@@ -11,32 +11,32 @@ import random
 import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
-state.transform = spawns[1]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+state.transform = spawns[0]
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 sx = state.transform.position.x
 sz = state.transform.position.z
 
 input("Press Enter to start creating pedestrians")
 
-# The list of available pedestrians can be found in Unity Editor in PedestrianManager under Pedestrians
-names = ["Bob", "Entrepreneur", "Howard", "Johnny", "Pamela", "Presley", "Robin", "Stephen"]
+# The list of available pedestrians can be found in PedestrianManager prefab
+names = ["PedestrianDefault"]
 
 i = 0
 while True:
   state = lgsvl.AgentState()
-  state.transform = spawns[1]
+  state.transform = spawns[0]
 
-  state.transform.position.x = sx - 5 - (1.0 * (i//16))
-  state.transform.position.z = sz - (1.0 * (i % 16))
+  state.transform.position.x = sx + 5 - (1.0 * (i % 16))
+  state.transform.position.z = sz + 5 + (1.0 * (i//16))
   name = random.choice(names)
   print("({}) adding {}".format(i+1, name))
   p = sim.add_agent(name, lgsvl.AgentType.PEDESTRIAN, state)

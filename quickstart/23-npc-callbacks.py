@@ -11,20 +11,20 @@ import math
 import random
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
+sx = spawns[0].position.x
+sy = spawns[0].position.y
+sz = spawns[0].position.z + 200.0
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
-
-sx = spawns[0].position.x
-sy = spawns[0].position.y
-sz = spawns[0].position.z
+state.transform = sim.map_point_on_lane(lgsvl.Vector(sx, sy, sz))
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 mindist = 10.0
 maxdist = 40.0
@@ -40,11 +40,11 @@ def on_lane_change(agent):
   print(agent.name, "is changing lanes")
 
 # This creates 4 NPCs randomly in an area around the EGO
-for name in ["Sedan", "SUV", "Jeep", "HatchBack"]:
+for name in ["Sedan", "SUV", "Jeep", "Hatchback"]:
   angle = random.uniform(0.0, 2*math.pi)
   dist = random.uniform(mindist, maxdist)
 
-  point = lgsvl.Vector(sx + dist * math.cos(angle), sy, sz + dist * math.sin(angle))
+  point = lgsvl.Vector(sx + dist * math.sin(angle), sy, sz + 25 + dist * math.cos(angle))
 
   state = lgsvl.AgentState()
   state.transform = sim.map_point_on_lane(point)

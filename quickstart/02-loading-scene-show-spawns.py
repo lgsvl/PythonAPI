@@ -12,11 +12,11 @@ sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 
 print("Current Scene = {}".format(sim.current_scene))
 
-# Loads the named map in the connected simulator. The available maps can be found in the Free Roam map selection drop down
-if sim.current_scene == "SanFrancisco":
+# Loads the named map in the connected simulator. The available maps can be set up in web interface
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 print("Current Scene = {}".format(sim.current_scene))
 

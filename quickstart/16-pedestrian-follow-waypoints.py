@@ -12,20 +12,20 @@ import time
 import math
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[1]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
-sx = state.position.x - 10
+sx = state.position.x + 8
 sy = state.position.y
-sz = state.position.z + 10
+sz = state.position.z
 
 # This will create waypoints in a circle for the pedestrian to follow
 radius = 5
@@ -42,7 +42,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[1]
 state.transform.position = wp[0].position
 
-p = sim.add_agent("Bob", lgsvl.AgentType.PEDESTRIAN, state)
+p = sim.add_agent("PedestrianDefault", lgsvl.AgentType.PEDESTRIAN, state)
 
 def on_waypoint(agent, index):
   print("Waypoint {} reached".format(index))

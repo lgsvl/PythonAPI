@@ -11,32 +11,30 @@ import random
 import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[1]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 sensors = a.get_sensors()
 
 # Sensors have an enabled/disabled state that can be set
-# By default only the CANBUS sensor is enabled
-# Enabling a sensor will allow it to start collecting data and sending it over a bridge if connected
+# By default all sensors are enabled
+# Disabling sensor will prevent it to send or receive messages to ROS or Cyber bridges
 for s in sensors:
   print(type(s), s.enabled)
 
-input("Press Enter to enable lidar")
+input("Press Enter to disable lidar")
 
 for s in sensors:
   if isinstance(s, lgsvl.LidarSensor):
-    s.enabled = True
+    s.enabled = False
 
 for s in sensors:
   print(type(s), s.enabled)
-
-sim.run()

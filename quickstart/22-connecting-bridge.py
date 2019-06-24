@@ -11,22 +11,22 @@ import random
 import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
 print("Bridge connected:", a.bridge_connected)
 
 # The EGO is now looking for a bridge at the specified IP and port
-a.connect_bridge("127.0.0.1", 9090)
+a.connect_bridge("10.195.248.183", 9090)
 
 print("Waiting for connection...")
 

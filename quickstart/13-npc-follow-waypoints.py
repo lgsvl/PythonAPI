@@ -10,10 +10,10 @@ import lgsvl
 import math
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -21,32 +21,32 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 # NPC, 10 meters ahead
 
-sx = spawns[0].position.x - 10.0
+sx = spawns[0].position.x
 sy = spawns[0].position.y
-sz = spawns[0].position.z
+sz = spawns[0].position.z + 10.0
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
 state.transform.position.x = sx
-state.transform.position.x = sz
+state.transform.position.z = sz
 npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
 # snake-drive
 # This block creates the list of waypoints that the NPC will follow
 # Each waypoint is an position vector paired with the speed that the NPC will drive to it
 waypoints = []
-z_max = 4
-x_delta = 12
+x_max = 2
+z_delta = 12
 for i in range(20):
   speed = 6 if i % 2 == 0 else 12
-  px = (i + 1) * x_delta
-  pz = z_max * (-1 if i % 2 == 0 else 1)
+  px = x_max * (-1 if i % 2 == 0 else 1)
+  pz = (i + 1) * z_delta
 
-  wp = lgsvl.DriveWaypoint(lgsvl.Vector(sx - px, sy, sz - pz), speed)
+  wp = lgsvl.DriveWaypoint(lgsvl.Vector(sx + px, sy, sz + pz), speed)
   waypoints.append(wp)
 
 # When the NPC is within 1m of the waypoint, this will be called

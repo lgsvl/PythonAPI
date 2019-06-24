@@ -11,35 +11,35 @@ import random
 import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
-state.transform = spawns[1]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+state.transform = spawns[0]
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 sx = state.transform.position.x
 sy = state.transform.position.y
 sz = state.transform.position.z
 
-names = ["Bob", "Entrepreneur", "Howard", "Johnny", "Pamela", "Presley", "Robin", "Stephen"]
+names = ["PedestrianDefault"]
 
-for i in range(20*8):
+for i in range(20*6):
   # Create peds in a block
-  px = sx + 5 - (1.0 * (i//8))
-  pz = sz + 6 + (1.0 * (i % 8))
+  px = sx - 8 + (1.0 * (i % 6))
+  pz = sz - 5 + (1.0 * (i//6))
 
 # Give waypoints for the spawn location and 10m ahead
   wp = [ lgsvl.WalkWaypoint(lgsvl.Vector(px, sy, pz), 0),
-         lgsvl.WalkWaypoint(lgsvl.Vector(px - 10, sy, pz), 0),
+         lgsvl.WalkWaypoint(lgsvl.Vector(px, sy, pz + 10), 0),
        ]
 
   state = lgsvl.AgentState()
-  state.transform = spawns[1]
+  state.transform = spawns[0]
   state.transform.position.x = px
   state.transform.position.z = pz
   name = random.choice(names)

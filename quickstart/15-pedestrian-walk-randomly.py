@@ -11,36 +11,36 @@ import random
 import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
+sx = spawns[0].position.x
+sz = spawns[0].position.z
 
 state = lgsvl.AgentState()
-state.transform = spawns[1]
-a = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+state.transform = spawns[0]
+state.transform.position.z += 40
 
-sx = state.transform.position.x
-sz = state.transform.position.z
+a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 state = lgsvl.AgentState()
-state.transform = spawns[1]
-# Spawn the pedestrian on the sidewalk
-state.transform.position.x = sx - 10
-state.transform.position.z = sz + 5
+state.transform = spawns[0]
+# Spawn the pedestrian in front of car
+state.transform.position.z = sz + 50
 
-p = sim.add_agent("Bob", lgsvl.AgentType.PEDESTRIAN, state)
-# Bob will walk randomly on the NavMesh he was created on. He will not walk onto the road
+p = sim.add_agent("PedestrianDefault", lgsvl.AgentType.PEDESTRIAN, state)
+# Pedestrian will walk to a random point on sidewalk
 p.walk_randomly(True)
 
 input("Press Enter to walk")
 
-sim.run(3)
+sim.run(10)
 
 input("Press Enter to stop")
-# With walk_randomly passed False, Bob will stop walking
+# With walk_randomly passed False, pedestrian will stop walking
 p.walk_randomly(False)
 
 sim.run(5)

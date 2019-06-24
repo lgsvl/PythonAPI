@@ -9,10 +9,10 @@ import os
 import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "BorregasAve":
   sim.reset()
 else:
-  sim.load("SanFrancisco")
+  sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -24,20 +24,20 @@ ry = spawns[0].rotation.y
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-ego = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
 # school bus, 20m ahead, perpendicular to road, stopped
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state.transform.position.x = sx - 20.0
-state.transform.rotation.y = 0.0
+state.transform.position.z = sz + 20.0
+state.transform.rotation.y = 90.0
 bus = sim.add_agent("SchoolBus", lgsvl.AgentType.NPC, state)
 
 # sedan, 10m ahead, driving forward
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state.transform.position.x = sx - 10.0
+state.transform.position.z = sz + 10.0
 state.transform.rotation.y = ry
 sedan = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 # Even though the sedan is commanded to follow the lane, obstacle avoidance takes precedence and it will not drive into the bus
