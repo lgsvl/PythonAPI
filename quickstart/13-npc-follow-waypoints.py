@@ -41,12 +41,20 @@ npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 waypoints = []
 x_max = 2
 z_delta = 12
+
+layer_mask = 0
+layer_mask |= 1 << 0 # 0 is the layer for the road (default)
+
 for i in range(20):
   speed = 6 if i % 2 == 0 else 12
   px = x_max * (-1 if i % 2 == 0 else 1)
   pz = (i + 1) * z_delta
 
-  wp = lgsvl.DriveWaypoint(lgsvl.Vector(sx + px, sy, sz + pz), speed)
+  # Raycast the points onto the ground because BorregasAve is not flat
+  hit = sim.raycast(lgsvl.Vector(sx + px, sy, sz + pz), lgsvl.Vector(0,-1,0), layer_mask) 
+
+  wp = lgsvl.DriveWaypoint(hit.point, speed)
+  #wp = lgsvl.DriveWaypoint(lgsvl.Vector(sx + px, sy, sz + pz), speed)
   waypoints.append(wp)
 
 # When the NPC is within 1m of the waypoint, this will be called

@@ -39,19 +39,19 @@ for bit in [0, 10, 11]: # do not put 9 here, to not hit EGO vehicle itself
 
 # raycast returns None if the ray doesn't collide with anything
 # hit also has the point property which is the Unity position vector of where the ray collided with something
-hit = sim.raycast(p, lgsvl.Vector(0,0,1), layer_mask)
+hit = sim.raycast(p, lgsvl.Vector(1,0,0), layer_mask)
 if hit:
   print("Distance right:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(0,0,-1), layer_mask)
+hit = sim.raycast(p, lgsvl.Vector(-1,0,0), layer_mask)
 if hit:
   print("Distance left:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(1,0,0), layer_mask)
+hit = sim.raycast(p, lgsvl.Vector(0,0,-1), layer_mask)
 if hit:
   print("Distance back:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(-1,0,0), layer_mask)
+hit = sim.raycast(p, lgsvl.Vector(0,0,1), layer_mask)
 if hit:
   print("Distance forward:", hit.distance)
 

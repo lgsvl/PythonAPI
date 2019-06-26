@@ -15,7 +15,7 @@ class TestException(Exception):
     pass
 
 class SimConnection:
-  def __init__(self, seconds=30, scene="SanFrancisco", error_message=None, load_scene=True):
+  def __init__(self, seconds=30, scene="BorregasAve", error_message=None, load_scene=True):
     if error_message is None:
       error_message = 'test timed out after {}s.'.format(seconds)
     self.seconds = seconds

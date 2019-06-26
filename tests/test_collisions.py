@@ -14,7 +14,7 @@ from .common import SimConnection, spawnState
 class TestCollisions(unittest.TestCase):
     def test_ego_collision(self): # Check that a collision between Ego and NPC is reported
         with SimConnection() as sim:
-            mover, bus = self.setup_collision(sim, "XE_Rigged-apollo", lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
+            mover, bus = self.setup_collision(sim, "Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
             collisions = []
 
             def on_collision(agent1, agent2, contact):
@@ -29,12 +29,12 @@ class TestCollisions(unittest.TestCase):
             self.assertGreater(len(collisions), 0)
             self.assertInBetween(collisions[0][2], collisions[0][0].state.position, collisions[0][1].state.position, "Ego Collision")
 
-            self.assertTrue(collisions[0][0].name == "XE_Rigged-apollo" or collisions[0][1].name == "XE_Rigged-apollo")
+            self.assertTrue(collisions[0][0].name == "Jaguar2015XE (Apollo 3.5)" or collisions[0][1].name == "Jaguar2015XE (Apollo 3.5)")
             self.assertTrue(True)
 
     def test_sim_stop(self): # Check that sim.stop works properly
         with SimConnection() as sim:
-            mover, bus = self.setup_collision(sim, "XE_Rigged-apollo", lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
+            mover, bus = self.setup_collision(sim, "Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
             collisions = []
 
             def on_collision(agent1, agent2, contact):
@@ -114,9 +114,11 @@ class TestCollisions(unittest.TestCase):
     def test_wall_collision(self): # Check that an EGO collision with a wall is reported properly
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z += 15
-            state.velocity.x += -50
-            ego = sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+            state.position.x = 60
+            state.position.y = -4
+            state.position.z = 121
+            state.velocity.z += 50
+            ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             collisions = []
 
             def on_collision(agent1, agent2, contact):
@@ -129,9 +131,9 @@ class TestCollisions(unittest.TestCase):
 
             self.assertGreater(len(collisions), 0)
             if collisions[0][0] is None:
-                self.assertTrue(collisions[0][1].name == "XE_Rigged-apollo")
+                self.assertTrue(collisions[0][1].name == "Jaguar2015XE (Apollo 3.5)")
             elif collisions[0][1] is None:
-                self.assertTrue(collisions[0][0].name == "XE_Rigged-apollo")
+                self.assertTrue(collisions[0][0].name == "Jaguar2015XE (Apollo 3.5)")
             else:
                 self.fail("Collision not with object")
 
@@ -139,15 +141,14 @@ class TestCollisions(unittest.TestCase):
         # Creates 2 agents, the mover is created with a forward velocity
         # still is rotated 90 degree in and in front of the mover
         state = spawnState(sim)
-        state.velocity = lgsvl.Vector(-50, 0, 0)
+        state.velocity = lgsvl.Vector(0, 0, 50)
         mover = sim.add_agent(mover_name, agent_type, state)
 
         # school bus, 20m ahead, perpendicular to road, stopped
 
-        state = lgsvl.AgentState()
-        state.transform = sim.get_spawn()[0]
-        state.transform.position.x -= 20.0
-        state.transform.rotation.y = 0.0
+        state = spawnState(sim)
+        state.transform.position.z += 20.0
+        state.transform.rotation.y = 90.0
         still = sim.add_agent(still_name, still_type, state)
 
         return mover, still

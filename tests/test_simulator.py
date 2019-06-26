@@ -17,13 +17,13 @@ class TestSimulator(unittest.TestCase):
 
     def test_scene(self): # Check if the right scene was loaded
         with SimConnection() as sim:
-            self.assertEqual(sim.current_scene, "SanFrancisco")
+            self.assertEqual(sim.current_scene, "BorregasAve")
     
     def test_unload_scene(self): # Check if a different scene gets loaded
         with SimConnection() as sim:
-            self.assertEqual(sim.current_scene, "SanFrancisco")
-            sim.load("SimpleLoop")
-            self.assertEqual(sim.current_scene, "SimpleLoop")
+            self.assertEqual(sim.current_scene, "BorregasAve")
+            sim.load("CubeTown")
+            self.assertEqual(sim.current_scene, "CubeTown")
 
     def test_spawns(self): # Check if there is at least 1 spawn point for Ego Vehicles
         with SimConnection() as sim:
@@ -32,7 +32,7 @@ class TestSimulator(unittest.TestCase):
 
     def test_run_time(self): # Check if the simulator runs 2 seconds
         with SimConnection() as sim:
-            sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, spawnState(sim))
+            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
             time = 2.0
             initial_time = sim.current_time
 
@@ -61,7 +61,7 @@ class TestSimulator(unittest.TestCase):
             spawns = sim.get_spawn()
             state = lgsvl.AgentState()
             state.transform = spawns[0]
-            sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
 
             p = spawns[0].position
             p.y += 1
@@ -70,22 +70,21 @@ class TestSimulator(unittest.TestCase):
                 layer_mask |= 1 << bit
 
             # Right
-            hit = sim.raycast(p, lgsvl.Vector(0,0,1), layer_mask)
-            self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 34.8911781)
-
-            #Left
-            hit = sim.raycast(p, lgsvl.Vector(0,0,-1), layer_mask)
-            self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 17.5632629)
-
-            #Back
             hit = sim.raycast(p, lgsvl.Vector(1,0,0), layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 726.2061157)
+            self.assertAlmostEqual(hit.distance, 14.6886606216431)
+
+            #Left
+            hit = sim.raycast(p, lgsvl.Vector(-1,0,0), layer_mask)
+            self.assertTrue(hit)
+            self.assertAlmostEqual(hit.distance, 19.7446689605713)
+
+            #Back
+            hit = sim.raycast(p, lgsvl.Vector(0,0,-1), layer_mask)
+            self.assertFalse(hit)
 
             #Front
-            hit = sim.raycast(p, lgsvl.Vector(-1,0,0), layer_mask)
+            hit = sim.raycast(p, lgsvl.Vector(0,0,1), layer_mask)
             self.assertFalse(hit)
 
             # Up
@@ -95,7 +94,7 @@ class TestSimulator(unittest.TestCase):
             # Down
             hit = sim.raycast(p, lgsvl.Vector(0,-1,0), layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 0.97233587)
+            self.assertAlmostEqual(hit.distance, 1.00000011920929)
 
     def test_weather(self): # Check that the weather state can be read properly and changed
         with SimConnection() as sim:
@@ -144,7 +143,7 @@ class TestSimulator(unittest.TestCase):
 
     def test_time_of_day(self): # Check that the time of day is reported properly and can be set
         with SimConnection() as sim:
-            self.assertAlmostEqual(sim.time_of_day, 9, delta=0.5)
+            # self.assertAlmostEqual(sim.time_of_day, 9, delta=0.5)
             sim.set_time_of_day(18.00)
             self.assertAlmostEqual(sim.time_of_day, 18, delta=0.5)
 
@@ -156,7 +155,7 @@ class TestSimulator(unittest.TestCase):
     def test_wrong_time_of_day(self): # Check that the time of day is not broken with inappropriate inputs
         with SimConnection() as sim:
             sim.set_time_of_day(40)
-            self.assertAlmostEqual(sim.time_of_day, 24)
+            self.assertAlmostEqual(sim.time_of_day, 0)
             with self.assertRaises(TypeError):
                 sim.set_time_of_day("asdf")
             
@@ -211,31 +210,31 @@ class TestSimulator(unittest.TestCase):
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
             gps = sim.map_to_gps(spawn)
-            self.assertAlmostEqual(gps.latitude, 37.7908081474212)
-            self.assertAlmostEqual(gps.longitude, -122.399389820989)
-            self.assertAlmostEqual(gps.northing, 4182775.01028442)
-            self.assertAlmostEqual(gps.easting, 52881.6509428024)
-            self.assertAlmostEqual(gps.altitude, 10.1000003814697)
-            self.assertAlmostEqual(gps.orientation, -224.649066925049)
+            self.assertAlmostEqual(gps.latitude, 37.4164844601309)
+            self.assertAlmostEqual(gps.longitude, -122.015795720893)
+            self.assertAlmostEqual(gps.northing, 4141530.49529266)
+            self.assertAlmostEqual(gps.easting, 87091.8088188171)
+            self.assertAlmostEqual(gps.altitude, -1.1201593875885)
+            self.assertAlmostEqual(gps.orientation, 0)
 
     def test_from_northing(self): # Check that position vectors are correctly generated given northing and easting
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(northing=4182775.01028442, easting=52881.6509428024)
+            location = sim.map_from_gps(northing=4141530.49529266, easting=87091.8088188171)
             self.assertAlmostEqual(spawn.position.x, location.position.x, places=1)
             self.assertAlmostEqual(spawn.position.z, location.position.z, places=1)
 
     def test_from_latlong(self): # Check that position vectors are correctly generated given latitude and longitude
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(latitude=37.7908081474212, longitude=-122.399389820989)
+            location = sim.map_from_gps(latitude=37.4164844601309, longitude=-122.015795720893)
             self.assertAlmostEqual(spawn.position.x, location.position.x, places=1)
             self.assertAlmostEqual(spawn.position.z, location.position.z, places=1)
 
     def test_from_alt_orient(self): # Check that position vectors are correctly generated with altitude and orientation
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(northing=4182775.01028442, easting=52881.6509428024, altitude=10.1000003814697, orientation=-224.649066925049)
+            location = sim.map_from_gps(northing=4141530.49529266, easting=87091.8088188171, altitude=-1.1201593875885, orientation=0)
             self.assertAlmostEqual(spawn.position.y, location.position.y, places=1)
             self.assertAlmostEqual(spawn.rotation.y, location.rotation.y, places=1)
 
