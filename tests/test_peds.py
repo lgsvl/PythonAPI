@@ -17,8 +17,8 @@ class TestPeds(unittest.TestCase):
             state = spawnState(sim)
             state.position.z -= 5
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
-            for name in ["PedestrianDefault"]:#["Bob", "Entrepreneur", "Howard", "Johnny", \
-                #"Pamela", "Presley", "Robin", "Stephen", "Zoe"]:
+            for name in ["Bob", "EntrepreneurFemale", "Howard", "Johny", \
+                "Pamela", "Presley", "Red", "Robin", "Stephen", "Zoe"]:
                 agent = self.create_ped(sim, name, spawnState(sim))
                 cmEqual(self, agent.state.position, sim.get_spawn()[0].position, name)
                 self.assertEqual(agent.name, name)
@@ -31,7 +31,7 @@ class TestPeds(unittest.TestCase):
             state = spawnState(sim)
             spawnPoint = state.transform.position
 
-            bob = self.create_ped(sim, "PedestrianDefault", state)
+            bob = self.create_ped(sim, "Bob", state)
             bob.walk_randomly(True)
             sim.run(2)
 
@@ -68,7 +68,7 @@ class TestPeds(unittest.TestCase):
                 waypoints.append(hit.point)
 
             state.transform.position = waypoints[0]
-            zoe = self.create_ped(sim, "PedestrianDefault", state)
+            zoe = self.create_ped(sim, "Zoe", state)
             def on_waypoint(agent,index):
                 msg = "Waypoint " + str(index)
                 mEqual(self, zoe.state.position, waypoints[index], msg)
@@ -87,7 +87,7 @@ class TestPeds(unittest.TestCase):
             sy = state.position.y
             sz = state.position.z + 10
             state.transform.position = lgsvl.Vector(sx, sy, sz)
-            zoe = self.create_ped(sim, "PedestrianDefault", state)
+            zoe = self.create_ped(sim, "Zoe", state)
 
             def on_waypoint(agent, index):
                 sim.stop()
