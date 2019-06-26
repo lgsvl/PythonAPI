@@ -41,7 +41,7 @@ LABEL_PATH = os.path.join(BASE_PATH, "label_2")
 
 
 class KittiParser:
-    def __init__(self, scene_name="SanFrancisco", agent_name="XE_Rigged-lgsvl", start_idx=0):
+    def __init__(self, scene_name="BorregasAve", agent_name="Jaguar2015XE (Apollo 3.5)", start_idx=0):
         self.scene_name = scene_name
         self.agent_name = agent_name
         self.sim = None
@@ -93,7 +93,7 @@ class KittiParser:
             print("{}: {}".format(sensor.name, sensor.transform))
             if sensor.name == "Main Camera":
                 self.sensor_camera = sensor
-            if sensor.name == "velodyne":
+            if sensor.name == "Lidar":
                 self.sensor_lidar = sensor
             if sensor.name == "IMU":
                 self.sensor_imu = sensor
@@ -193,7 +193,7 @@ class KittiParser:
     def position_npc(self, transform):
         npc_state = lgsvl.AgentState()
         npc_state.transform = transform
-        available_npcs = ['Sedan', 'SUV', 'Jeep', 'HatchBack']  # 'SchoolBus', 'DeliveryTruck'
+        available_npcs = ['Sedan', 'SUV', 'Jeep', 'Hatchback']  # 'SchoolBus', 'DeliveryTruck'
         npc_type = available_npcs[random.randint(0, len(available_npcs) - 1)]
         npc = self.sim.add_agent(npc_type, lgsvl.AgentType.NPC, npc_state)
         self.npcs.append(npc)
