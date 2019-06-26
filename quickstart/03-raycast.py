@@ -30,11 +30,11 @@ p.y += 1
 # 9 - EGO vehicles
 # 10 - NPC vehicles
 # 11 - Pedestrian
-# TODO: obstacle layer
+# 12 - Obstacle
 
 # Included layers can be hit by the rays. Otherwise the ray will go through the layer
 layer_mask = 0
-for bit in [0, 10, 11]: # do not put 9 here, to not hit EGO vehicle itself
+for bit in [0, 10, 11, 12]: # do not put 9 here, to not hit EGO vehicle itself
   layer_mask |= 1 << bit
 
 # raycast returns None if the ray doesn't collide with anything
