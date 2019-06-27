@@ -202,7 +202,7 @@ class TestSensors(unittest.TestCase):
             self.assertNotAlmostEqual(gps.data.altitude, 0)
             self.assertNotAlmostEqual(gps.data.orientation, 0)
 
-    def test_sensor_enabling(self): # Check if sensors can be enabled
+    def test_sensor_disabling(self): # Check if sensors can be enabled
         with SimConnection() as sim:
             agent = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
             for s in agent.get_sensors():
