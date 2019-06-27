@@ -15,7 +15,7 @@ class TestPeds(unittest.TestCase):
     def test_ped_creation(self): # Check if the different types of Peds can be created
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.z -= 4
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             for name in ["Bob", "EntrepreneurFemale", "Howard", "Johny", \
                 "Pamela", "Presley", "Red", "Robin", "Stephen", "Zoe"]:
@@ -26,7 +26,7 @@ class TestPeds(unittest.TestCase):
     def test_ped_random_walk(self): # Check if pedestrians can walk randomly
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.z -= 4
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             spawnPoint = state.transform.position
@@ -48,7 +48,7 @@ class TestPeds(unittest.TestCase):
     def test_ped_circle_waypoints(self): # Check if pedestrians can follow waypoints
         with SimConnection(60) as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.z -= 4
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             sx = state.position.x

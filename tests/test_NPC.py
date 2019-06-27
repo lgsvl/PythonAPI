@@ -58,7 +58,7 @@ class TestNPC(unittest.TestCase):
     def test_NPC_follow_lane(self): #Check if NPC can follow lane
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.x -= 5
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "Sedan")
             agent.follow_closest_lane(True, 5.6)
@@ -71,7 +71,7 @@ class TestNPC(unittest.TestCase):
     def test_rotate_NPC(self): # Check if NPC can be rotated
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.x -= 5
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "SUV")
             self.assertAlmostEqual(agent.state.transform.rotation.y, 0, places=3)
@@ -151,7 +151,7 @@ class TestNPC(unittest.TestCase):
     def test_follow_waypoints(self): # Check that the NPC can follow waypoints
         with SimConnection(60) as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.x -= 5
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             spawns = sim.get_spawn()
             sx = spawns[0].position.x
@@ -192,7 +192,7 @@ class TestNPC(unittest.TestCase):
         try:
             with SimConnection(15) as sim:
                 state = spawnState(sim)
-                state.position.z -= 5
+                state.position.x -= 5
                 sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
                 spawns = sim.get_spawn()
                 sx = spawns[0].position.x
@@ -200,8 +200,8 @@ class TestNPC(unittest.TestCase):
                 sz = spawns[0].position.z
                 agent = self.create_NPC(sim, "Sedan")
 
-                px = 12
-                pz = 4
+                px = 4
+                pz = 12
                 py = 5
                 speed = 6
                 wp = [lgsvl.DriveWaypoint(lgsvl.Vector(sx-px, sy+py, sz+pz), speed)]
@@ -217,7 +217,7 @@ class TestNPC(unittest.TestCase):
     def test_npc_different_directions(self): # Check that specified velocities match the NPC's movement
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 5
+            state.position.x -= 5
             sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.velocity = lgsvl.Vector(-10,0,0)
@@ -253,7 +253,7 @@ class TestNPC(unittest.TestCase):
                 npc.follow_closest_lane(True, 10)
                 npc.on_stop_line(on_stop_line)
 
-                state.position.z -= 5
+                state.position.x -= 5
                 sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
                 sim.run(60)
         self.assertIn("Waypoint reached", repr(e.exception))
