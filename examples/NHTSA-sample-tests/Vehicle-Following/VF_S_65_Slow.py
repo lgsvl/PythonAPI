@@ -14,35 +14,28 @@ import time
 import evaluator
 
 MAX_EGO_SPEED = 29.06 # (105 km/h, 65 mph)
-SPEED_VARIANCE = 4
+SPEED_VARIANCE = 10 # Simple Physics does not return an accurate value
 MAX_POV_SPEED = 26.82 # (96 km/h, 60 mph)
 MAX_POV_ROTATION = 5 #deg/s
 TIME_LIMIT = 45 # seconds
 TIME_DELAY = 5
-MAX_FOLLOWING_DISTANCE = 20
+MAX_FOLLOWING_DISTANCE = 100 # Apollo 3.5 is very cautious
 
 print("VF_S_65_Slow - ", end = '')
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "SingleLaneRoad":
     sim.reset()
 else:
-    sim.load("SanFrancisco")
+    sim.load("SingleLaneRoad")
 
 # spawn EGO in the 2nd to right lane
 egoState = lgsvl.AgentState()
-# A point close to the desired lane was found in Editor. This method returns the position and orientation of the closest lane to the point.
-egoState.transform = sim.map_point_on_lane(lgsvl.Vector(1699.6, 88.38, -598.4))
-ego = sim.add_agent("XE_Rigged-apollo_3_5", lgsvl.AgentType.EGO, egoState)
+egoState.transform = sim.get_spawn()[0]
+ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, egoState)
 egoX = ego.state.position.x
 egoY = ego.state.position.y
 egoZ = ego.state.position.z
-
-# enable sensors required for Apollo 3.5
-sensors = ego.get_sensors()
-for s in sensors:
-    if s.name in ['velodyne', 'Main Camera', 'Telephoto Camera', 'GPS', 'IMU']:
-        s.enabled = True
 
 ego.connect_bridge(os.environ.get("BRIDGE_HOST", "127.0.0.1"), 9090)
 
@@ -73,6 +66,9 @@ try:
             raise evaluator.TestException("POV speed exceeded limit, {} > {} m/s".format(POVCurrentState.speed, MAX_POV_SPEED + SPEED_VARIANCE))
         if POVCurrentState.angular_velocity.y > MAX_POV_ROTATION:
             raise evaluator.TestException("POV angular rotation exceeded limit, {} > {} deg/s".format(POVCurrentState.angular_velocity, MAX_POV_ROTATION))
+
+        if evaluator.separation(POVCurrentState.position, lgsvl.Vector(1.8, 0, 125)) < 5:
+            break
 
         if time.time() - t0 > TIME_LIMIT:
             break
