@@ -21,7 +21,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[1]
-a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 sx = state.position.x + 8
 sy = state.position.y
@@ -42,7 +42,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[1]
 state.transform.position = wp[0].position
 
-p = sim.add_agent("PedestrianDefault", lgsvl.AgentType.PEDESTRIAN, state)
+p = sim.add_agent("Pamela", lgsvl.AgentType.PEDESTRIAN, state)
 
 def on_waypoint(agent, index):
   print("Waypoint {} reached".format(index))

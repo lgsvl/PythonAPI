@@ -20,13 +20,13 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 sx = state.transform.position.x
 sy = state.transform.position.y
 sz = state.transform.position.z
 
-names = ["PedestrianDefault"]
+names = ["Bob", "EntrepreneurFemale", "Howard", "Johny", "Pamela", "Presley", "Robin", "Stephen", "Zoe"]
 
 for i in range(20*6):
   # Create peds in a block

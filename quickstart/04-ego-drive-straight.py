@@ -20,7 +20,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 # Agents can be spawned with a velocity. Default is to spawn with 0 velocity
 state.velocity = lgsvl.Vector(0, 0, 20)
-a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # The bounding box of an agent are 2 points (min and max) such that the box formed from those 2 points completely encases the agent
 print("Vehicle bounding box =", a.bounding_box)

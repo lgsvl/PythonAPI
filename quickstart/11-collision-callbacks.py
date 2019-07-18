@@ -24,7 +24,7 @@ ry = spawns[0].rotation.y
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # school bus, 20m ahead, perpendicular to road, stopped
 

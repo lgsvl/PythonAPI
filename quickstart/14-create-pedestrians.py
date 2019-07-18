@@ -20,7 +20,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 sx = state.transform.position.x
 sz = state.transform.position.z
@@ -28,7 +28,7 @@ sz = state.transform.position.z
 input("Press Enter to start creating pedestrians")
 
 # The list of available pedestrians can be found in PedestrianManager prefab
-names = ["PedestrianDefault"]
+names = ["Bob", "EntrepreneurFemale", "Howard", "Johny", "Pamela", "Presley", "Robin", "Stephen", "Zoe"]
 
 i = 0
 while True:

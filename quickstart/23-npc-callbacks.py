@@ -24,7 +24,7 @@ sz = spawns[0].position.z + 200.0
 state = lgsvl.AgentState()
 state.transform = spawns[0]
 state.transform = sim.map_point_on_lane(lgsvl.Vector(sx, sy, sz))
-a = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 mindist = 10.0
 maxdist = 40.0
