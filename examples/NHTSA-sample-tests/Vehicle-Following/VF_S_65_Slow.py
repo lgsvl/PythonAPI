@@ -32,7 +32,7 @@ else:
 # spawn EGO in the 2nd to right lane
 egoState = lgsvl.AgentState()
 egoState.transform = sim.get_spawn()[0]
-ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, egoState)
+ego = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, egoState)
 egoX = ego.state.position.x
 egoY = ego.state.position.y
 egoZ = ego.state.position.z

@@ -15,7 +15,7 @@ import evaluator
 
 MAX_EGO_SPEED = 29.167 # (105 km/h, 65 mph)
 MAX_POV_SPEED = 26.667 # (96 km/h, 60 mph)
-INITIAL_HEADWAY = 105
+INITIAL_HEADWAY = 200 # spec says >105m
 SPEED_VARIANCE = 4
 TIME_LIMIT = 30
 TIME_DELAY = 5
@@ -23,30 +23,24 @@ TIME_DELAY = 5
 print("EOV_S_65_60 - ", end = '')
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "SanFrancisco":
+if sim.current_scene == "SingleLaneRoad":
     sim.reset()
 else:
-    sim.load("SanFrancisco")
+    sim.load("SingleLaneRoad")
 
 # spawn EGO in the 2nd to right lane
 egoState = lgsvl.AgentState()
 # A point close to the desired lane was found in Editor. This method returns the position and orientation of the closest lane to the point.
-egoState.transform = sim.map_point_on_lane(lgsvl.Vector(218, 9.9, 4.3))
-ego = sim.add_agent("XE_Rigged-apollo_3_5", lgsvl.AgentType.EGO, egoState)
-
-# enable sensors required for Apollo 3.5
-sensors = ego.get_sensors()
-for s in sensors:
-    if s.name in ['velodyne', 'Main Camera', 'Telephoto Camera', 'GPS', 'IMU']:
-        s.enabled = True
+egoState.transform = sim.get_spawn()[0]
+ego = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, egoState)
 
 ego.connect_bridge(os.environ.get("BRIDGE_HOST", "127.0.0.1"), 9090)
 
-finalPOVWaypointPosition = lgsvl.Vector(218, 9.9, 2.207)
+finalPOVWaypointPosition = lgsvl.Vector(0, 0, -125)
 
 POVState = lgsvl.AgentState()
-POVState.transform.position = lgsvl.Vector(finalPOVWaypointPosition.x - 4.5 - INITIAL_HEADWAY, finalPOVWaypointPosition.y, finalPOVWaypointPosition.z)
-POVState.transform.rotation = lgsvl.Vector(0, 90, 0)
+POVState.transform.position = lgsvl.Vector(finalPOVWaypointPosition.x, finalPOVWaypointPosition.y, finalPOVWaypointPosition.z + 4.5 + INITIAL_HEADWAY)
+POVState.transform.rotation = lgsvl.Vector(0, 180, 0)
 POV = sim.add_agent("Sedan", lgsvl.AgentType.NPC, POVState)
 
 POVWaypoints = []
