@@ -66,7 +66,7 @@ class Simulator:
 
   @accepts(int, (int, float))
   def step(self, frames = 1, framerate = 30.0):
-    raise NotImplementedError()
+    self._process("simulator/step", {"frames": frames, "framerate": framerate})
 
   def _add_callback(self, agent, name, fn):
     if agent not in self.callbacks:
