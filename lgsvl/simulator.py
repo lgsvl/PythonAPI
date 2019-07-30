@@ -30,9 +30,9 @@ class Simulator:
   def close(self):
     self.remote.close()
 
-  @accepts(str)
-  def load(self, scene):
-    self.remote.command("simulator/load_scene", {"scene": scene})
+  @accepts(str, int)
+  def load(self, scene, seed=None):
+    self.remote.command("simulator/load_scene", {"scene": scene, "seed": seed})
     self.agents.clear()
     self.callbacks.clear()
 
