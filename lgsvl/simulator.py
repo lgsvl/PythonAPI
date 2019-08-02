@@ -60,13 +60,9 @@ class Simulator:
   def stop(self):
     self.stopped = True
 
-  @accepts((int, float))
-  def run(self, time_limit = 0.0):
-    self._process("simulator/run", {"time_limit": time_limit})
-
-  @accepts(int, (int, float))
-  def step(self, frames = 1, framerate = 30.0):
-    self._process("simulator/step", {"frames": frames, "framerate": framerate})
+  @accepts((int, float), (int, float))
+  def run(self, time_limit = 0.0, framerate = None):
+    self._process("simulator/run", {"time_limit": time_limit, "framerate": framerate})
 
   def _add_callback(self, agent, name, fn):
     if agent not in self.callbacks:

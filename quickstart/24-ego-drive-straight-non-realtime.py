@@ -30,20 +30,20 @@ print("Real time elapsed = ", 0)
 print("Simulation time = ", sim.current_time)
 print("Simulation frames = ", sim.current_frame)
 
-input("Press Enter to drive forward for 100 frames")
+input("Press Enter to drive forward for 4 seconds")
 
 # The simulator can be run for a set amount of time. time_limit is optional and if omitted or set to 0, then the simulator will run indefinitely
 t0 = time.time()
-sim.step(frames = 100, framerate = 20)
+sim.run(time_limit = 4, framerate = 20)
 t1 = time.time()
 print("Real time elapsed = ", t1 - t0)
 print("Simulation time = ", sim.current_time)
 print("Simulation frames = ", sim.current_frame)
 
-input("Press Enter to continue driving for 100 frames")
+input("Press Enter to continue driving for 4 more seconds")
 
 t2 = time.time()
-sim.step(frames = 100, framerate = 20)
+sim.run(time_limit = 4, framerate = 20)
 t3 = time.time()
 
 print("Real time elapsed = ", t3 - t2 + t1 - t0)
