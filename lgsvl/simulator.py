@@ -61,8 +61,8 @@ class Simulator:
     self.stopped = True
 
   @accepts((int, float), (int, float))
-  def run(self, time_limit = 0.0, framerate = None):
-    self._process("simulator/run", {"time_limit": time_limit, "framerate": framerate})
+  def run(self, time_limit = 0.0, time_scale = None):
+    self._process("simulator/run", {"time_limit": time_limit, "time_scale": time_scale})
 
   def _add_callback(self, agent, name, fn):
     if agent not in self.callbacks:

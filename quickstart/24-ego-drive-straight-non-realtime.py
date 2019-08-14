@@ -23,29 +23,29 @@ state.transform = spawns[0]
 state.velocity = lgsvl.Vector(0, 0, 20)
 a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
-# The bounding box of an agent are 2 points (min and max) such that the box formed from those 2 points completely encases the agent
-print("Vehicle bounding box =", a.bounding_box)
+print("Real time elapsed =", 0)
+print("Simulation time =", sim.current_time)
+print("Simulation frames =", sim.current_frame)
 
-print("Real time elapsed = ", 0)
-print("Simulation time = ", sim.current_time)
-print("Simulation frames = ", sim.current_frame)
-
-input("Press Enter to drive forward for 4 seconds")
+input("Press Enter to drive forward for 4 seconds (2x)")
 
 # The simulator can be run for a set amount of time. time_limit is optional and if omitted or set to 0, then the simulator will run indefinitely
 t0 = time.time()
-sim.run(time_limit = 4, framerate = 20)
+sim.run(time_limit = 4, time_scale = 2)
 t1 = time.time()
-print("Real time elapsed = ", t1 - t0)
-print("Simulation time = ", sim.current_time)
-print("Simulation frames = ", sim.current_frame)
+print("Real time elapsed =", t1 - t0)
+print("Simulation time =", sim.current_time)
+print("Simulation frames =", sim.current_frame)
 
-input("Press Enter to continue driving for 4 more seconds")
+current_sim_time = sim.current_time
+current_sim_frames = sim.current_frame
+
+input("Press Enter to continue driving for 2 more seconds (0.5x)")
 
 t2 = time.time()
-sim.run(time_limit = 4, framerate = 20)
+sim.run(time_limit = 2, time_scale = 0.5)
 t3 = time.time()
 
-print("Real time elapsed = ", t3 - t2 + t1 - t0)
-print("Simulation time = ", sim.current_time)
-print("Simulation frames = ", sim.current_frame)
+print("Real time elapsed =", t3 - t2)
+print("Simulation time =", sim.current_time - current_sim_time)
+print("Simulation frames =", sim.current_frame - current_sim_frames)
