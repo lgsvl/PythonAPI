@@ -106,7 +106,6 @@ class Agent:
   @state.setter
   @accepts(AgentState)
   def state(self, state):
-    j = state.to_json()
     self.remote.command("agent/state/set", {
       "uid": self.uid,
       "state": state.to_json()

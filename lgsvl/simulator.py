@@ -9,6 +9,7 @@ from .agent import Agent, AgentType, AgentState
 from .sensor import GpsData
 from .geometry import Vector, Transform
 from .utils import accepts
+from .controllable import Controllable
 
 from collections import namedtuple
 
@@ -194,6 +195,6 @@ class Simulator:
       return None
     return RaycastHit(hit["distance"], Vector.from_json(hit["point"]), Vector.from_json(hit["normal"]))
 
-  # @accepts(bool)
-  # def set_physics(self, isPhysicsSimple):
-  #   self.remote.command("vehicle/set_npc_physics", {"isPhysicsSimple": isPhysicsSimple})
+  def get_controllables(self):
+    j = self.remote.command("controllable/get/all")
+    return [Controllable(self.remote, controllable) for controllable in j]
