@@ -8,7 +8,6 @@
 import os
 import lgsvl
 import math
-import copy
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
@@ -22,9 +21,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state2 = copy.deepcopy(state)
-state2.transform.position.z += 50
-a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state2)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # NPC, 10 meters ahead
 
@@ -38,43 +35,34 @@ state.transform.position.x = sx
 state.transform.position.z = sz
 npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
-vehicles = {
-  a: "EGO",
-  npc: "Sedan",
-}
-
-# Executed upon receiving collision callback -- NPC is expected to drive through colliding objects
-def on_collision(agent1, agent2, contact):
-  name1 = vehicles[agent1]
-  name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
-  print("{} collided with {}".format(name1, name2))
-
-a.on_collision(on_collision)
-npc.on_collision(on_collision)
 
 # This block creates the list of waypoints that the NPC will follow
-# Each waypoint is an position vector paired with the speed that the NPC will drive to it
+# Each waypoint consists of a position vector, speed, and an angular orientation vector
 waypoints = []
 x_max = 2
+y_max = 2
 z_delta = 12
 
 layer_mask = 0
 layer_mask |= 1 << 0 # 0 is the layer for the road (default)
+px = 0
+py = 0.5
 
-for i in range(20):
-  speed = 24# if i % 2 == 0 else 12
+for i in range(75):
+  speed = 6
   px = 0
-  pz = (i + 1) * z_delta
-  # Waypoint angles are input as Euler angles (roll, pitch, yaw)
-  angle = lgsvl.Vector(0, 0, 0)
+  py = ((i + 1) * 0.05) if (i < 50) else (50 * 0.05 + (50 - i) * 0.05)
+  pz = i * z_delta * 0.05
+
+  angle = lgsvl.Vector(i, 0, 3*i)
+
   # Raycast the points onto the ground because BorregasAve is not flat
   hit = sim.raycast(lgsvl.Vector(sx + px, sy, sz + pz), lgsvl.Vector(0,-1,0), layer_mask) 
 
-  # NPC will wait for 1 second at each waypoint
-  wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1, 0)
+  wp = lgsvl.DriveWaypoint(lgsvl.Vector(sx + px, sy + py, sz + pz), speed, angle, 0, 0)
   waypoints.append(wp)
 
-# When the NPC is within 0.5m of the waypoint, this will be called
+# When the NPC is within 1m of the waypoint, this will be called
 def on_waypoint(agent, index):
   print("waypoint {} reached".format(index))
 

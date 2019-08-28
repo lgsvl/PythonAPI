@@ -8,7 +8,6 @@
 import os
 import lgsvl
 import math
-import copy
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
@@ -22,9 +21,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state2 = copy.deepcopy(state)
-state2.transform.position.z += 50
-a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state2)
+a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # NPC, 10 meters ahead
 
@@ -70,8 +67,11 @@ for i in range(20):
   # Raycast the points onto the ground because BorregasAve is not flat
   hit = sim.raycast(lgsvl.Vector(sx + px, sy, sz + pz), lgsvl.Vector(0,-1,0), layer_mask) 
 
-  # NPC will wait for 1 second at each waypoint
-  wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1, 0)
+  # Trigger is set to 10 meters for every other waypoint (0 means no trigger)
+  tr = 0
+  if (i % 2):
+    tr = 10 
+  wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 0, tr)
   waypoints.append(wp)
 
 # When the NPC is within 0.5m of the waypoint, this will be called

@@ -13,7 +13,7 @@ from collections import namedtuple
 from collections.abc import Iterable, Callable
 import math
 
-DriveWaypoint = namedtuple("DriveWaypoint", "position speed")
+DriveWaypoint = namedtuple("DriveWaypoint", "position speed angle idle trigger_distance")
 WalkWaypoint = namedtuple("WalkWaypoint", "position idle")
 
 class AgentType(Enum):
@@ -202,7 +202,7 @@ class NpcVehicle(Vehicle):
   def follow(self, waypoints, loop = False):
     self.remote.command("vehicle/follow_waypoints", {
       "uid": self.uid,
-      "waypoints": [{"position": wp.position.to_json(), "speed": wp.speed} for wp in waypoints],
+      "waypoints": [{"position": wp.position.to_json(), "speed": wp.speed, "angle": wp.angle.to_json(), "idle": wp.idle, "trigger_distance": wp.trigger_distance} for wp in waypoints],
       "loop": loop,
     })
 
