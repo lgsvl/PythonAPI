@@ -82,7 +82,7 @@ class Simulator:
         if event_type in callbacks:
           for fn in callbacks[event_type]:
             if event_type == "collision":
-              fn(agent, self.agents.get(ev["other"]), Vector.from_json(ev["contact"]))
+              fn(agent, self.agents.get(ev["other"]), Vector.from_json(ev["contact"]) if ev["contact"] is not None else None)
             elif event_type == "waypoint_reached":
               fn(agent, ev["index"])
             elif event_type == "stop_line":
