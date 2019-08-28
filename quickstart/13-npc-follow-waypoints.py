@@ -24,7 +24,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 state2 = copy.deepcopy(state)
 state2.transform.position.z += 50
-a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state2)
+a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state2)
 
 # NPC, 10 meters ahead
 

@@ -21,7 +21,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 # Agents can be spawned with a velocity. Default is to spawn with 0 velocity
 state.velocity = lgsvl.Vector(0, 0, 20)
-a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 print("Real time elapsed =", 0)
 print("Simulation time =", sim.current_time)

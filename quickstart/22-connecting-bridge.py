@@ -20,7 +20,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
 print("Bridge connected:", a.bridge_connected)
