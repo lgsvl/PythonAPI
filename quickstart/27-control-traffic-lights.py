@@ -24,7 +24,7 @@ state.transform = spawns[0]
 state.velocity = lgsvl.Vector(0, 0, 20)
 ego = sim.add_agent("Jaguar2015XE (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
-print("Python API Quickstart #26: How to Control Traffic Light")
+print("Python API Quickstart #27: How to Control Traffic Light")
 
 # Get a list of controllable objects
 controllables = sim.get_controllables()
