@@ -16,7 +16,7 @@ class TestPeds(unittest.TestCase):
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.z -= 4
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             for name in ["Bob", "EntrepreneurFemale", "Howard", "Johny", \
                 "Pamela", "Presley", "Red", "Robin", "Stephen", "Zoe"]:
                 agent = self.create_ped(sim, name, spawnState(sim))
@@ -27,7 +27,7 @@ class TestPeds(unittest.TestCase):
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.z -= 4
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             spawnPoint = state.transform.position
 
@@ -49,7 +49,7 @@ class TestPeds(unittest.TestCase):
         with SimConnection(60) as sim:
             state = spawnState(sim)
             state.position.z -= 4
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             sx = state.position.x
             sy = state.position.y
@@ -81,7 +81,7 @@ class TestPeds(unittest.TestCase):
 
     def test_waypoint_idle_time(self):
         with SimConnection(60) as sim:
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
             state = spawnState(sim)
             sx = state.position.x
             sy = state.position.y

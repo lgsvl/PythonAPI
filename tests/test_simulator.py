@@ -32,20 +32,19 @@ class TestSimulator(unittest.TestCase):
 
     def test_run_time(self): # Check if the simulator runs 2 seconds
         with SimConnection() as sim:
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
             time = 2.0
             initial_time = sim.current_time
 
             sim.run(time)
             self.assertAlmostEqual(sim.current_time - initial_time, time, delta=0.1)
 
-    @unittest.skip("Running by frames not implemented yet")
-    def test_run_frames(self): # Check if the simulator runs 30 frames
+    def test_non_realtime(self): # Check if non-realtime simulation runs
         with SimConnection() as sim:
-            initial_frame = sim.current_frame
+            initial_time = sim.current_time
+            sim.run(time_limit=3, time_scale=2)
 
-            sim.step(frames=30)
-            self.assertEqual(sim.current_frame - initial_frame, 0)
+            self.assertAlmostEqual(sim.current_time-initial_time, 3, delta=0.1)
 
     def test_reset(self): # Check if sim.reset resets the time and frame
         with SimConnection() as sim:
@@ -61,7 +60,7 @@ class TestSimulator(unittest.TestCase):
             spawns = sim.get_spawn()
             state = lgsvl.AgentState()
             state.transform = spawns[0]
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             p = spawns[0].position
             p.y += 1

@@ -28,7 +28,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection(60) as sim:
             state = spawnState(sim)
             state.position.x += 10
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             spawns = sim.get_spawn()
             for name in ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]:
                 agent = self.create_NPC(sim, name)
@@ -40,17 +40,17 @@ class TestNPC(unittest.TestCase):
             agentCount = 1
             state = spawnState(sim)
             state.position.x += 10
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             for name in ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]:
                 self.create_NPC(sim, name)
                 agentCount += 1
             agents = sim.get_agents()
             self.assertEqual(len(agents), agentCount)
-            agentCounter = {"Jaguar2015XE (Apollo 3.5)":0, "Sedan":0, "SUV":0, "Jeep":0, "Hatchback":0, "SchoolBus":0, "BoxTruck":0}
+            agentCounter = {"Jaguar2015XE (Apollo 3.0)":0, "Sedan":0, "SUV":0, "Jeep":0, "Hatchback":0, "SchoolBus":0, "BoxTruck":0}
             for a in agents:
                 agentCounter[a.name] += 1
 
-            expectedAgents = ["Jaguar2015XE (Apollo 3.5)", "Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
+            expectedAgents = ["Jaguar2015XE (Apollo 3.0)", "Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
             for a in expectedAgents:
                 with self.subTest(a):
                     self.assertEqual(agentCounter[a], 1)
@@ -59,7 +59,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.x -= 5
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "Sedan")
             agent.follow_closest_lane(True, 5.6)
             sim.run(2.0)
@@ -72,7 +72,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.x -= 5
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "SUV")
             self.assertAlmostEqual(agent.state.transform.rotation.y, 0, places=3)
             x = agent.state
@@ -105,7 +105,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.x += 10
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.rotation.z += 180
             agent = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
@@ -119,7 +119,7 @@ class TestNPC(unittest.TestCase):
             state = spawnState(sim)
             state.position.z -= 10
             state.position.y += 200
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.position.y += 200
             agent = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
@@ -152,7 +152,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection(60) as sim:
             state = spawnState(sim)
             state.position.x -= 5
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             spawns = sim.get_spawn()
             sx = spawns[0].position.x
             sy = spawns[0].position.y
@@ -172,7 +172,7 @@ class TestNPC(unittest.TestCase):
                 px = x_max * (-1 if i % 2 == 0 else 1)
 
                 hit = sim.raycast(lgsvl.Vector(sx + px, sy, sz + pz), lgsvl.Vector(0,-1,0), layer_mask)
-                wp = lgsvl.DriveWaypoint(hit.point, speed)
+                wp = lgsvl.DriveWaypoint(hit.point, speed, lgsvl.Vector(0,0,0), 0, 0)
                 waypointCommands.append(wp)
                 waypoints.append(hit.point)
 
@@ -189,57 +189,59 @@ class TestNPC(unittest.TestCase):
             sim.run()
 
     def test_high_waypoint(self): # Check that a NPC will drive to under a high waypoint
-        try:
-            with SimConnection(15) as sim:
-                state = spawnState(sim)
-                state.position.x -= 5
-                sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
-                spawns = sim.get_spawn()
-                sx = spawns[0].position.x
-                sy = spawns[0].position.y
-                sz = spawns[0].position.z
-                agent = self.create_NPC(sim, "Sedan")
+        with SimConnection(15) as sim:
+            state = spawnState(sim)
+            state.position.x -= 5
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            spawns = sim.get_spawn()
+            sx = spawns[0].position.x
+            sy = spawns[0].position.y
+            sz = spawns[0].position.z
+            agent = self.create_NPC(sim, "Sedan")
 
-                px = 4
-                pz = 12
-                py = 5
-                speed = 6
-                wp = [lgsvl.DriveWaypoint(lgsvl.Vector(sx-px, sy+py, sz+pz), speed)]
+            px = 4
+            pz = 12
+            py = 50
+            speed = 6
+            wp = [lgsvl.DriveWaypoint(lgsvl.Vector(sx-px, sy+py, sz+pz), speed, lgsvl.Vector(0,0,0), 0, 0)]
 
-                def on_waypoint(agent,index):
-                    raise TestException("Waypoint reached?")
-                agent.on_waypoint_reached(on_waypoint)
-                agent.follow(wp)
-                sim.run(10)
-        except TestException as e:
-            self.assertNotIn("Waypoint reached?", repr(e))
+            def on_waypoint(agent,index):
+                sim.stop()
+
+            agent.on_waypoint_reached(on_waypoint)
+            agent.follow(wp)
+            sim.run(10)
+
+            self.assertAlmostEqual(agent.state.position.x, sx-px, delta=1)
+            self.assertAlmostEqual(agent.state.position.y, sy+py, delta=1)
+            self.assertAlmostEqual(agent.state.position.z, sz+pz, delta=1)
 
     def test_npc_different_directions(self): # Check that specified velocities match the NPC's movement
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.x -= 5
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.velocity = lgsvl.Vector(-10,0,0)
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
             sim.run(1)
-            self.assertNotAlmostEqual(state.position.x, npc.state.position.x, delta=0.2)
-            self.assertAlmostEqual(state.position.y, npc.state.position.y, delta=0.2)
-            self.assertAlmostEqual(state.position.z, npc.state.position.z, delta=0.2)
+            self.assertNotAlmostEqual(state.position.x, npc.state.position.x, delta=2)
+            self.assertAlmostEqual(state.position.y, npc.state.position.y, delta=2)
+            self.assertAlmostEqual(state.position.z, npc.state.position.z, delta=2)
             sim.remove_agent(npc)
             state.velocity = lgsvl.Vector(0,10,0)
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
             sim.run(1)
-            self.assertNotAlmostEqual(state.position.y, npc.state.position.y, delta=0.2)
-            self.assertAlmostEqual(state.position.x, npc.state.position.x, delta=0.2)
-            self.assertAlmostEqual(state.position.z, npc.state.position.z, delta=0.2)
+            self.assertNotAlmostEqual(state.position.y, npc.state.position.y, delta=2)
+            self.assertAlmostEqual(state.position.x, npc.state.position.x, delta=2)
+            self.assertAlmostEqual(state.position.z, npc.state.position.z, delta=2)
             sim.remove_agent(npc)
             state.velocity = lgsvl.Vector(0,0,10)
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
             sim.run(1)
-            self.assertNotAlmostEqual(state.position.z, npc.state.position.z, delta=0.2)
-            self.assertAlmostEqual(state.position.y, npc.state.position.y, delta=0.2)
-            self.assertAlmostEqual(state.position.x, npc.state.position.x, delta=0.2)
+            self.assertNotAlmostEqual(state.position.z, npc.state.position.z, delta=2)
+            self.assertAlmostEqual(state.position.y, npc.state.position.y, delta=2)
+            self.assertAlmostEqual(state.position.x, npc.state.position.x, delta=2)
 
     def test_stopline_callback(self): # Check that the stopline call back works properly
         with self.assertRaises(TestException) as e:
@@ -254,7 +256,7 @@ class TestNPC(unittest.TestCase):
                 npc.on_stop_line(on_stop_line)
 
                 state.position.x -= 5
-                sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+                sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
                 sim.run(60)
         self.assertIn("Waypoint reached", repr(e.exception))
 
@@ -277,7 +279,7 @@ class TestNPC(unittest.TestCase):
 
     def test_spawn_speed(self): # Checks that a spawned agent keeps the correct speed when spawned
         with SimConnection() as sim:
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim, 1))
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim, 1))
             npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, spawnState(sim))
 
             self.assertEqual(npc.state.speed,0)
@@ -291,7 +293,7 @@ class TestNPC(unittest.TestCase):
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
             state.transform = sim.map_point_on_lane(lgsvl.Vector(-42.43, -2, -6.2))
-            ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
 
@@ -314,7 +316,7 @@ class TestNPC(unittest.TestCase):
             npc = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
 
             state.transform = sim.map_point_on_lane(lgsvl.Vector(-42.43, -2, -6.2))
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
 
@@ -325,7 +327,7 @@ class TestNPC(unittest.TestCase):
             npc.on_lane_change(on_lane_change)
             sim.run(2)
             npc.change_lane(False)
-            sim.run(5)
+            sim.run(3)
 
             self.assertTrue(len(agents)== 0)
             self.assertAlmostEqual(npc.state.position.z, sim.map_point_on_lane(lgsvl.Vector(-42.73, -2, -9.7)).position.z, delta=1)
@@ -337,7 +339,7 @@ class TestNPC(unittest.TestCase):
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
             state.transform = sim.map_point_on_lane(lgsvl.Vector(-42.73, -2, -6.2))
-            ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
 
@@ -360,7 +362,7 @@ class TestNPC(unittest.TestCase):
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
             state.position.z -= 10
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
 
@@ -438,7 +440,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection() as sim:
             state = lgsvl.AgentState()
             state.transform = sim.map_point_on_lane(lgsvl.Vector(19, -2, 62))
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state.transform = sim.map_point_on_lane(lgsvl.Vector(19, -2, 72))
             npc = sim.add_agent("Jeep", lgsvl.AgentType.NPC, state)
             npc.follow_closest_lane(True, 10)
@@ -458,7 +460,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection(60) as sim:
             state = lgsvl.AgentState()
             state.transform = sim.map_point_on_lane(lgsvl.Vector(19, -2, 62))
-            sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, state)
+            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state.transform = sim.map_point_on_lane(lgsvl.Vector(19, -2, 72))
             npc = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
             npcX = npc.state.position.x
@@ -470,10 +472,10 @@ class TestNPC(unittest.TestCase):
             layer_mask |= 1 << 0
 
             hit = sim.raycast(lgsvl.Vector(npcX, npcY, npcZ+10), lgsvl.Vector(0,-1,0), layer_mask)
-            waypoints.append(lgsvl.DriveWaypoint(hit.point, 5)) # this waypoint to allow NPC to get up to speed
+            waypoints.append(lgsvl.DriveWaypoint(hit.point, 5, lgsvl.Vector(0,0,0), 0, 0)) # this waypoint to allow NPC to get up to speed
 
             hit = sim.raycast(lgsvl.Vector(npcX, npcY, npcZ+30), lgsvl.Vector(0,-1,0), layer_mask)
-            waypoints.append(lgsvl.DriveWaypoint(hit.point, 5))
+            waypoints.append(lgsvl.DriveWaypoint(hit.point, 5, lgsvl.Vector(0,0,0), 0, 0))
 
             def on_waypoint(agent, index):
                 sim.stop()
@@ -487,9 +489,9 @@ class TestNPC(unittest.TestCase):
             t1 = time.time()
             waypoints = []
             hit = sim.raycast(lgsvl.Vector(npcX, npcY, npcZ+40), lgsvl.Vector(0,-1,0), layer_mask)
-            waypoints.append(lgsvl.DriveWaypoint(hit.point, 20)) # this waypoint to allow NPC to get up to speed
+            waypoints.append(lgsvl.DriveWaypoint(hit.point, 20, lgsvl.Vector(0,0,0), 0, 0)) # this waypoint to allow NPC to get up to speed
             hit = sim.raycast(lgsvl.Vector(npcX, npcY, npcZ+120), lgsvl.Vector(0,-1,0), layer_mask)
-            waypoints.append(lgsvl.DriveWaypoint(hit.point, 20))
+            waypoints.append(lgsvl.DriveWaypoint(hit.point, 20, lgsvl.Vector(0,0,0), 0, 0))
             npc.follow(waypoints)
             sim.run()
             t2 = time.time()
