@@ -20,6 +20,14 @@ class Vector:
   def __repr__(self):
     return "Vector({}, {}, {})".format(self.x, self.y, self.z)
 
+  def __add__(self, v):
+    return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
+
+  def __sub__(self, v):
+    return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+
+  def __mul__(self, v):
+    return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
 
 class BoundingBox:
   def __init__(self, min, max):

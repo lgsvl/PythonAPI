@@ -175,8 +175,45 @@ class Simulator:
     if orientation is not None:
       if not isinstance(orientation, numtype): raise TypeError("Argument 'orientation' should have '{}' type".format(numtype))
       j["orientation"] = orientation
-    j = self.remote.command("map/from_gps", j)
-    return Transform.from_json(j)
+    j = self.remote.command("map/from_gps", [j])
+    return Transform.from_json(j[0])
+
+  def map_from_gps_batch(self, coords):
+    # coords dictionary
+    jarr = []
+
+    for c in coords:
+      j = {}
+      numtype = (int, float)
+      if ("latitude" in c) and ("longitude" in c):
+        if not isinstance(c["latitude"], numtype): raise TypeError("Argument 'latitude' should have '{}' type".format(numtype))
+        if not isinstance(c["longitude"], numtype): raise TypeError("Argument 'longitude' should have '{}' type".format(numtype))
+        if c["latitude"] < -90 or c["latitude"] > 90: raise ValueError("Latitude is out of range")
+        if c["longitude"] < -180 or c["longitude"] > 180: raise ValueError("Longitude is out of range")
+        j["latitude"] = c["latitude"]
+        j["longitude"] = c["longitude"]
+      elif ("northing" in c) and ("easting" in c):
+        if not isinstance(c["northing"], numtype): raise TypeError("Argument 'northing' should have '{}' type".format(numtype))
+        if not isinstance(c["easting"], numtype): raise TypeError("Argument 'easting' should have '{}' type".format(numtype))
+        if c["northing"] < 0 or c["northing"] > 10000000: raise ValueError("Northing is out of range")
+        if c["easting"] < -340000 or c["easting"] > 334000 : raise ValueError("Easting is out of range")
+        j["northing"] = c["northing"]
+        j["easting"] = c["easting"]
+      else:
+        raise Exception("Either latitude and longitude or northing and easting should be specified")
+      if "altitude" in c:
+        if not isinstance(c["altitude"], numtype): raise TypeError("Argument 'altitude' should have '{}' type".format(numtype))
+        j["altitude"] = c["altitude"]
+      if "orientation" in c:
+        if not isinstance(c["orientation"], numtype): raise TypeError("Argument 'orientation' should have '{}' type".format(numtype))
+        j["orientation"] = c["orientation"]
+      jarr.append(j)
+      
+    jarr = self.remote.command("map/from_gps", jarr)
+    transforms = []
+    for j in jarr:
+      transforms.append(Transform.from_json(j))
+    return transforms
 
   @accepts(Vector)
   def map_point_on_lane(self, point):
