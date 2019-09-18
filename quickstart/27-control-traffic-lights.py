@@ -21,26 +21,28 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state.velocity = lgsvl.Vector(0, 0, 20)
+state.transform.position.z += 20
+# state.velocity = lgsvl.Vector(0, 0, 20)
 ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 print("Python API Quickstart #27: How to Control Traffic Light")
 
-# Get a list of controllable objects
-controllables = sim.get_controllables()
+# # Get a list of controllable objects
+controllables = sim.get_controllables("signal")
 print("\n# List of controllable objects in {} scene:".format(scene_name))
 for c in controllables:
   print(c)
 
-# Pick a traffic light of intrest
-signal = controllables[2]
+signal = sim.get_controllable(lgsvl.Vector(19, 5, 21), "signal")
+print("\n# Signal of interest:")
+print(signal)
 
 # Get current controllable states
 print("\n# Current control policy:")
 print(signal.control_policy)
 
 # Create a new control policy
-control_policy = "trigger=50;green=1;yellow=1.5;red=2;green=5;loop"
+control_policy = "trigger=50;green=3;yellow=2;red=1;loop"
 
 # Control this traffic light with a new control policy
 signal.control(control_policy)
@@ -52,7 +54,7 @@ print(signal.control_policy)
 print("\n# Current signal state before simulation:")
 print(signal.current_state)
 
-seconds = 10
+seconds = 18
 input("\nPress Enter to run simulation for {} seconds".format(seconds))
 print("\nRunning simulation for {} seconds...".format(seconds))
 sim.run(seconds)

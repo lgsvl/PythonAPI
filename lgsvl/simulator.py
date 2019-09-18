@@ -195,6 +195,17 @@ class Simulator:
       return None
     return RaycastHit(hit["distance"], Vector.from_json(hit["point"]), Vector.from_json(hit["normal"]))
 
-  def get_controllables(self):
-    j = self.remote.command("controllable/get/all")
+  @accepts(str)
+  def get_controllables(self, control_type = None):
+    j = self.remote.command("controllable/get/all", {
+      "type": control_type,
+    })
     return [Controllable(self.remote, controllable) for controllable in j]
+
+  @accepts(Vector, str)
+  def get_controllable(self, position, control_type = None):
+    j = self.remote.command("controllable/get", {
+      "position": position.to_json(),
+      "type": control_type,
+    })
+    return Controllable(self.remote, j)
