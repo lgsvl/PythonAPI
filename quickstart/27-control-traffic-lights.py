@@ -20,9 +20,9 @@ else:
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
+forward = lgsvl.utils.transform_to_forward(spawns[0])
 state.transform = spawns[0]
-state.transform.position.z += 20
-# state.velocity = lgsvl.Vector(0, 0, 20)
+state.transform.position = spawns[0].position + 20 * forward
 ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 print("Python API Quickstart #27: How to Control Traffic Light")

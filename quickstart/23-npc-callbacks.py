@@ -17,13 +17,11 @@ else:
   sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
-sx = spawns[0].position.x
-sy = spawns[0].position.y
-sz = spawns[0].position.z + 200.0
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
 
 state = lgsvl.AgentState()
-state.transform = spawns[0]
-state.transform = sim.map_point_on_lane(lgsvl.Vector(sx, sy, sz))
+state.transform = sim.map_point_on_lane(spawns[0].position + 200 * forward)
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 mindist = 10.0
@@ -44,7 +42,7 @@ for name in ["Sedan", "SUV", "Jeep", "Hatchback"]:
   angle = random.uniform(0.0, 2*math.pi)
   dist = random.uniform(mindist, maxdist)
 
-  point = lgsvl.Vector(sx + dist * math.sin(angle), sy, sz + 25 + dist * math.cos(angle))
+  point = spawns[0].position + dist * math.sin(angle) * right + (225 + dist * math.cos(angle)) * forward
 
   state = lgsvl.AgentState()
   state.transform = sim.map_point_on_lane(point)

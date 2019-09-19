@@ -20,19 +20,15 @@ spawns = sim.get_spawn()
 # EGO
 
 state = lgsvl.AgentState()
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
 state.transform = spawns[0]
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # NPC, 10 meters ahead
-
-sx = spawns[0].position.x
-sy = spawns[0].position.y
-sz = spawns[0].position.z + 10.0
-
 state = lgsvl.AgentState()
-state.transform = spawns[0]
-state.transform.position.x = sx
-state.transform.position.z = sz
+state.transform.position = spawns[0].position + 10 * forward
+state.transform.rotation = spawns[0].rotation
 npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
 vehicles = {
@@ -63,9 +59,9 @@ for i in range(20):
   px = 0
   pz = (i + 1) * z_delta
   # Waypoint angles are input as Euler angles (roll, pitch, yaw)
-  angle = lgsvl.Vector(0, 0, 0)
+  angle = spawns[0].rotation
   # Raycast the points onto the ground because BorregasAve is not flat
-  hit = sim.raycast(lgsvl.Vector(sx + px, sy, sz + pz), lgsvl.Vector(0,-1,0), layer_mask) 
+  hit = sim.raycast(spawns[0].position + px * right + pz * forward, lgsvl.Vector(0,-1,0), layer_mask) 
 
   # Trigger is set to 10 meters for every other waypoint (0 means no trigger)
   tr = 0

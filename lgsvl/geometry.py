@@ -43,11 +43,6 @@ class Vector:
 
   def __rmul__(self, v):
     return self * v
-    # if isinstance(v, Vector):
-    #   return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
-    
-    # if isinstance(v, (int, float)):
-    #   return Vector(self.x * v, self.y * v, self.z * v)
 
 class BoundingBox:
   def __init__(self, min, max):
