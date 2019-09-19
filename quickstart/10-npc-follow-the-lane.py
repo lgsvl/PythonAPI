@@ -21,22 +21,21 @@ state.transform = spawns[0]
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 state = lgsvl.AgentState()
-state.transform = spawns[0]
 
-sx = spawns[0].position.x
-sz = spawns[0].position.z
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
 
 # 10 meters ahead, on left lane
-state.transform.position.z = sz + 10.0
+state.transform.position = spawns[0].position + 10.0 * forward
+state.transform.rotation = spawns[0].rotation
 
 npc1 = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
 state = lgsvl.AgentState()
-state.transform = spawns[0]
 
 # 10 meters ahead, on right lane
-state.transform.position.x = sx + 4.0
-state.transform.position.z = sz + 10.0
+state.transform.position = spawns[0].position + 4.0 * right + 10.0 * forward
+state.transform.rotation = spawns[0].rotation
 
 npc2 = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 

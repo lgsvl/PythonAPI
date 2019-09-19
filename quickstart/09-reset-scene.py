@@ -25,16 +25,15 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
-# 10 meters ahead
-sx = state.transform.position.x
-sz = state.transform.position.z + 10.0
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
+
 
 for i, name in enumerate(["Sedan", "SUV", "Jeep", "Hatchback"]):
   state = lgsvl.AgentState()
-  state.transform = spawns[0]
-
-  state.transform.position.x = sx - 4.0 * i
-  state.transform.position.z = sz
+  # 10 meters ahead
+  state.transform.position = spawns[0].position + (10 * forward) - (4.0 * i * right)
+  state.transform.rotation = spawns[0].rotation
   sim.add_agent(name, lgsvl.AgentType.NPC, state)
 
 input("Press Enter to reset")

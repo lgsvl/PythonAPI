@@ -26,19 +26,20 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
+
 # school bus, 20m ahead, perpendicular to road, stopped
 
 state = lgsvl.AgentState()
-state.transform = spawns[0]
-state.transform.position.z = sz + 20.0
-state.transform.rotation.y = 90.0
+state.transform.position = spawns[0].position + 20.0 * forward
+state.transform.rotation.y = spawns[0].rotation.y + 90.0
 bus = sim.add_agent("SchoolBus", lgsvl.AgentType.NPC, state)
 
 # sedan, 10m ahead, driving forward
 state = lgsvl.AgentState()
-state.transform = spawns[0]
-state.transform.position.z = sz + 10.0
-state.transform.rotation.y = ry
+state.transform.position = spawns[0].position + 10.0 * forward
+state.transform.rotation = spawns[0].rotation
 sedan = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 # Even though the sedan is commanded to follow the lane, obstacle avoidance takes precedence and it will not drive into the bus
 sedan.follow_closest_lane(True, 11.1) # 11.1 m/s is ~40 km/h

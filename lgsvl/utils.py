@@ -44,6 +44,38 @@ def transform_to_matrix(tr):
            [ px, py, pz, 1.0 ],
          ]
 
+def transform_to_forward(tr):
+  ax = tr.rotation.x * math.pi / 180.0
+  sx, cx = math.sin(ax), math.cos(ax)
+
+  ay = tr.rotation.y * math.pi / 180.0
+  sy, cy = math.sin(ay), math.cos(ay)
+
+  return Vector(cx * sy, -sx, cx * cy)
+
+def transform_to_up(tr):
+  ax = tr.rotation.x * math.pi / 180.0
+  ay = tr.rotation.y * math.pi / 180.0
+  az = tr.rotation.z * math.pi / 180.0
+
+  sx, cx = math.sin(ax), math.cos(ax)
+  sy, cy = math.sin(ay), math.cos(ay)
+  sz, cz = math.sin(az), math.cos(az)
+
+  return Vector(sx * sy * cz - cy * sz, cx * cz, sy * sz + sx * cy * cz)
+
+def transform_to_right(tr):
+  ax = tr.rotation.x * math.pi / 180.0
+  ay = tr.rotation.y * math.pi / 180.0
+  az = tr.rotation.z * math.pi / 180.0
+
+  sx, cx = math.sin(ax), math.cos(ax)
+  sy, cy = math.sin(ay), math.cos(ay)
+  sz, cz = math.sin(az), math.cos(az)
+
+  return Vector(sx * sy * sz + cy * cz, cx * sz, sx * cy * sz - sy * cz)
+
+
 
 def vector_dot(a, b):
   return a.x * b.x + a.y * b.y + a.z * b.z

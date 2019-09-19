@@ -20,6 +20,8 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 sx = state.transform.position.x
@@ -33,10 +35,9 @@ names = ["Bob", "EntrepreneurFemale", "Howard", "Johny", "Pamela", "Presley", "R
 i = 0
 while True:
   state = lgsvl.AgentState()
-  state.transform = spawns[0]
 
-  state.transform.position.x = sx + 5 - (1.0 * (i % 16))
-  state.transform.position.z = sz + 5 + (1.0 * (i//16))
+  state.transform.position = spawns[0].position + (5 + (1.0 * (i//16))) * forward + (5 - (1.0 * (i % 16))) * right
+  state.transform.rotation = spawns[0].rotation
   name = random.choice(names)
   print("({}) adding {}".format(i+1, name))
   p = sim.add_agent(name, lgsvl.AgentType.PEDESTRIAN, state)

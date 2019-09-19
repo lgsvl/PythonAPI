@@ -21,13 +21,33 @@ class Vector:
     return "Vector({}, {}, {})".format(self.x, self.y, self.z)
 
   def __add__(self, v):
-    return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
+    if isinstance(v, Vector):
+      return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
+
+    if isinstance(v, (int, float)):
+      return Vector(self.x + v, self.y + v, self.z + v)
 
   def __sub__(self, v):
-    return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+    if isinstance(v, Vector):
+      return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
+    
+    if isinstance(v, (int, float)):
+      return Vector(self.x - v, self.y - v, self.z - v)
 
   def __mul__(self, v):
-    return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
+    if isinstance(v, Vector):
+      return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
+    
+    if isinstance(v, (int, float)):
+      return Vector(self.x * v, self.y * v, self.z * v)
+
+  def __rmul__(self, v):
+    return self * v
+    # if isinstance(v, Vector):
+    #   return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
+    
+    # if isinstance(v, (int, float)):
+    #   return Vector(self.x * v, self.y * v, self.z * v)
 
 class BoundingBox:
   def __init__(self, min, max):

@@ -17,13 +17,14 @@ else:
   sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
-
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
 # EGO
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
 state2 = copy.deepcopy(state)
-state2.transform.position.z += 50
+state2.transform.position += 50 * forward
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state2)
 
 # NPC, 10 meters ahead
@@ -33,9 +34,8 @@ sy = spawns[0].position.y
 sz = spawns[0].position.z + 10.0
 
 state = lgsvl.AgentState()
-state.transform = spawns[0]
-state.transform.position.x = sx
-state.transform.position.z = sz
+state.transform.position = spawns[0].position + 10 * forward
+state.transform.rotation = spawns[0].rotation
 npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
 vehicles = {
@@ -66,9 +66,9 @@ for i in range(20):
   px = 0
   pz = (i + 1) * z_delta
   # Waypoint angles are input as Euler angles (roll, pitch, yaw)
-  angle = lgsvl.Vector(0, 0, 0)
+  angle = spawns[0].rotation
   # Raycast the points onto the ground because BorregasAve is not flat
-  hit = sim.raycast(lgsvl.Vector(sx + px, sy, sz + pz), lgsvl.Vector(0,-1,0), layer_mask) 
+  hit = sim.raycast(spawns[0].position + pz * forward, lgsvl.Vector(0,-1,0), layer_mask) 
 
   # NPC will wait for 1 second at each waypoint
   wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1, 0)

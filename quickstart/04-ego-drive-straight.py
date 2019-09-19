@@ -7,6 +7,7 @@
 
 import os
 import lgsvl
+import math
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
@@ -18,8 +19,11 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
+
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+
 # Agents can be spawned with a velocity. Default is to spawn with 0 velocity
-state.velocity = lgsvl.Vector(0, 0, 20)
+state.velocity = 20 * forward
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # The bounding box of an agent are 2 points (min and max) such that the box formed from those 2 points completely encases the agent

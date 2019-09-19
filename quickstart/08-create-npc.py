@@ -21,17 +21,16 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
-# Spawn NPC vehicles 10 meters ahead of the EGO
-sx = spawns[0].position.x
-sz = spawns[0].position.z + 10.0
+forward = lgsvl.utils.transform_to_forward(spawns[0])
+right = lgsvl.utils.transform_to_right(spawns[0])
 
 # Spawns one of each of the listed types of NPCS
 # The first will be created in front of the EGO and then they will be created to the left
 # The available types of NPCs can be found in NPCManager prefab
 for i, name in enumerate(["Sedan", "SUV", "Jeep", "Hatchback"]):
   state = lgsvl.AgentState()
-  state.transform = spawns[0]
 
-  state.transform.position.x = sx - 4.0 * i
-  state.transform.position.z = sz
+  # Spawn NPC vehicles 10 meters ahead of the EGO
+  state.transform.position = spawns[0].position + (10 * forward) - (4.0 * i * right)
+  state.transform.rotation = spawns[0].rotation
   sim.add_agent(name, lgsvl.AgentType.NPC, state)
