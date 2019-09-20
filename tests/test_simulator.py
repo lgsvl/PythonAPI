@@ -209,31 +209,31 @@ class TestSimulator(unittest.TestCase):
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
             gps = sim.map_to_gps(spawn)
-            self.assertAlmostEqual(gps.latitude, 37.4164844601309)
-            self.assertAlmostEqual(gps.longitude, -122.015795720893)
-            self.assertAlmostEqual(gps.northing, 4141530.49529266)
-            self.assertAlmostEqual(gps.easting, 87091.8088188171)
-            self.assertAlmostEqual(gps.altitude, -1.1201593875885)
-            self.assertAlmostEqual(gps.orientation, 0)
+            self.assertAlmostEqual(gps.latitude, 37.4173601699318)
+            self.assertAlmostEqual(gps.longitude, -122.016132757826)
+            self.assertAlmostEqual(gps.northing, 4141627.34000015)
+            self.assertAlmostEqual(gps.easting, 87060.970000267)
+            self.assertAlmostEqual(gps.altitude, -1.03600001335144)
+            self.assertAlmostEqual(gps.orientation, -194.823394775391)
 
     def test_from_northing(self): # Check that position vectors are correctly generated given northing and easting
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(northing=4141530.49529266, easting=87091.8088188171)
+            location = sim.map_from_gps(northing=4141627.34000015, easting=87060.970000267)
             self.assertAlmostEqual(spawn.position.x, location.position.x, places=1)
             self.assertAlmostEqual(spawn.position.z, location.position.z, places=1)
 
     def test_from_latlong(self): # Check that position vectors are correctly generated given latitude and longitude
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(latitude=37.4164844601309, longitude=-122.015795720893)
+            location = sim.map_from_gps(latitude=37.4173601699318, longitude=-122.016132757826)
             self.assertAlmostEqual(spawn.position.x, location.position.x, places=1)
             self.assertAlmostEqual(spawn.position.z, location.position.z, places=1)
 
     def test_from_alt_orient(self): # Check that position vectors are correctly generated with altitude and orientation
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(northing=4141530.49529266, easting=87091.8088188171, altitude=-1.1201593875885, orientation=0)
+            location = sim.map_from_gps(northing=4141627.34000015, easting=87060.970000267, altitude=-1.03600001335144, orientation=-194.823394775391)
             self.assertAlmostEqual(spawn.position.y, location.position.y, places=1)
             self.assertAlmostEqual(spawn.rotation.y, location.rotation.y, places=1)
 

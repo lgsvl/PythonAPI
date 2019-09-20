@@ -23,23 +23,26 @@ class Vector:
   def __add__(self, v):
     if isinstance(v, Vector):
       return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
-
-    if isinstance(v, (int, float)):
+    elif isinstance(v, (int, float)):
       return Vector(self.x + v, self.y + v, self.z + v)
+    else:
+      raise TypeError("Vector addition only allowed between Vectors and numbers")
 
   def __sub__(self, v):
     if isinstance(v, Vector):
       return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
-    
-    if isinstance(v, (int, float)):
+    elif isinstance(v, (int, float)):
       return Vector(self.x - v, self.y - v, self.z - v)
+    else:
+      raise TypeError("Vector subtraction only allowed between Vectors and numbers")
 
   def __mul__(self, v):
     if isinstance(v, Vector):
       return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
-    
-    if isinstance(v, (int, float)):
+    elif isinstance(v, (int, float)):
       return Vector(self.x * v, self.y * v, self.z * v)
+    else:
+      raise TypeError("Vector multiplication only allowed between Vectors and numbers")
 
   def __rmul__(self, v):
     return self * v

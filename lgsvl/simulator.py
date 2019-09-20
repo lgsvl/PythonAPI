@@ -151,32 +151,17 @@ class Simulator:
     return GpsData(j["latitude"], j["longitude"], j["northing"], j["easting"], j["altitude"], j["orientation"])
 
   def map_from_gps(self, latitude = None, longitude = None, northing = None, easting = None, altitude = None, orientation = None):
-    j = {}
-    numtype = (int, float)
-    if latitude is not None and longitude is not None:
-      if not isinstance(latitude, numtype): raise TypeError("Argument 'latitude' should have '{}' type".format(numtype))
-      if not isinstance(longitude, numtype): raise TypeError("Argument 'longitude' should have '{}' type".format(numtype))
-      if latitude < -90 or latitude > 90: raise ValueError("Latitude is out of range")
-      if longitude < -180 or longitude > 180: raise ValueError("Longitude is out of range")
-      j["latitude"] = latitude
-      j["longitude"] = longitude
-    elif northing is not None and easting is not None:
-      if not isinstance(northing, numtype): raise TypeError("Argument 'northing' should have '{}' type".format(numtype))
-      if not isinstance(easting, numtype): raise TypeError("Argument 'easting' should have '{}' type".format(numtype))
-      if northing < 0 or northing > 10000000: raise ValueError("Northing is out of range")
-      if easting < -340000 or easting > 334000 : raise ValueError("Easting is out of range")
-      j["northing"] = northing
-      j["easting"] = easting
-    else:
-      raise Exception("Either latitude and longitude or northing and easting should be specified")
-    if altitude is not None:
-      if not isinstance(altitude, numtype): raise TypeError("Argument 'altitude' should have '{}' type".format(numtype))
-      j["altitude"] = altitude
-    if orientation is not None:
-      if not isinstance(orientation, numtype): raise TypeError("Argument 'orientation' should have '{}' type".format(numtype))
-      j["orientation"] = orientation
-    j = self.remote.command("map/from_gps", [j])
-    return Transform.from_json(j[0])
+    c = []
+    coord = {
+      "latitude": latitude,
+      "longitude": longitude,
+      "northing": northing,
+      "easting": easting,
+      "altitude": altitude,
+      "orientation": orientation
+    }
+    c.append(coord)
+    return self.map_from_gps_batch(c)[0]
 
   def map_from_gps_batch(self, coords):
     # coords dictionary
@@ -185,14 +170,14 @@ class Simulator:
     for c in coords:
       j = {}
       numtype = (int, float)
-      if ("latitude" in c) and ("longitude" in c):
+      if ("latitude" in c and c["latitude"] is not None) and ("longitude" in c and c["longitude"] is not None):
         if not isinstance(c["latitude"], numtype): raise TypeError("Argument 'latitude' should have '{}' type".format(numtype))
         if not isinstance(c["longitude"], numtype): raise TypeError("Argument 'longitude' should have '{}' type".format(numtype))
         if c["latitude"] < -90 or c["latitude"] > 90: raise ValueError("Latitude is out of range")
         if c["longitude"] < -180 or c["longitude"] > 180: raise ValueError("Longitude is out of range")
         j["latitude"] = c["latitude"]
         j["longitude"] = c["longitude"]
-      elif ("northing" in c) and ("easting" in c):
+      elif ("northing" in c and c["northing"] is not None) and ("easting" in c and c["easting"] is not None):
         if not isinstance(c["northing"], numtype): raise TypeError("Argument 'northing' should have '{}' type".format(numtype))
         if not isinstance(c["easting"], numtype): raise TypeError("Argument 'easting' should have '{}' type".format(numtype))
         if c["northing"] < 0 or c["northing"] > 10000000: raise ValueError("Northing is out of range")
@@ -201,10 +186,10 @@ class Simulator:
         j["easting"] = c["easting"]
       else:
         raise Exception("Either latitude and longitude or northing and easting should be specified")
-      if "altitude" in c:
+      if "altitude" in c and c["altitude"] is not None:
         if not isinstance(c["altitude"], numtype): raise TypeError("Argument 'altitude' should have '{}' type".format(numtype))
         j["altitude"] = c["altitude"]
-      if "orientation" in c:
+      if "orientation" in c and c["orientation"] is not None:
         if not isinstance(c["orientation"], numtype): raise TypeError("Argument 'orientation' should have '{}' type".format(numtype))
         j["orientation"] = c["orientation"]
       jarr.append(j)
