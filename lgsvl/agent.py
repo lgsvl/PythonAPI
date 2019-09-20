@@ -13,8 +13,19 @@ from collections import namedtuple
 from collections.abc import Iterable, Callable
 import math
 
-DriveWaypoint = namedtuple("DriveWaypoint", "position speed angle idle trigger_distance")
-WalkWaypoint = namedtuple("WalkWaypoint", "position idle")
+class DriveWaypoint:
+  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, trigger_distance = 0):
+    self.position = position
+    self.speed = speed
+    self.angle = angle
+    self.idle = idle
+    self.trigger_distance = trigger_distance
+
+class WalkWaypoint:
+  def __init__(self, position, idle, trigger_distance = 0):
+    self.position = position
+    self.idle = idle
+    self.trigger_distance = trigger_distance
 
 class AgentType(Enum):
   EGO = 1
@@ -199,6 +210,36 @@ class NpcVehicle(Vehicle):
 
   @accepts(Iterable, bool)
   def follow(self, waypoints, loop = False):
+    '''Tells the NPC to follow the waypoints
+    
+    When an NPC reaches a waypoint, it will:
+    1. Wait for an EGO vehicle to approach to within the trigger_distance [meters] (ignored if 0)
+    2. Wait the idle time (ignored if 0)
+    3. Drive to the next waypoint (if any)
+
+    Parameters
+    ----------
+    waypoints : list of DriveWaypoints
+      DriveWaypoint : tuple (position, speed, angle, idle, trigger_distance)
+
+        position : lgsvl.Vector()
+          Unity coordinates of waypoint
+
+        speed : float
+          how fast the NPC should drive to the waypoint
+
+        angle : lgsvl.Vector()
+          Unity rotation of the NPC at the waypoint
+
+        idle : float
+          time for the NPC to wait at the waypoint
+
+        trigger_distance : float
+          how close an EGO must approach for the NPC to continue
+
+    loop : bool
+      whether the NPC should loop through the waypoints after reaching the final one
+    '''
     self.remote.command("vehicle/follow_waypoints", {
       "uid": self.uid,
       "waypoints": [{"position": wp.position.to_json(), "speed": wp.speed, "angle": wp.angle.to_json(), "idle": wp.idle, "trigger_distance": wp.trigger_distance} for wp in waypoints],
@@ -254,9 +295,33 @@ class Pedestrian(Agent):
 
   @accepts(Iterable, bool)
   def follow(self, waypoints, loop = False):
+    '''Tells the Pedestrian to follow the waypoints
+
+    When a pedestrian reaches a waypoint, it will:
+    1. Wait for an EGO vehicle to approach to within the trigger_distance [meters] (ignored if 0)
+    2. Wait the idle time (ignored if 0)
+    3. Walk to the next waypoint (if any)
+
+    Parameters
+    ----------
+    waypoints : list of WalkWaypoints
+      WalkWaypoint : tuple (position, idle, trigger_distance)
+
+        position : lgsvl.Vector()
+          Unity coordinates of waypoint
+
+        idle : float
+          time for the pedestrian to wait at the waypoint
+
+        trigger_distance : float
+          how close an EGO must approach for the pedestrian to continue
+
+    loop : bool
+      whether the pedestrian should loop through the waypoints after reaching the final one
+    '''
     self.remote.command("pedestrian/follow_waypoints", {
       "uid": self.uid,
-      "waypoints": [{"position": wp.position.to_json(), "idle": wp.idle} for wp in waypoints],
+      "waypoints": [{"position": wp.position.to_json(), "idle": wp.idle, "trigger_distance": wp.trigger_distance} for wp in waypoints],
       "loop": loop,
     })
 
