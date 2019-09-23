@@ -14,11 +14,12 @@ from collections.abc import Iterable, Callable
 import math
 
 class DriveWaypoint:
-  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, trigger_distance = 0):
+  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, deactivate = False, trigger_distance = 0):
     self.position = position
     self.speed = speed
     self.angle = angle
     self.idle = idle
+    self.deactivate = deactivate
     self.trigger_distance = trigger_distance
 
 class WalkWaypoint:
@@ -220,7 +221,7 @@ class NpcVehicle(Vehicle):
     Parameters
     ----------
     waypoints : list of DriveWaypoints
-      DriveWaypoint : tuple (position, speed, angle, idle, trigger_distance)
+      DriveWaypoint : tuple (position, speed, angle, idle, deactivate, trigger_distance)
 
         position : lgsvl.Vector()
           Unity coordinates of waypoint
@@ -234,6 +235,9 @@ class NpcVehicle(Vehicle):
         idle : float
           time for the NPC to wait at the waypoint
 
+        deactivate : bool
+          whether the NPC is to deactivate while waiting at this waypoint
+
         trigger_distance : float
           how close an EGO must approach for the NPC to continue
 
@@ -242,7 +246,7 @@ class NpcVehicle(Vehicle):
     '''
     self.remote.command("vehicle/follow_waypoints", {
       "uid": self.uid,
-      "waypoints": [{"position": wp.position.to_json(), "speed": wp.speed, "angle": wp.angle.to_json(), "idle": wp.idle, "trigger_distance": wp.trigger_distance} for wp in waypoints],
+      "waypoints": [{"position": wp.position.to_json(), "speed": wp.speed, "angle": wp.angle.to_json(), "idle": wp.idle, "deactivate": wp.deactivate, "trigger_distance": wp.trigger_distance} for wp in waypoints],
       "loop": loop,
     })
 

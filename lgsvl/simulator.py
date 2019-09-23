@@ -207,15 +207,36 @@ class Simulator:
 
   @accepts(Vector, Vector, int, float)
   def raycast(self, origin, direction, layer_mask = -1, max_distance = float("inf")):
-    hit = self.remote.command("simulator/raycast", {
+    hit = self.remote.command("simulator/raycast", [{
       "origin": origin.to_json(),
       "direction": direction.to_json(),
       "layer_mask": layer_mask,
       "max_distance": max_distance
-    })
-    if hit is None:
+    }])
+    if hit[0] is None:
       return None
-    return RaycastHit(hit["distance"], Vector.from_json(hit["point"]), Vector.from_json(hit["normal"]))
+    return RaycastHit(hit[0]["distance"], Vector.from_json(hit[0]["point"]), Vector.from_json(hit[0]["normal"]))
+
+  
+  def raycast_batch(self, args):
+    jarr = []
+    for arg in args:
+      jarr.append({
+      "origin": arg["origin"].to_json(),
+      "direction": arg["direction"].to_json(),
+      "layer_mask": arg["layer_mask"],
+      "max_distance": arg["max_distance"]
+    }) 
+
+    hits = self.remote.command("simulator/raycast", jarr)
+    results = []
+    for hit in hits:
+      if hit is None:
+        results.append(None)
+      else:
+        results.append(RaycastHit(hit["distance"], Vector.from_json(hit["point"]), Vector.from_json(hit["normal"])))
+
+    return results
 
   @accepts(str)
   def get_controllables(self, control_type = None):
