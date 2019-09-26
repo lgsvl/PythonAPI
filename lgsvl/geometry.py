@@ -3,6 +3,7 @@
 #
 # This software contains code licensed as described in LICENSE.
 #
+from math import sqrt
 
 class Vector:
   def __init__(self, x = 0.0, y = 0.0, z = 0.0):
@@ -46,6 +47,9 @@ class Vector:
 
   def __rmul__(self, v):
     return self * v
+
+  def magnitude(self):
+    return sqrt(self.x**2 + self.y**2 + self.z**2)
 
 class BoundingBox:
   def __init__(self, min, max):
