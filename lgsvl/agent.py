@@ -9,7 +9,6 @@ from .sensor import Sensor
 from .utils import accepts
 
 from enum import Enum
-from collections import namedtuple
 from collections.abc import Iterable, Callable
 import math
 
@@ -221,7 +220,7 @@ class NpcVehicle(Vehicle):
     Parameters
     ----------
     waypoints : list of DriveWaypoints
-      DriveWaypoint : tuple (position, speed, angle, idle, deactivate, trigger_distance)
+      DriveWaypoint : Class (position, speed, angle, idle, trigger_distance)
 
         position : lgsvl.Vector()
           Unity coordinates of waypoint
@@ -309,7 +308,7 @@ class Pedestrian(Agent):
     Parameters
     ----------
     waypoints : list of WalkWaypoints
-      WalkWaypoint : tuple (position, idle, trigger_distance)
+      WalkWaypoint : Class (position, idle, trigger_distance)
 
         position : lgsvl.Vector()
           Unity coordinates of waypoint

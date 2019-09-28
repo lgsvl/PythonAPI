@@ -5,6 +5,8 @@
 #
 from math import sqrt
 
+import math
+
 class Vector:
   def __init__(self, x = 0.0, y = 0.0, z = 0.0):
     self.x = x
@@ -47,6 +49,9 @@ class Vector:
 
   def __rmul__(self, v):
     return self * v
+
+  def __neg__(self):
+    return Vector(-self.x, -self.y, -self.z)
 
   def magnitude(self):
     return sqrt(self.x**2 + self.y**2 + self.z**2)

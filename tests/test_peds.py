@@ -15,7 +15,8 @@ class TestPeds(unittest.TestCase):
     def test_ped_creation(self): # Check if the different types of Peds can be created
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 4
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            state.transform.position = state.position - 4 * forward
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             for name in ["Bob", "EntrepreneurFemale", "Howard", "Johny", \
                 "Pamela", "Presley", "Red", "Robin", "Stephen", "Zoe"]:
@@ -26,7 +27,8 @@ class TestPeds(unittest.TestCase):
     def test_ped_random_walk(self): # Check if pedestrians can walk randomly
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.z -= 4
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            state.transform.position = state.position - 4 * forward
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             spawnPoint = state.transform.position
@@ -48,12 +50,12 @@ class TestPeds(unittest.TestCase):
     def test_ped_circle_waypoints(self): # Check if pedestrians can follow waypoints
         with SimConnection(60) as sim:
             state = spawnState(sim)
-            state.position.z -= 4
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            state.transform.position = state.position - 4 * forward
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
-            sx = state.position.x
-            sy = state.position.y
-            sz = state.position.z + 10
+            state.transform.position = state.position + 10 * forward
             radius = 5
             count = 3
             waypointCommands = []
@@ -63,7 +65,7 @@ class TestPeds(unittest.TestCase):
                 x = radius * math.cos(i * 2 * math.pi / count)
                 z = radius * math.sin(i * 2 * math.pi / count)
                 idle = 1 if i < count//2 else 0
-                hit = sim.raycast(lgsvl.Vector(sx + x, sy, sz + z), lgsvl.Vector(0, -1, 0), layer_mask)
+                hit = sim.raycast(state.position + z * forward + x * right, lgsvl.Vector(0, -1, 0), layer_mask)
                 waypointCommands.append(lgsvl.WalkWaypoint(hit.point, idle))
                 waypoints.append(hit.point)
 
@@ -83,10 +85,9 @@ class TestPeds(unittest.TestCase):
         with SimConnection(60) as sim:
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
             state = spawnState(sim)
-            sx = state.position.x
-            sy = state.position.y
-            sz = state.position.z + 10
-            state.transform.position = lgsvl.Vector(sx, sy, sz)
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            state.transform.position = state.position + 10 * forward
             zoe = self.create_ped(sim, "Zoe", state)
 
             def on_waypoint(agent, index):
@@ -94,9 +95,9 @@ class TestPeds(unittest.TestCase):
 
             layer_mask = 0 | (1 << 0)
             waypoints = []
-            hit = sim.raycast(lgsvl.Vector(sx-2, sy, sz), lgsvl.Vector(0, -1, 0), layer_mask)
+            hit = sim.raycast(state.position - 2 * right, lgsvl.Vector(0, -1, 0), layer_mask)
             waypoints.append(lgsvl.WalkWaypoint(hit.point, 0))
-            hit = sim.raycast(lgsvl.Vector(sx-5, sy, sz), lgsvl.Vector(0, -1, 0), layer_mask)
+            hit = sim.raycast(state.position - 5 * right, lgsvl.Vector(0, -1, 0), layer_mask)
             waypoints.append(lgsvl.WalkWaypoint(hit.point, 0))
 
             zoe.on_waypoint_reached(on_waypoint)
@@ -109,9 +110,9 @@ class TestPeds(unittest.TestCase):
 
             zoe.state = state
             waypoints = []
-            hit = sim.raycast(lgsvl.Vector(sx-2, sy, sz), lgsvl.Vector(0, -1, 0), layer_mask)
+            hit = sim.raycast(state.position - 2 * right, lgsvl.Vector(0, -1, 0), layer_mask)
             waypoints.append(lgsvl.WalkWaypoint(hit.point, 2))
-            hit = sim.raycast(lgsvl.Vector(sx-5, sy, sz), lgsvl.Vector(0, -1, 0), layer_mask)
+            hit = sim.raycast(state.position - 5 * right, lgsvl.Vector(0, -1, 0), layer_mask)
             waypoints.append(lgsvl.WalkWaypoint(hit.point, 0))
             zoe.follow(waypoints)
             t2 = time.time()

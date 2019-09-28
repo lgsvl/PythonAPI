@@ -60,6 +60,9 @@ class TestSimulator(unittest.TestCase):
             spawns = sim.get_spawn()
             state = lgsvl.AgentState()
             state.transform = spawns[0]
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            up = lgsvl.utils.transform_to_up(state.transform)
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             p = spawns[0].position
@@ -69,31 +72,31 @@ class TestSimulator(unittest.TestCase):
                 layer_mask |= 1 << bit
 
             # Right
-            hit = sim.raycast(p, lgsvl.Vector(1,0,0), layer_mask)
+            hit = sim.raycast(p, right, layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 14.6886606216431)
+            self.assertAlmostEqual(hit.distance, 15.0892992019653)
 
             #Left
-            hit = sim.raycast(p, lgsvl.Vector(-1,0,0), layer_mask)
+            hit = sim.raycast(p, -right, layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 19.7446689605713)
+            self.assertAlmostEqual(hit.distance, 19.72922706604)
 
             #Back
-            hit = sim.raycast(p, lgsvl.Vector(0,0,-1), layer_mask)
+            hit = sim.raycast(p, -forward, layer_mask)
             self.assertFalse(hit)
 
             #Front
-            hit = sim.raycast(p, lgsvl.Vector(0,0,1), layer_mask)
+            hit = sim.raycast(p, forward, layer_mask)
             self.assertFalse(hit)
 
             # Up
-            hit = sim.raycast(p, lgsvl.Vector(0,1,0), layer_mask)
+            hit = sim.raycast(p, up, layer_mask)
             self.assertFalse(hit)
 
             # Down
-            hit = sim.raycast(p, lgsvl.Vector(0,-1,0), layer_mask)
+            hit = sim.raycast(p, -up, layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 1.00000011920929)
+            self.assertAlmostEqual(hit.distance, 1.08376359939575)
 
     def test_weather(self): # Check that the weather state can be read properly and changed
         with SimConnection() as sim:

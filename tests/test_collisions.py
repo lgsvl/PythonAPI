@@ -113,10 +113,11 @@ class TestCollisions(unittest.TestCase):
     def test_wall_collision(self): # Check that an EGO collision with a wall is reported properly
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.position.x = 60
-            state.position.y = -4
-            state.position.z = 121
-            state.velocity.z += 50
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            up = lgsvl.utils.transform_to_up(state.transform)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            state.transform.position = state.position + 30 * right - 1 * up + 140 * forward
+            state.velocity = 50 * forward
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             collisions = []
 
@@ -140,14 +141,15 @@ class TestCollisions(unittest.TestCase):
         # Creates 2 agents, the mover is created with a forward velocity
         # still is rotated 90 degree in and in front of the mover
         state = spawnState(sim)
-        state.velocity = lgsvl.Vector(0, 0, 50)
+        forward = lgsvl.utils.transform_to_forward(state.transform)
+        state.velocity = 50 * forward
         mover = sim.add_agent(mover_name, agent_type, state)
 
         # school bus, 20m ahead, perpendicular to road, stopped
 
         state = spawnState(sim)
-        state.transform.position.z += 20.0
-        state.transform.rotation.y = 90.0
+        state.transform.position = state.transform.position + 20 * forward
+        state.transform.rotation.y += 90.0
         still = sim.add_agent(still_name, still_type, state)
 
         return mover, still

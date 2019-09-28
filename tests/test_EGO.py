@@ -40,7 +40,8 @@ class TestEGO(unittest.TestCase):
             cmEqual(self, agent.state.velocity, state.velocity, "0 Velocity")
 
             sim.reset()
-            state.velocity = lgsvl.Vector(-50, 0, 0)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            state.velocity = -50 * right
             agent = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             
             cmEqual(self, agent.state.velocity, state.velocity, "50 Velocity")
@@ -48,33 +49,39 @@ class TestEGO(unittest.TestCase):
     def test_ego_different_directions(self): # Check that the xyz velocities equate to xyz changes in position
         with SimConnection(40) as sim:
             state = spawnState(sim)
-            state.velocity = lgsvl.Vector(-10,0,0)
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            up = lgsvl.utils.transform_to_up(state.transform)
+            right = lgsvl.utils.transform_to_right(state.transform)
+
+            state.velocity = -10 * right
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             sim.run(.5)
-            self.assertNotAlmostEqual(state.position.x, ego.state.position.x, places=1)
-            self.assertAlmostEqual(state.position.y, ego.state.position.y, places=1)
-            self.assertAlmostEqual(state.position.z, ego.state.position.z, places=1)
+            target = state.position - 3 * right
+            self.assertLess((ego.state.position - target).magnitude(), 1)
             sim.remove_agent(ego)
-            state.velocity = lgsvl.Vector(0,10,0)
+            
+            state.velocity = 10 * up
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             sim.run(.5)
-            self.assertNotAlmostEqual(state.position.y, ego.state.position.y, places=1)
-            self.assertAlmostEqual(state.position.x, ego.state.position.x, places=1)
-            self.assertAlmostEqual(state.position.z, ego.state.position.z, places=1)
+            target = state.position + 3 * up
+            self.assertLess((ego.state.position - target).magnitude(), 1)
             sim.remove_agent(ego)
-            state.velocity = lgsvl.Vector(0,0,10)
+
+            state.velocity = 10 * forward
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             sim.run(.5)
-            self.assertNotAlmostEqual(state.position.z, ego.state.position.z, places=1)
-            self.assertAlmostEqual(state.position.y, ego.state.position.y, delta=0.15)
-            self.assertAlmostEqual(state.position.x, ego.state.position.x, places=1)
+            target = state.position + 4 * forward
+            self.assertLess((ego.state.position - target).magnitude(), 1)
 
     def test_speed(self): # check that speed returns a reasonable number
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.velocity = lgsvl.Vector(-10,10,10)
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            up = lgsvl.utils.transform_to_up(state.transform)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            state.velocity = -10 * right + 10 * up + 10 * forward
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
-            self.assertAlmostEqual(ego.state.speed, math.sqrt(300))
+            self.assertAlmostEqual(ego.state.speed, math.sqrt(300), places=3)
 
     @unittest.skip("No highway in currents maps")
     def test_rotation_on_highway_ramp(self): # Check that vehicle is rotated when spawned on the highway ramp
@@ -120,7 +127,7 @@ class TestEGO(unittest.TestCase):
             control = lgsvl.VehicleControl()
             ego.apply_control(control,True)
             sim.run(3)
-            noBrakePosition = ego.state.position.z
+            noBrakeDistance = (ego.state.position - state.position).magnitude()
             
             sim.reset()
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
@@ -132,7 +139,8 @@ class TestEGO(unittest.TestCase):
             control.braking = 1
             ego.apply_control(control, True)
             sim.run(3)
-            self.assertLess(ego.state.position.z, noBrakePosition)
+            brakeDistance = (ego.state.position - state.position).magnitude()
+            self.assertLess(brakeDistance, noBrakeDistance)
 
     def test_ego_handbrake(self): # Check that the handbrake can be enable on an EGO vehicle, and the car stops sooner than without brakes
         with SimConnection(60) as sim:
@@ -145,7 +153,7 @@ class TestEGO(unittest.TestCase):
             control = lgsvl.VehicleControl()
             ego.apply_control(control,True)
             sim.run(3)
-            noBrakePosition = ego.state.position.z
+            noBrakeDistance = (ego.state.position - state.position).magnitude()
             
             sim.reset()
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
@@ -157,32 +165,41 @@ class TestEGO(unittest.TestCase):
             control.handbrake = True
             ego.apply_control(control, True)
             sim.run(3)
-            self.assertLess(ego.state.position.z, noBrakePosition)
+            brakeDistance = (ego.state.position - state.position).magnitude()
+            self.assertLess(brakeDistance, noBrakeDistance)
     
     def test_ego_reverse(self): # Check that the gear can be changed in an EGO vehicle, and the car moves in reverse
         with SimConnection() as sim:
-            ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
+            state = spawnState(sim)
+            ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             control = lgsvl.VehicleControl()
             control.throttle = 0.5
             control.reverse = True
             ego.apply_control(control, True)
             sim.run(2)
-            self.assertLess(ego.state.position.z, sim.get_spawn()[0].position.z)
+            forward = lgsvl.utils.transform_to_forward(state.transform)
+            target = state.position - 3.5 * forward
+            diff = ego.state.position - target
+            self.assertLess((diff).magnitude(), 1)
 
     def test_not_sticky_control(self): # Check that the a non sticky control is removed
         with SimConnection(60) as sim:
             state = spawnState(sim)
-            state.position.z += 20
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             control = lgsvl.VehicleControl()
             control.throttle = 1
             ego.apply_control(control, True)
             sim.run(3)
             stickySpeed = ego.state.speed
+
+            sim.reset()
+            ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             control = lgsvl.VehicleControl()
             control.throttle = 1
-            ego.apply_control(control, False)
-            sim.run(3)
+            ego.apply_control(control, True)
+            sim.run(1)
+            ego.apply_control(control,False)
+            sim.run(2)
             finalSpeed = ego.state.speed
             self.assertGreater(stickySpeed, finalSpeed)
 

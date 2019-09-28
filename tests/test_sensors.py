@@ -177,7 +177,8 @@ class TestSensors(unittest.TestCase):
         with SimConnection() as sim:
             state = lgsvl.AgentState()
             state.transform = sim.get_spawn()[0]
-            state.velocity = lgsvl.Vector(-50, 0, 0)
+            right = lgsvl.utils.transform_to_right(state.transform)
+            state.velocity = -50 * right
             agent = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             sensors = agent.get_sensors()
             initialGPSData = None

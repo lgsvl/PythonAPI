@@ -19,6 +19,9 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
+forward = lgsvl.utils.transform_to_forward(state.transform)
+right = lgsvl.utils.transform_to_right(state.transform)
+up = lgsvl.utils.transform_to_up(state.transform)
 sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # This is the point from which the rays will originate from. It is raised 1m from the ground
@@ -39,26 +42,26 @@ for bit in [0, 10, 11, 12]: # do not put 9 here, to not hit EGO vehicle itself
 
 # raycast returns None if the ray doesn't collide with anything
 # hit also has the point property which is the Unity position vector of where the ray collided with something
-hit = sim.raycast(p, lgsvl.Vector(1,0,0), layer_mask)
+hit = sim.raycast(p, right, layer_mask)
 if hit:
   print("Distance right:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(-1,0,0), layer_mask)
+hit = sim.raycast(p, -right, layer_mask)
 if hit:
   print("Distance left:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(0,0,-1), layer_mask)
+hit = sim.raycast(p, -forward, layer_mask)
 if hit:
   print("Distance back:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(0,0,1), layer_mask)
+hit = sim.raycast(p, forward, layer_mask)
 if hit:
   print("Distance forward:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(0,1,0), layer_mask)
+hit = sim.raycast(p, up, layer_mask)
 if hit:
   print("Distance up:", hit.distance)
 
-hit = sim.raycast(p, lgsvl.Vector(0,-1,0), layer_mask)
+hit = sim.raycast(p, -up, layer_mask)
 if hit:
   print("Distance down:", hit.distance)
