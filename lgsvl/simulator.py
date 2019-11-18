@@ -181,7 +181,7 @@ class Simulator:
         if not isinstance(c["northing"], numtype): raise TypeError("Argument 'northing' should have '{}' type".format(numtype))
         if not isinstance(c["easting"], numtype): raise TypeError("Argument 'easting' should have '{}' type".format(numtype))
         if c["northing"] < 0 or c["northing"] > 10000000: raise ValueError("Northing is out of range")
-        if c["easting"] < -340000 or c["easting"] > 334000 : raise ValueError("Easting is out of range")
+        if c["easting"] < 160000 or c["easting"] > 834000 : raise ValueError("Easting is out of range")
         j["northing"] = c["northing"]
         j["easting"] = c["easting"]
       else:
