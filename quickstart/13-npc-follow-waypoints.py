@@ -71,7 +71,7 @@ for i in range(20):
   hit = sim.raycast(spawns[0].position + pz * forward, lgsvl.Vector(0,-1,0), layer_mask) 
 
   # NPC will wait for 1 second at each waypoint
-  wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1, 0)
+  wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1)
   waypoints.append(wp)
 
 # When the NPC is within 0.5m of the waypoint, this will be called
