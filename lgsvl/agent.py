@@ -203,6 +203,9 @@ class EgoVehicle(Vehicle):
       args["control"]["turn_signal_right"] = control.turn_signal_right
     self.remote.command("vehicle/apply_control", args)
 
+  def on_custom(self, fn):
+    self.simulator._add_callback(self, "custom", fn)
+
 
 class NpcVehicle(Vehicle):
   def __init__(self, uid, simulator):

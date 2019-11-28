@@ -89,6 +89,8 @@ class Simulator:
               fn(agent)
             elif event_type == "lane_change":
               fn(agent)
+            elif event_type == "custom":
+              fn(agent, ev["kind"], ev["context"])
             if self.stopped:
               return
 
