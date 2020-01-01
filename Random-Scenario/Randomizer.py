@@ -10,13 +10,18 @@ import sys
 import re
 import tempfile
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+# output message, will be referenced later
 endMsg = 'default'
 
 
+# run function, recieves vehicle name, amount of NPCs, map name, runtime, seed, and timescale parameters, then creates
+# a random scenario using these variables
 def run(VN, NPC, MAP, RT, SD, TS):
     # Main spawning script
     # Initial simulator setup
+    sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+
+    # initialize variables
     try:
         vehicleName = VN
         NPCCount = int(NPC)
@@ -66,11 +71,6 @@ def run(VN, NPC, MAP, RT, SD, TS):
     a.connect_bridge("192.168.43.64", 9090)
 
     print("Waiting for connection...")
-    sensors = a.get_sensors()
-    for s in sensors:
-        if s.name == "Lidar":
-            s.save("lidar.pcd")
-            break
     while not a.bridge_connected:
         time.sleep(1)
 
@@ -102,7 +102,7 @@ def run(VN, NPC, MAP, RT, SD, TS):
         output = "{} collided with {} at {}".format(name1, name2, contact)
         print(output)
         print("Killing sim...")
-        endOfSim(msg)
+        sim.stop()
         global endMsg
         endMsg = msg
 
@@ -176,16 +176,6 @@ def run(VN, NPC, MAP, RT, SD, TS):
         for x in range(zeros):
             strFixed = "0" + strFixed
         return strFixed
-
-    # function to end the simulation and write a message in the output.txt file
-    def endOfSim(msg):
-        # if os.path.isfile('./output.txt'):
-        #     f = open("output.txt", "a")
-        # else:
-        #     f = open("output.txt", "w")
-        # f.write(msg)
-        # f.close()
-        sim.stop()
 
     # Function that returns true if two given agent states are at least dist away from each other on the x axis (forward
     # axis), also specifically checks if one of them is a larger vehicle, and if so it sets the distance between them
@@ -314,9 +304,10 @@ def run(VN, NPC, MAP, RT, SD, TS):
         if not collided:
             Pkey = addPickled()
             msg = "Simulation ended with no collisions \n Seed: {}\n Replay Key: {}\n \n".format(seed, Pkey)
-            endOfSim(msg)
+            sim.stop()
             global endMsg
             endMsg = msg
+
 
     start(NPCCount)
     return endMsg
@@ -324,6 +315,7 @@ def run(VN, NPC, MAP, RT, SD, TS):
     pass
 
 
+# replay function, recieves replay key as parameter
 def replay(key):
     # sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 
@@ -473,6 +465,7 @@ def replay(key):
         found = "{" + found + "}"
         return found
 
+    # main looping function
     def start(transformString):
         i = 0
         # spawning loop
@@ -494,12 +487,15 @@ def replay(key):
     pass
 
 
+# if this function is not called from the GUI for the purpose of debugging
 if __name__ == "__main__":
     ans = input("run or replay\n")
-    if ans not in "run" or "replay":
-        print("invalid command dickhead")
+    if not ans == "run" and not ans == "replay":
+        print("invalid command")
     if ans is "run":
         run("OR CAR", 20, "BorregasAve", 3, '', 1)
-    else:
-        if ans is "replay":
+    elif ans == 'replay':
+        try:
             replay('0001')
+        except ZeroDivisionError:
+            print('no scenarios exist')
