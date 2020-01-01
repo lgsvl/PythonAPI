@@ -9,15 +9,15 @@ from tkinter.scrolledtext import ScrolledText
 from datetime import datetime
 import Randomizer
 
-# TODO: exception handling for running gui without lgsvl running
+# TODO: docs / readme
+# TODO: fix / give up on bash file bug when mouse is over applications bar
+# general GUI setup
 root = tk.Tk()
 root.title("LGSVL PythonAPI")
 root.resizable(width=False, height=False)
 root.geometry('700x350')
 program_directory = sys.path[0]
 root.iconphoto(True, tk.PhotoImage(file=os.path.join(program_directory, "yoinkPY.png")))
-saved_file_root = ''
-loaded_file_root = ''
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # TAB SETUP
@@ -267,6 +267,23 @@ def get_picklefiles(keys, path):
     return files, lines_with_file
 
 
+# clear the output tab
+def clear_output():
+    tab3_output_scrolledtext.configure(state='normal')
+    tab3_output_scrolledtext.delete('1.0', 'end')
+    tab3_output_scrolledtext.configure(state='disabled')
+
+
+# check if any pickle files exist. if they do forward them to them select scenarios popup
+def save_to_file():
+    try:
+        keys = getKeys('')
+    except FileNotFoundError:
+        error_popup('Error: no scenarios exist')
+    else:
+        popup_select_scenarios(keys)
+
+
 # generic error message popup, print passed message with okay button to close popup
 def error_popup(msg):
     pop = tk.Toplevel()
@@ -277,6 +294,7 @@ def error_popup(msg):
     btn.grid(row=1, column=0)
 
 
+# are you sure popup, msg is the are you sure question, command is the function to call if yes is pressed
 def are_you_sure_popup(msg, command):
     pop = tk.Toplevel()
     label = tk.Label(pop, text=msg)
@@ -288,6 +306,8 @@ def are_you_sure_popup(msg, command):
     root.wait_window(pop)
 
 
+# check that all the pickle files that are stored in the pickleDict file actually exist. this is to ensure no
+# shenanigans and/or tomfoolery have taken place in the files
 def validate_pickles(path):
     try:
         keys = getKeys(path + '/pickleDict.txt')
@@ -311,6 +331,7 @@ def validate_pickles(path):
     # print(keys)
 
 
+# show and format nicely the existing pickle files in the temp folder, as checkboxes
 def update_available_replays(canvas):
     try:
         keys = getKeys('')
@@ -340,14 +361,30 @@ def update_available_replays(canvas):
         canvas.place_forget()
 
 
+# checks if the port that has been passed to the function as an integer is currently at this very moment being used by
+# some program that is currently running on the computer on which this function is being run and returns true if the
+# passed port is being used by a program on this computer and returns false if the port is not being used, you fool
+def is_port_in_use(port):
+    import socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('localhost', port)) == 0
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are ones that are called from different buttons, and rely on the helper functions
 # in the code section above
 
+# run button function, first checks if LGSVL is running, if not it exits the function and displays an error
+# otherwise, it attempts to run an instance of the Randomizer run function using the parameters input by the user
+# If the vehicle doesn't exist, or there is some sort of error in the entries, an error is displayed. If the run was
+# successful, run it again however many times are left according to the runs entry box
 def run():
     tab1_error_label.grid_forget()
     tab1_nameerror_label.grid_forget()
-
+    tab1_serveroffline_label.grid_forget()
+    if not is_port_in_use(8181):
+        tab1_serveroffline_label.grid(columnspan=2, column=1)
+        return
     try:
         msg = Randomizer.run(tab1_vehicle_name_entry.get(), variable_NPCs.get(), tab1_map_entry.get(),
                              tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get())
@@ -364,6 +401,8 @@ def run():
     update_available_replays(tab2_replays_canvas)
 
 
+# replay button function, attempts to run an instance of Randomizer replay function with the key entered by the user
+# as the passed key. if the key is invalid, an error is displayed
 def Replay():
     tab2_error_label.pack_forget()
     try:
@@ -372,37 +411,29 @@ def Replay():
         tab2_error_label.pack()
 
 
+# clear button function, calls are_you_sure_popup helper function with the warning and a reference to the do_Clear func
 def Clear():
     are_you_sure_popup("Doing this will delete all stored scenarios\n Scenarios can be saved in the output tab\n "
                        "Continue?", do_Clear)
 
 
+# clear (delete) the /or temp file, clear the output in the output tab, and update the available replays in tab2
 def do_Clear():
     shutil.rmtree(tempfile.gettempdir() + '/or', ignore_errors=True)
     clear_output()
     update_available_replays(tab2_replays_canvas)
 
 
-def clear_output():
-    tab3_output_scrolledtext.configure(state='normal')
-    tab3_output_scrolledtext.delete('1.0', 'end')
-    tab3_output_scrolledtext.configure(state='disabled')
-
-
-def save_to_file():
-    try:
-        keys = getKeys('')
-    except FileNotFoundError:
-        error_popup('Error: no scenarios exist')
-    else:
-        popup_select_scenarios(keys)
-
-
+# ask user for replays file location, confirm no shenanigans in the saved replays file, then copy the files from
+# folder to temp folder, which is where the other functions search for replays
 def load_from_file():
     Clear()
     homedir = os.environ['HOME']
     root.directory = tk.filedialog.askdirectory(initialdir=homedir)
-    validate, files = validate_pickles(root.directory)
+    try:
+        validate, files = validate_pickles(root.directory)
+    except TypeError:
+        return
     if not validate:
         error_popup('Error: Can not load file, something has been deleted, renamed, or moved')
     else:
@@ -458,6 +489,7 @@ tab1_runtime_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd3)
 tab1_timescale_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd3)
 tab1_timescale_entry.insert(0, "1")
 tab1_run_button = tk.Button(tab1, text="RUN", command=run)
+tab1_serveroffline_label = tk.Label(tab1, text='Unable to connect to LGSVL')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Run tab widget placement
 tab1_vehicle_name_label.grid(row=0, column=0, padx=15, pady=15, sticky="w")
@@ -486,7 +518,7 @@ tab1_timescale_entry.grid(row=3, column=3, padx=15, pady=15, sticky="w")
 tab1_run_button.grid(row=4, columnspan=2, column=1)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Replay tab widgets
+# Replay tab widgets + placement
 tab2_replaykey_label = tk.Label(tab2, text="Replay key")
 tab2_replaykey_entry = tk.Entry(tab2, validate='key', validatecommand=vcmd, justify='center')
 tab2_error_label = tk.Label(tab2, text="Error: Replay key not found")
@@ -502,16 +534,13 @@ tab2_clearreplays_button.place(relx=0.5, rely=0.95, anchor='s')
 
 tab2_replays_canvas = tk.Canvas(tab2, width=175, height=125)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Output tab widgets
+# Output tab widgets + placement
 tab3_output_frame = tk.Frame(tab3)
 tab3_output_scrolledtext = ScrolledText(tab3_output_frame, font=("Helvetica", 11), width=70, height=20,
                                         state='disabled')
 tab3_clear_button = tk.Button(tab3, text="CLEAR", command=clear_output)
 tab3_save_button = tk.Button(tab3, text="SAVE", padx=15, command=save_to_file)
 tab3_load_button = tk.Button(tab3, text="LOAD", padx=15, command=load_from_file)
-
-# addEntryContentToScrolledText(myEntry, tab3_output_scrolledtext)
-
 tab3_output_frame.pack(side='right')
 tab3_output_scrolledtext.pack()
 tab3_clear_button.place(relx=0.135, rely=0.10, anchor='e')
@@ -519,6 +548,7 @@ tab3_save_button.place(relx=0.135, rely=0.20, anchor='e')
 tab3_load_button.place(relx=0.135, rely=0.30, anchor='e')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# set tabs, update the displayed available replays (in the temp folder), and then run the GUI
 tabControl.pack(expan=1, fill="both")
 update_available_replays(tab2_replays_canvas)
 root.mainloop()
