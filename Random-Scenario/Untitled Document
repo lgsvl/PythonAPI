@@ -1,0 +1,1 @@
+xdotool windowfocus 56623107 && xdotool key --window 56623107 "Tab" && xdotool key --window 56623107 "Tab" && xdotool key --window 56623107 "Tab" && xdotool key --window 56623107 "Tab" && xdotool key --window 56623107 "Tab" && xdotool key --window 56623107 "KP_Enter"
