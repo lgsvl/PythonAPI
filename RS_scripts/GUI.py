@@ -8,12 +8,18 @@ from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 from datetime import datetime
 import Randomizer
+import signal
 
 # TODO: docs / readme
+# notes for docs: launch bash file will not work for non-unix systems, however the scripts should
+# be able to run manually (testing required)
+
 # TODO: fix / give up on bash file bug when mouse is over applications bar
+# TODO maybe: extra settings (distance between cars, spawning distance, exclusive vehicles etc)
+
 # general GUI setup
 root = tk.Tk()
-root.title("LGSVL PythonAPI")
+root.title("LGSVL PythonAPI Scenario Randomizer")
 root.resizable(width=False, height=False)
 root.geometry('700x350')
 program_directory = sys.path[0]
@@ -31,7 +37,8 @@ tabControl.add(tab2, text="Replay")
 tab3 = ttk.Frame(tabControl)
 tabControl.add(tab3, text="Output")
 
-
+tab4 = ttk.Frame(tabControl)
+tabControl.add(tab4, text='Params')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are mostly helper functions, which are called by various buttons and entry boxes
 
@@ -52,26 +59,7 @@ def validate_int(action, index, value_if_allowed,
     else:
         return True
 
-
-# validate only numbers are entered in entry box, negatives not allowed
-# noinspection PyUnusedLocal
-def validate_float(action, index, value_if_allowed,
-                   prior_value, text, validation_type, trigger_type, widget_name):
-    # action=1 -> insert
-    if action == '1':
-        if text in '0123456789.':
-            try:
-                float(value_if_allowed)
-                return True
-            except ValueError:
-                return False
-        else:
-            return False
-    else:
-        return True
-
-
-# validate only numbers are entered in entry box, negatives allowed
+# validate only ints are entered in entry box, negatives allowed
 # noinspection PyUnusedLocal
 def validate_int_negatives(action, index, value_if_allowed,
                            prior_value, text, validation_type, trigger_type, widget_name):
@@ -85,6 +73,24 @@ def validate_int_negatives(action, index, value_if_allowed,
                 return False
         if text in '-' and value_if_allowed == '-':
             return True
+        else:
+            return False
+    else:
+        return True
+
+
+# validate only ints or floats are entered in entry box, negatives not allowed
+# noinspection PyUnusedLocal
+def validate_float(action, index, value_if_allowed,
+                   prior_value, text, validation_type, trigger_type, widget_name):
+    # action=1 -> insert
+    if action == '1':
+        if text in '0123456789.':
+            try:
+                float(value_if_allowed)
+                return True
+            except ValueError:
+                return False
         else:
             return False
     else:
@@ -369,6 +375,16 @@ def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
 
+# create an array of strings of names of selected vehicles to be used in the scenario
+def array_vehiclenames():
+    names = ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
+    vars = [var_sedan.get(), var_suv.get(), var_jeep.get(), var_hatchback.get(), var_schoolbus.get(), var_boxtruck.get()]
+    indices = [i for i, x in enumerate(vars) if x == 1]
+    return [names[i] for i in indices]
+
+# timeout handler
+def handler(signum, frame):
+    raise TimeoutError
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are ones that are called from different buttons, and rely on the helper functions
@@ -382,21 +398,32 @@ def run():
     tab1_error_label.grid_forget()
     tab1_nameerror_label.grid_forget()
     tab1_serveroffline_label.grid_forget()
+    tab1_unabletospawn_label.grid_forget()
+
+    signal.signal(signal.SIGALRM, handler)
+    signal.alarm(15 + int(tab1_runtime_entry.get()))
+
     if not is_port_in_use(8181):
         tab1_serveroffline_label.grid(columnspan=2, column=1)
         return
     try:
         msg = Randomizer.run(tab1_vehicle_name_entry.get(), variable_NPCs.get(), tab1_map_entry.get(),
-                             tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get())
+                             tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get(),
+                             distbetween=tab4_distbetweencars_entry.get(), cars_to_use=array_vehiclenames(),
+                             spawn_start= tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get())
         addEntryContentToScrolledText(msg, tab3_output_scrolledtext)
     except ZeroDivisionError:
         tab1_nameerror_label.grid(columnspan=2, column=1)
     except ValueError:
         tab1_error_label.grid(columnspan=2, column=1)
+    except TimeoutError:
+        tab1_unabletospawn_label.grid(columnspan=2, column=1)
     else:
         for x in range(int(tab1_runs_entry.get()) - 1):
             msg = Randomizer.run(tab1_vehicle_name_entry.get(), variable_NPCs.get(), tab1_map_entry.get(),
-                                 tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get())
+                                 tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get(),
+                                 distbetween=tab4_distbetweencars_entry.get(), cars_to_use=array_vehiclenames(),
+                                 spawn_start=tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get())
             addEntryContentToScrolledText(msg, tab3_output_scrolledtext)
     update_available_replays(tab2_replays_canvas)
 
@@ -469,6 +496,8 @@ tab1_runtime_label = tk.Label(tab1, text="Runtime")
 tab1_timescale_label = tk.Label(tab1, text="Timescale")
 tab1_nameerror_label = tk.Label(tab1, text="Error: Vehicle name does not exist")
 tab1_error_label = tk.Label(tab1, text="Error: Illegal value entered")
+tab1_serveroffline_label = tk.Label(tab1, text='Unable to connect to LGSVL')
+tab1_unabletospawn_label = tk.Label(tab1, text='Spawning error: check params')
 tab1_vehicle_name_entry = tk.Entry(tab1)
 OPTIONS_NPCs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                 29, 30]
@@ -489,7 +518,6 @@ tab1_runtime_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd3)
 tab1_timescale_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd3)
 tab1_timescale_entry.insert(0, "1")
 tab1_run_button = tk.Button(tab1, text="RUN", command=run)
-tab1_serveroffline_label = tk.Label(tab1, text='Unable to connect to LGSVL')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Run tab widget placement
 tab1_vehicle_name_label.grid(row=0, column=0, padx=15, pady=15, sticky="w")
@@ -547,7 +575,38 @@ tab3_clear_button.place(relx=0.135, rely=0.10, anchor='e')
 tab3_save_button.place(relx=0.135, rely=0.20, anchor='e')
 tab3_load_button.place(relx=0.135, rely=0.30, anchor='e')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Param tab widgets + placement
+tab4_distbetweencars_label = tk.Label(tab4, text='Distance between vehicles')
+tab4_distbetweencars_entry = tk.Entry(tab4, validate='key', validatecommand=vcmd3)
+tab4_spawnstart_label = tk.Label(tab4, text='Spawn start position')
+tab4_spawnstart_entry = tk.Entry(tab4, validate='key', validatecommand=vcmd3)
+tab4_spawnend_label = tk.Label(tab4, text='Spawn end position')
+tab4_spawnend_entry = tk.Entry(tab4, validate='key', validatecommand=vcmd3)
 
+tab4_distbetweencars_label.grid(row=1, padx=5, pady=15)
+tab4_distbetweencars_entry.grid(row=1, column=1, padx=5, pady=15)
+tab4_spawnstart_label.grid(row=2, padx=5, pady=15)
+tab4_spawnstart_entry.grid(row=2, column=1, padx=5, pady=15)
+tab4_spawnend_label.grid(row=3, padx=5, pady=15)
+tab4_spawnend_entry.grid(row=3, column=1, padx=5, pady=15)
+
+# Car checkboxes:
+# names = ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
+var_sedan = tk.IntVar(value=1)
+var_suv = tk.IntVar(value=1)
+var_jeep = tk.IntVar(value=1)
+var_hatchback = tk.IntVar(value=1)
+var_schoolbus = tk.IntVar(value=1)
+var_boxtruck = tk.IntVar(value=1)
+tab4_cb_frame = tk.Frame(tab4)
+tab4_cb_frame.grid(rowspan=3, row=1, column=2)
+tab4_sedan_cb = tk.Checkbutton(tab4_cb_frame, text="Sedan", variable=var_sedan).grid(row=1, column=3, sticky='W', padx=50)
+tab4_suv_cb = tk.Checkbutton(tab4_cb_frame, text="SUV", variable=var_suv).grid(row=2, column=3, sticky='W', padx=50)
+tab4_jeep_cb = tk.Checkbutton(tab4_cb_frame, text="Jeep", variable=var_jeep).grid(row=3, column=3, sticky='W', padx=50)
+tab4_hatchback_cb = tk.Checkbutton(tab4_cb_frame, text="Hatchback", variable=var_hatchback).grid(row=4, column=3, sticky='W', padx=50)
+tab4_schoolbus_cb = tk.Checkbutton(tab4_cb_frame, text="School Bus", variable=var_schoolbus).grid(row=5, column=3, sticky='W', padx=50)
+tab4_boxtruck_cb = tk.Checkbutton(tab4_cb_frame, text="Box Truck", variable=var_boxtruck).grid(row=6, column=3, sticky='W', padx=50)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # set tabs, update the displayed available replays (in the temp folder), and then run the GUI
 tabControl.pack(expan=1, fill="both")
 update_available_replays(tab2_replays_canvas)

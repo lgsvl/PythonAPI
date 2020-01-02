@@ -14,9 +14,9 @@ import tempfile
 endMsg = 'default'
 
 
-# run function, recieves vehicle name, amount of NPCs, map name, runtime, seed, and timescale parameters, then creates
+# run function, receives vehicle name, amount of NPCs, map name, runtime, seed, and timescale parameters, then creates
 # a random scenario using these variables
-def run(VN, NPC, MAP, RT, SD, TS):
+def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=None, cars_to_use=None):
     # Main spawning script
     # Initial simulator setup
     sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
@@ -35,6 +35,27 @@ def run(VN, NPC, MAP, RT, SD, TS):
     else:
         seed = int(SD)
 
+    # Selected cars to use in the scenario
+    if cars_to_use is None or cars_to_use == '':
+        cars_to_use = ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
+
+    # Distance between vehicles (doubled for long vehicles)
+    if distbetween is None or distbetween == '':
+        distbetween = 5.0
+    else:
+        distbetween = float(distbetween)
+
+    # Minimum and maximum distance for NPCs to be spawned from EGO vehicle
+    if spawn_start is None or spawn_start == '':
+        spawn_start = 10.0
+    else:
+        spawn_start = float(spawn_start)
+
+    if spawn_end is None or spawn_end == '':
+        spawn_end = 500.0
+    else:
+        spawn_end = float(spawn_end)
+
     if sim.current_scene == map:
         sim.reset()
     else:
@@ -44,7 +65,7 @@ def run(VN, NPC, MAP, RT, SD, TS):
 
     NPCNameList = []
     # All possible NPC vehicles
-    names = ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
+
     # Bigger NPC vehicles (important later when spawning)
     bigLads = ["SchoolBus", "BoxTruck"]
     # List of transforms representing good spawn points
@@ -79,9 +100,6 @@ def run(VN, NPC, MAP, RT, SD, TS):
     sx = spawns[0].position.x
     sy = spawns[0].position.y
     sz = spawns[0].position.z
-    # Minimum and maximum distance for NPCs to be spawned from EGO vehicle
-    mindist = 10.0
-    maxdist = 500.0
     states = [state]
     statesToReplay = []
     AgentList = {
@@ -204,9 +222,9 @@ def run(VN, NPC, MAP, RT, SD, TS):
             for i in range(len(states)):
                 if NPCNameList[i] in bigLads:
                     biglad = True
-                if not (checkValidPos(state, states[i], 5.0, biglad)):
+                if not (checkValidPos(state, states[i], distbetween, biglad)):
                     finishCount = 0
-                    state.transform.position -= 5.0 * lgsvl.utils.transform_to_forward(state)
+                    state.transform.position -= distbetween * lgsvl.utils.transform_to_forward(state)
                     break
                 else:
                     finishCount += 1
@@ -235,14 +253,14 @@ def run(VN, NPC, MAP, RT, SD, TS):
     def dis2Positions(pos1, pos2):
         return math.sqrt((pos1.x - pos2.x) ** 2 + (pos1.y - pos2.y) ** 2 + (pos1.z - pos2.z) ** 2)
 
-    # Function to create a new random position between mindist and maxdist away from the EGO vehicle, and select a
+    # Function to create a new random position between spawn_start and spawn_end away from the EGO vehicle, and select a
     # random vehicle type from the list of vehicle types
     def randPos():
-        name = random.choice(names)
+        name = random.choice(cars_to_use)
 
         # Creates a random point around the EGO
         angle = random.uniform(0.0, -1 * math.pi)
-        dist = random.uniform(mindist, maxdist)
+        dist = random.uniform(spawn_start, spawn_end)
 
         point = lgsvl.Vector(sx + dist * math.cos(angle), sy, sz + dist * math.sin(angle))
 
@@ -307,7 +325,6 @@ def run(VN, NPC, MAP, RT, SD, TS):
             sim.stop()
             global endMsg
             endMsg = msg
-
 
     start(NPCCount)
     return endMsg
