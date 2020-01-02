@@ -38,13 +38,13 @@ if [ $# -eq 0 ]
         xinput set-prop $i 'Device Enabled' 1
     done
     sleep 0.1
-    python3 ~/PythonAPI/Random-Scenario/GUI.py
+    python3 ~/PythonAPI/RS_scripts/GUI.py
 fi
 
 if [[ $1 = "-r" ]];
 then
     version=$(find ~ 2>&1 -type d -name "lgsvlsimulator*" -not -path "*/Trash/*" | grep -v "Permission denied" | head -1)
     $version/simulator & gnome-terminal -- roslaunch rosbridge_server rosbridge_websocket.launch
-    python3 ~/PythonAPI/Random-Scenario/GUI.py
+    python3 ~/PythonAPI/RS_scripts/GUI.py
 fi
 
