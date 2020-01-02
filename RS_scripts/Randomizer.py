@@ -334,7 +334,7 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
 
 # replay function, recieves replay key as parameter
 def replay(key):
-    # sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+    sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 
     # this script handles the replay feature. it is initialized in the same way as hagrala.py, however the spawning is
     # not done randomly and is instead done using a list of states of NPC vehicles from a given run of hagrala.py
