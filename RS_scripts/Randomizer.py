@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 import errno
-import os
-import lgsvl
-import random
 import math
-import time
+import os
 import pickle
-import sys
+import random
 import re
 import tempfile
+import time
+import lgsvl
+import signal
 
 # output message, will be referenced later
 endMsg = 'default'
@@ -20,6 +20,10 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
     # Main spawning script
     # Initial simulator setup
     sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+
+    # timeout handler
+    def handler(signum, frame):
+        raise TimeoutError
 
     # initialize variables
     try:
@@ -34,6 +38,9 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
         seed = random.randint(-2147483649, 2147483647)
     else:
         seed = int(SD)
+
+    signal.signal(signal.SIGALRM, handler)
+    signal.alarm(15 + int(runtime))
 
     # Selected cars to use in the scenario
     if cars_to_use is None or cars_to_use == '':
@@ -78,10 +85,6 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
     except Exception:
         raise ZeroDivisionError
     sensors = a.get_sensors()
-    for s in sensors:
-        if s.name == "Lidar":
-            s.save("lidar.pcd")
-            break
     # Lexus2016RXHybrid (Autoware) OR CAR [<lgsvl.sensor.GpsSensor object at 0x7ff1055e1828>, <lgsvl.sensor.ImuSensor
     # object at 0x7ff1055e1860>, <lgsvl.sensor.LidarSensor object at 0x7ff1055e1898>, <lgsvl.sensor.CameraSensor object
     # at 0x7ff1055e18d0>] An EGO will not connect to a bridge unless commanded to
@@ -121,6 +124,7 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
         print(output)
         print("Killing sim...")
         sim.stop()
+        sim.close()
         global endMsg
         endMsg = msg
 
@@ -323,12 +327,12 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
             Pkey = addPickled()
             msg = "Simulation ended with no collisions \n Seed: {}\n Replay Key: {}\n \n".format(seed, Pkey)
             sim.stop()
+            sim.close()
             global endMsg
             endMsg = msg
 
     start(NPCCount)
     return endMsg
-    sim.stop()
     pass
 
 
@@ -396,10 +400,6 @@ def replay(key):
     state.transform = spawns[0]
     a = sim.add_agent(vehicleName, lgsvl.AgentType.EGO, state)
     sensors = a.get_sensors()
-    for s in sensors:
-        if s.name == "Lidar":
-            s.save("lidar.pcd")
-            break
     # Lexus2016RXHybrid (Autoware) OR CAR [<lgsvl.sensor.GpsSensor object at 0x7ff1055e1828>, <lgsvl.sensor.ImuSensor
     # object at 0x7ff1055e1860>, <lgsvl.sensor.LidarSensor object at 0x7ff1055e1898>, <lgsvl.sensor.CameraSensor object
     # at 0x7ff1055e18d0>] An EGO will not connect to a bridge unless commanded to
@@ -411,10 +411,6 @@ def replay(key):
 
     print("Waiting for connection...")
     sensors = a.get_sensors()
-    for s in sensors:
-        if s.name == "Lidar":
-            s.save("lidar.pcd")
-            break
     while not a.bridge_connected:
         time.sleep(1)
 
@@ -432,6 +428,8 @@ def replay(key):
         name1 = AgentList[agent1]
         name2 = AgentList[agent2] if agent2 is not None else "OBSTACLE"
         print("{} collided with {} at {} \n".format(name1, name2, contact))
+        sim.stop()
+        sim.close()
 
     collided = False
 
@@ -499,6 +497,8 @@ def replay(key):
         sim.run(time_limit=runtime, time_scale=timescale)
         if not collided:
             print("Simulation ended with no collisions")
+            sim.stop()
+            sim.close()
 
     start(transformString)
     pass
