@@ -1,6 +1,7 @@
 #!/bin/bash
 if [ $# -eq 0 ]
   then
+    trap "echo hello world" SIGINT
     SEARCH="Mouse"
     if [ "$SEARCH" = "" ]; then 
         exit 1
@@ -17,7 +18,6 @@ if [ $# -eq 0 ]
     do
         xinput set-prop $i 'Device Enabled' 0
     done
-    #fix launching gui
     version=$(find ~ 2>&1 -type d -name "lgsvlsimulator*" -not -path "*/Trash/*" | grep -v "Permission denied" | head -1)
     $version/simulator >/dev/null 2>&1 & gnome-terminal -- roslaunch rosbridge_server rosbridge_websocket.launch
     sleep 0.3

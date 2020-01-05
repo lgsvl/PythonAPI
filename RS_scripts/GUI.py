@@ -10,13 +10,6 @@ from datetime import datetime
 import Randomizer
 import signal
 
-# TODO: docs / readme
-# notes for docs: launch bash file will not work for non-unix systems, however the scripts should
-# be able to run manually (testing required)
-
-# TODO: fix / give up on bash file bug when mouse is over applications bar
-# TODO maybe: extra settings (distance between cars, spawning distance, exclusive vehicles etc)
-
 # general GUI setup
 root = tk.Tk()
 root.title("LGSVL PythonAPI Scenario Randomizer")
@@ -349,7 +342,7 @@ def update_available_replays(canvas):
         for key in keys:
             lb = tk.Label(canvas, text=key)
             lbs.append(lb)
-            canvas.create_window(y * 75, x * 20, anchor='nw', window=lb)
+            canvas.create_window(y * 55, x * 15, anchor='nw', window=lb)
             if x == 6:
                 y += 1
                 x = 0
@@ -382,9 +375,6 @@ def array_vehiclenames():
     indices = [i for i, x in enumerate(vars) if x == 1]
     return [names[i] for i in indices]
 
-# timeout handler
-def handler(signum, frame):
-    raise TimeoutError
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are ones that are called from different buttons, and rely on the helper functions
@@ -399,9 +389,6 @@ def run():
     tab1_nameerror_label.grid_forget()
     tab1_serveroffline_label.grid_forget()
     tab1_unabletospawn_label.grid_forget()
-
-    signal.signal(signal.SIGALRM, handler)
-    signal.alarm(15 + int(tab1_runtime_entry.get()))
 
     if not is_port_in_use(8181):
         tab1_serveroffline_label.grid(columnspan=2, column=1)
@@ -486,7 +473,7 @@ def load_from_file():
 # Run tab widgets
 tab1_vehicle_name_label = tk.Label(tab1, text="Vehicle name")
 tab1_vehicle_name_note_label = tk.Label(tab1,
-                                        text="Important: Enter vehicle name exactly as how it appears on LGSVL "
+                                        text="Important: Enter vehicle name exactly as it appears on LGSVL "
                                              "control site", wraplength=275)
 tab1_seed_label = tk.Label(tab1, text="Seed (leave blank for random)")
 tab1_NPCs_label = tk.Label(tab1, text="NPCs")
@@ -497,7 +484,7 @@ tab1_timescale_label = tk.Label(tab1, text="Timescale")
 tab1_nameerror_label = tk.Label(tab1, text="Error: Vehicle name does not exist")
 tab1_error_label = tk.Label(tab1, text="Error: Illegal value entered")
 tab1_serveroffline_label = tk.Label(tab1, text='Unable to connect to LGSVL')
-tab1_unabletospawn_label = tk.Label(tab1, text='Spawning error: check params')
+tab1_unabletospawn_label = tk.Label(tab1, text='Spawning timed out')
 tab1_vehicle_name_entry = tk.Entry(tab1)
 OPTIONS_NPCs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                 29, 30]
