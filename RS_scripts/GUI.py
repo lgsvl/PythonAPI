@@ -32,7 +32,6 @@ tabControl.add(tab3, text="Output")
 tab4 = ttk.Frame(tabControl)
 tabControl.add(tab4, text='Params')
 
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are mostly helper functions, which are called by various buttons and entry boxes
 
