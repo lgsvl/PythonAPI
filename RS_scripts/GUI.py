@@ -15,6 +15,7 @@ root.title("LGSVL PythonAPI Scenario Randomizer")
 root.resizable(width=False, height=False)
 root.geometry('700x350')
 program_directory = sys.path[0]
+program_directory = program_directory.replace('RS_scripts', 'misc')
 root.iconphoto(True, tk.PhotoImage(file=os.path.join(program_directory, "yoinkPY.png")))
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
