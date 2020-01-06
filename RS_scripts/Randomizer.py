@@ -320,9 +320,6 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
             NPCsToSpawn = spawn(state, NPCsToSpawn)
             x += 1
 
-        allAgents = sim.get_agents()
-        NPCs = allAgents[1:]
-
         sim.run(time_limit=runtime, time_scale=timescale)
         if not collided:
             Pkey = addPickled()
