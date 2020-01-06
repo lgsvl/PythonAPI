@@ -349,10 +349,10 @@ def update_available_replays(canvas):
             else:
                 x += 1
 
-        canvas.place(relx=0.5, rely=0.5, anchor='center')
+        canvas.place(relx=0.5, rely=0.4, anchor='center')
         if len(keys) > 14:
             scroll_x = tk.Scrollbar(tab2, orient="horizontal", command=canvas.xview)
-            scroll_x.place(relx=0.5, rely=0.65, anchor='center', width=200)
+            scroll_x.place(relx=0.5, rely=0.60, anchor='center', width=200)
 
             canvas.configure(xscrollcommand=scroll_x.set)
             canvas.configure(scrollregion=canvas.bbox("all"))
