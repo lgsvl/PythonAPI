@@ -29,19 +29,19 @@ Documentation is available on our website: https://www.lgsvlsimulator.com/docs/p
 
 The Scenario Randomizer is split into four components:
 
-<h2> LGSVL Sim:
+<h2> LGSVL Sim: </h2>
 
 LGSVL (LG Silicon Valley Lab) Simulator is simulation software developed for the acceleration of safe autonomous vehicle development. The current version as of writing this document is 2019.10, however LG have stated that they plan on releasing a new version every month or so. LGSVL is required for the Scenario Randomizer.
 
-<h2> LGSVL PythonAPI:
+<h2> LGSVL PythonAPI: </h2>
 
 LGSVL Simulator exposes runtime functionality to a Python API which you can use to manipulate object placement and vehicle movement in a loaded scene, retreive sensor configuration and data, control weather, time state, and more. The Scenario Randomization script is written using this PythonAPI. The full documentation can be found here: https://www.lgsvlsimulator.com/docs/python-api/
 
-<h2> ROSBridge:
+<h2> ROSBridge: </h2>
 
 ROSBridge allows for the connection between ROS and the vehicle. This means that once the ROSBridge connection is established we can view the vehicle’s sensor output, or send it commands.
 
-<h2> Scenario Randomizer GUI:
+<h2> Scenario Randomizer GUI: </h2>
 
 The GUI was made in Python using the Tkinter module. The GUI allows the user to control the parameters of the scenario without needing to enter the code, such as the amount of NPC Vehicles to spawn, the runtime of the scenario, or the timescale.
 
@@ -66,7 +66,7 @@ Furthermore, if you would like to change the graphical settings of the simulator
 
 # Launching each component manually
 
-<h2> LGSVL:
+<h2> LGSVL: </h2>
 
 In the LGSVL folder, find the ‘simulator’ executable and run it. It should open a graphical settings menu. Select the graphics that best fit your specifications and press ‘OK’. After that you should be greeted with a menu similar to this one.
 
@@ -74,13 +74,13 @@ In the LGSVL folder, find the ‘simulator’ executable and run it. It should o
 
 Press the ‘Open Browser’ button, and a webpage should open. More on this webpage later.
 
-<h2> ROSBridge:
+<h2> ROSBridge: </h2>
 
 Assuming you have ROS installed and a stable internet connection, open a new terminal and type the following.
 
     roslaunch rosbridge_server rosbridge_websocket.launch
 
-<h2> GUI:
+<h2> GUI: </h2>
 
 cd into PythonAPI/RS_scripts and run the following command.
 
@@ -111,7 +111,7 @@ The simulation is now running and waiting for the API to determine the scenario 
 
 The GUI is split into four tabs; Run, Replay, Output, and Params. The GUI allows for running multiple scenarios using a particular LGSVL map and vehicle, replaying these randomly generated scenarios, and saving them to a file to be replayed at a later time.
 
-<h2> The Run tab
+<h2> The Run tab </h2>
     
 ![run tab](/misc/8.png)
 
@@ -135,7 +135,7 @@ RUN – The activation button, runs the simulation with the selected variables
 
 If a value entered raises an exception, the GUI displays it at the bottom, under the “RUN” button
 
-<h2> The Replay tab
+<h2> The Replay tab </h2>
     
 ![replay tab](/misc/9.png)
 
@@ -151,7 +151,7 @@ Clear Stored Replays – Clears all currently locally stored replays
 
 Replays are either stored locally or saved to a file. Locally stored replays are saved in the temp folder, meaning they persist until the computer is shut off. Clearing the stored replays deletes all replays in the temp folder, meaning if you loaded replays from a file, and cleared stored replays, the file containing the replays still exists, however the replays are no longer in the temp folder so you will need to load them in again if you wish to replay them.
 
-<h2> The Output tab
+<h2> The Output tab </h2>
     
 ![output tab](/misc/10.png)
 
@@ -175,7 +175,7 @@ Upon pressing “Yes”, the same directory selection from the “SAVE” button
 
 Pressing “OK” will load the replays from the selected folder, and they can now be used in the Replay tab.
 
-<h2> The Params tab
+<h2> The Params tab </h2>
     
 ![params tab](/misc/15.png)
 
