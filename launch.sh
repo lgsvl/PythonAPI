@@ -1,7 +1,6 @@
 #!/bin/bash
 if [ $# -eq 0 ]
   then
-    trap "echo hello world" SIGINT
     SEARCH="Mouse"
     if [ "$SEARCH" = "" ]; then 
         exit 1
