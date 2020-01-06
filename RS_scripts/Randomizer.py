@@ -65,6 +65,7 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
 
     if sim.current_scene == map:
         sim.reset()
+
     else:
         # Seed (optional) is an Integer (-2,147,483,648 - 2,147,483,647) that determines the "random" behavior of the
         # NPC vehicles and rain effects.
@@ -332,6 +333,7 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
             endMsg = msg
 
     start(NPCCount)
+    signal.alarm(0)
     return endMsg
     pass
 

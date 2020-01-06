@@ -8,7 +8,6 @@ from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 from datetime import datetime
 import Randomizer
-import signal
 
 # general GUI setup
 root = tk.Tk()
@@ -32,6 +31,8 @@ tabControl.add(tab3, text="Output")
 
 tab4 = ttk.Frame(tabControl)
 tabControl.add(tab4, text='Params')
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are mostly helper functions, which are called by various buttons and entry boxes
 
@@ -51,6 +52,7 @@ def validate_int(action, index, value_if_allowed,
             return False
     else:
         return True
+
 
 # validate only ints are entered in entry box, negatives allowed
 # noinspection PyUnusedLocal
@@ -142,10 +144,10 @@ def combine_funcs(*funcs):
 def popup_select_scenarios(keys):
     win = tk.Toplevel()
     win.resizable(width=False, height=False)
-    win.geometry('175x225')
+    win.geometry('200x225')
     win.wm_title("Select scenarios to be saved")
 
-    canvas = tk.Canvas(win, width=175, height=175)
+    canvas = tk.Canvas(win, width=200, height=175)
 
     x = 0
     y = 0
@@ -171,11 +173,7 @@ def popup_select_scenarios(keys):
 
     save_button = ttk.Button(win, text="Save",
                              command=combine_funcs(win.destroy, lambda: save_selected_scenarios(var_list, keys)))
-    if y in [0, 1, 2]:
-        col = 0
-    else:
-        col = int(y / 2)
-    save_button.grid(row=8, column=col, columnspan=2)
+    save_button.grid(row=3, column=0, columnspan=2)
 
 
 # given the list of checkboxes, check if any are selected. if none are create error popup and close the first popup. if
@@ -199,6 +197,8 @@ def save_selected_scenarios(var_list, keys):
         # print(keysToBeSaved)
         homedir = os.environ['HOME']
         root.directory = tk.filedialog.askdirectory(initialdir=homedir)
+        if root.directory == ():
+            return
         pfiles, dict_lines = get_picklefiles(keysToBeSaved, '')
         path = root.directory + '/LGSVL ' + str(
             datetime.strptime(str(datetime.now().replace(microsecond=0)), '%Y-%m-%d %H:%M:%S').strftime(
@@ -368,10 +368,12 @@ def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
 
+
 # create an array of strings of names of selected vehicles to be used in the scenario
 def array_vehiclenames():
     names = ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
-    vars = [var_sedan.get(), var_suv.get(), var_jeep.get(), var_hatchback.get(), var_schoolbus.get(), var_boxtruck.get()]
+    vars = [var_sedan.get(), var_suv.get(), var_jeep.get(), var_hatchback.get(), var_schoolbus.get(),
+            var_boxtruck.get()]
     indices = [i for i, x in enumerate(vars) if x == 1]
     return [names[i] for i in indices]
 
@@ -397,7 +399,7 @@ def run():
         msg = Randomizer.run(tab1_vehicle_name_entry.get(), variable_NPCs.get(), tab1_map_entry.get(),
                              tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get(),
                              distbetween=tab4_distbetweencars_entry.get(), cars_to_use=array_vehiclenames(),
-                             spawn_start= tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get())
+                             spawn_start=tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get())
         addEntryContentToScrolledText(msg, tab3_output_scrolledtext)
     except ZeroDivisionError:
         tab1_nameerror_label.grid(columnspan=2, column=1)
@@ -442,6 +444,9 @@ def do_Clear():
 # folder to temp folder, which is where the other functions search for replays
 def load_from_file():
     Clear()
+    # True if NO was pressed on popup
+    if os.path.isdir(tempfile.gettempdir() + '/or'):
+        return
     homedir = os.environ['HOME']
     root.directory = tk.filedialog.askdirectory(initialdir=homedir)
     try:
@@ -587,12 +592,16 @@ var_schoolbus = tk.IntVar(value=1)
 var_boxtruck = tk.IntVar(value=1)
 tab4_cb_frame = tk.Frame(tab4)
 tab4_cb_frame.grid(rowspan=3, row=1, column=2)
-tab4_sedan_cb = tk.Checkbutton(tab4_cb_frame, text="Sedan", variable=var_sedan).grid(row=1, column=3, sticky='W', padx=50)
+tab4_sedan_cb = tk.Checkbutton(tab4_cb_frame, text="Sedan", variable=var_sedan).grid(row=1, column=3, sticky='W',
+                                                                                     padx=50)
 tab4_suv_cb = tk.Checkbutton(tab4_cb_frame, text="SUV", variable=var_suv).grid(row=2, column=3, sticky='W', padx=50)
 tab4_jeep_cb = tk.Checkbutton(tab4_cb_frame, text="Jeep", variable=var_jeep).grid(row=3, column=3, sticky='W', padx=50)
-tab4_hatchback_cb = tk.Checkbutton(tab4_cb_frame, text="Hatchback", variable=var_hatchback).grid(row=4, column=3, sticky='W', padx=50)
-tab4_schoolbus_cb = tk.Checkbutton(tab4_cb_frame, text="School Bus", variable=var_schoolbus).grid(row=5, column=3, sticky='W', padx=50)
-tab4_boxtruck_cb = tk.Checkbutton(tab4_cb_frame, text="Box Truck", variable=var_boxtruck).grid(row=6, column=3, sticky='W', padx=50)
+tab4_hatchback_cb = tk.Checkbutton(tab4_cb_frame, text="Hatchback", variable=var_hatchback).grid(row=4, column=3,
+                                                                                                 sticky='W', padx=50)
+tab4_schoolbus_cb = tk.Checkbutton(tab4_cb_frame, text="School Bus", variable=var_schoolbus).grid(row=5, column=3,
+                                                                                                  sticky='W', padx=50)
+tab4_boxtruck_cb = tk.Checkbutton(tab4_cb_frame, text="Box Truck", variable=var_boxtruck).grid(row=6, column=3,
+                                                                                               sticky='W', padx=50)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # set tabs, update the displayed available replays (in the temp folder), and then run the GUI
 tabControl.pack(expan=1, fill="both")
