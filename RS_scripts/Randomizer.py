@@ -33,14 +33,20 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
         runtime = float(RT)
         timescale = float(TS)
     except ValueError:
+        sim.stop()
+        sim.close()
         raise ValueError
     if SD == '':
         seed = random.randint(-2147483649, 2147483647)
     else:
         seed = int(SD)
 
-    signal.signal(signal.SIGALRM, handler)
-    signal.alarm(15 + int(runtime))
+    if sim.current_scene == map:
+        sim.reset()
+    else:
+        # Seed (optional) is an Integer (-2,147,483,648 - 2,147,483,647) that determines the "random" behavior of the
+        # NPC vehicles and rain effects.
+        sim.load(scene=map, seed=seed)
 
     # Selected cars to use in the scenario
     if cars_to_use is None or cars_to_use == '':
@@ -63,27 +69,23 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
     else:
         spawn_end = float(spawn_end)
 
-    if sim.current_scene == map:
-        sim.reset()
-
-    else:
-        # Seed (optional) is an Integer (-2,147,483,648 - 2,147,483,647) that determines the "random" behavior of the
-        # NPC vehicles and rain effects.
-        sim.load(scene=map, seed=seed)
-
     NPCNameList = []
-    # All possible NPC vehicles
 
     # Bigger NPC vehicles (important later when spawning)
     bigLads = ["SchoolBus", "BoxTruck"]
     # List of transforms representing good spawn points
     spawns = sim.get_spawn()
+
     # Creates new agent state, makes it's transform equal to the first good spawn point.
     state = lgsvl.AgentState()
     state.transform = spawns[0]
+
     try:
         a = sim.add_agent(vehicleName, lgsvl.AgentType.EGO, state)
     except Exception:
+        signal.alarm(0)
+        sim.stop()
+        sim.close()
         raise ZeroDivisionError
     sensors = a.get_sensors()
     # Lexus2016RXHybrid (Autoware) OR CAR [<lgsvl.sensor.GpsSensor object at 0x7ff1055e1828>, <lgsvl.sensor.ImuSensor
@@ -100,6 +102,9 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
         time.sleep(1)
 
     print("Bridge connected:", a.bridge_connected)
+
+    signal.signal(signal.SIGALRM, handler)
+    signal.alarm(15 + int(runtime))
 
     sx = spawns[0].position.x
     sy = spawns[0].position.y
