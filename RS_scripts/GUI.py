@@ -332,6 +332,7 @@ def validate_pickles(path):
 
 # show and format nicely the existing pickle files in the temp folder, as checkboxes
 def update_available_replays(canvas):
+    print('update canvas')
     try:
         keys = getKeys('')
         if keys == '':
@@ -342,7 +343,7 @@ def update_available_replays(canvas):
         for key in keys:
             lb = tk.Label(canvas, text=key)
             lbs.append(lb)
-            canvas.create_window(y * 55, x * 15, anchor='nw', window=lb)
+            canvas.create_window(y * 55, x * 17.5, anchor='nw', window=lb)
             if x == 6:
                 y += 1
                 x = 0
