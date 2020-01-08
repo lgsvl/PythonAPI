@@ -33,6 +33,7 @@ tabControl.add(tab3, text="Output")
 tab4 = ttk.Frame(tabControl)
 tabControl.add(tab4, text='Params')
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # These functions are mostly helper functions, which are called by various buttons and entry boxes
 
@@ -86,6 +87,50 @@ def validate_float(action, index, value_if_allowed,
                 return True
             except ValueError:
                 return False
+        else:
+            return False
+    else:
+        return True
+
+
+# validate only ints or floats are entered in entry box, negatives not allowed
+# noinspection PyUnusedLocal
+def validate_float_spinbox(action, index, value_if_allowed,
+                           prior_value, text, validation_type, trigger_type, widget_name):
+    # action=1 -> insert
+    if action == '1':
+        if text in '0123456789.':
+            try:
+                float(value_if_allowed)
+            except ValueError:
+                return False
+            else:
+                if float(value_if_allowed) > 1.0:
+                    return False
+                else:
+                    return True
+        else:
+            return False
+    else:
+        return True
+
+
+# validate only ints or floats are entered in entry box, negatives not allowed
+# noinspection PyUnusedLocal
+def validate_float_timeofday(action, index, value_if_allowed,
+                             prior_value, text, validation_type, trigger_type, widget_name):
+    # action=1 -> insert
+    if action == '1':
+        if text in '0123456789.':
+            try:
+                float(value_if_allowed)
+            except ValueError:
+                return False
+            else:
+                if float(value_if_allowed) > 24.0:
+                    return False
+                else:
+                    return True
         else:
             return False
     else:
@@ -332,7 +377,6 @@ def validate_pickles(path):
 
 # show and format nicely the existing pickle files in the temp folder, as checkboxes
 def update_available_replays(canvas):
-    print('update canvas')
     try:
         keys = getKeys('')
         if keys == '':
@@ -400,7 +444,9 @@ def run():
         msg = Randomizer.run(tab1_vehicle_name_entry.get(), variable_NPCs.get(), tab1_map_entry.get(),
                              tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get(),
                              distbetween=tab4_distbetweencars_entry.get(), cars_to_use=array_vehiclenames(),
-                             spawn_start=tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get())
+                             spawn_start=tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get(),
+                             rain=tab4_rain_entry.get(), fog=tab4_fog_entry.get(), wetness=tab4_wetness_entry.get(),
+                             timeofday=tab4_timeofday_entry.get(), fixed=var_fixed.get())
         addEntryContentToScrolledText(msg, tab3_output_scrolledtext)
     except ZeroDivisionError:
         tab1_nameerror_label.grid(columnspan=2, column=1)
@@ -413,7 +459,9 @@ def run():
             msg = Randomizer.run(tab1_vehicle_name_entry.get(), variable_NPCs.get(), tab1_map_entry.get(),
                                  tab1_runtime_entry.get(), tab1_seed_entry.get(), tab1_timescale_entry.get(),
                                  distbetween=tab4_distbetweencars_entry.get(), cars_to_use=array_vehiclenames(),
-                                 spawn_start=tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get())
+                                 spawn_start=tab4_spawnstart_entry.get(), spawn_end=tab4_spawnend_entry.get(),
+                                 rain=tab4_rain_entry.get(), fog=tab4_fog_entry.get(), wetness=tab4_wetness_entry.get(),
+                                 timeofday=tab4_timeofday_entry.get(), fixed=var_fixed.get())
             addEntryContentToScrolledText(msg, tab3_output_scrolledtext)
     update_available_replays(tab2_replays_canvas)
 
@@ -505,6 +553,10 @@ vcmd2 = (root.register(validate_int_negatives),
          '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
 vcmd3 = (root.register(validate_float),
          '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+vcmd4 = (root.register(validate_float_spinbox),
+         '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+vcmd5 = (root.register(validate_float_timeofday),
+         '%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
 tab1_seed_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd2)
 tab1_runs_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd)
 tab1_runtime_entry = tk.Entry(tab1, validate='key', validatecommand=vcmd3)
@@ -575,6 +627,20 @@ tab4_spawnstart_label = tk.Label(tab4, text='Spawn start position')
 tab4_spawnstart_entry = tk.Entry(tab4, validate='key', validatecommand=vcmd3)
 tab4_spawnend_label = tk.Label(tab4, text='Spawn end position')
 tab4_spawnend_entry = tk.Entry(tab4, validate='key', validatecommand=vcmd3)
+tab4_rain_label = tk.Label(tab4, text='Rain')
+tab4_rain_entry = tk.Spinbox(tab4, format="%.2f", increment=0.01, from_=-0.01, to=1,
+                             validate="key", validatecommand=vcmd4, width=8)
+tab4_fog_label = tk.Label(tab4, text='Fog')
+tab4_fog_entry = tk.Spinbox(tab4, format="%.2f", increment=0.01, from_=-0.01, to=1,
+                            validate="key", validatecommand=vcmd4, width=8)
+tab4_wetness_label = tk.Label(tab4, text='Wetness')
+tab4_wetness_entry = tk.Spinbox(tab4, format="%.2f", increment=0.01, from_=-0.01, to=1,
+                                validate="key", validatecommand=vcmd4, width=8)
+tab4_timeofday_label = tk.Label(tab4, text='Time of day         ')
+tab4_timeofday_entry = tk.Spinbox(tab4, format="%.2f", increment=0.01, from_=-0.01, to=24,
+                                  validate="key", validatecommand=vcmd5, width=8)
+var_fixed = tk.IntVar(value=1)
+tab4_fixed_cb = tk.Checkbutton(tab4, text="Fixed", variable=var_fixed).grid(row=5, column=3, sticky='W', padx=50)
 
 tab4_distbetweencars_label.grid(row=1, padx=5, pady=15)
 tab4_distbetweencars_entry.grid(row=1, column=1, padx=5, pady=15)
@@ -582,6 +648,14 @@ tab4_spawnstart_label.grid(row=2, padx=5, pady=15)
 tab4_spawnstart_entry.grid(row=2, column=1, padx=5, pady=15)
 tab4_spawnend_label.grid(row=3, padx=5, pady=15)
 tab4_spawnend_entry.grid(row=3, column=1, padx=5, pady=15)
+tab4_rain_label.grid(row=4, padx=5, pady=15)
+tab4_rain_entry.grid(row=4, column=1, padx=5, pady=15)
+tab4_fog_label.grid(row=5, padx=5, pady=15)
+tab4_fog_entry.grid(row=5, column=1, padx=5, pady=15)
+tab4_wetness_label.grid(row=6, padx=5, pady=15)
+tab4_wetness_entry.grid(row=6, column=1, padx=5, pady=15)
+tab4_timeofday_label.grid(row=5, column=2, padx=5, pady=15)
+tab4_timeofday_entry.grid(row=5, column=2, columnspan=2, padx=5, pady=15)
 
 # Car checkboxes:
 # names = ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]

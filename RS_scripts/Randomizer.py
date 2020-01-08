@@ -13,10 +13,10 @@ import signal
 # output message, will be referenced later
 endMsg = 'default'
 
-
 # run function, receives vehicle name, amount of NPCs, map name, runtime, seed, and timescale parameters, then creates
 # a random scenario using these variables
-def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=None, cars_to_use=None):
+def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=None, cars_to_use=None,
+        rain=None, fog=None, wetness=None, timeofday=None, fixed=None):
     # Main spawning script
     # Initial simulator setup
     sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
@@ -68,6 +68,35 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
         spawn_end = 500.0
     else:
         spawn_end = float(spawn_end)
+
+    if rain == '-0.01':
+        rain = round(random.uniform(0, 1),2)
+    else:
+        rain = float(rain)
+
+    if fog == '-0.01':
+        fog = round(random.uniform(0, 1),2)
+    else:
+        fog = float(fog)
+
+    if wetness == '-0.01':
+        wetness = round(random.uniform(0, 1),2)
+    else:
+        wetness = float(wetness)
+
+    if timeofday == '-0.01':
+        timeofday = round(random.uniform(0, 24),2)
+    else:
+        timeofday = float(timeofday)
+
+    if fixed == 1:
+        fixed = True
+    else:
+        fixed = False
+
+    # Handling weather and time
+    sim.weather = lgsvl.WeatherState(rain=rain, fog=fog, wetness=wetness)
+    sim.set_time_of_day(timeofday, fixed=fixed)
 
     NPCNameList = []
 
@@ -166,7 +195,8 @@ def run(VN, NPC, MAP, RT, SD, TS, distbetween=None, spawn_start=None, spawn_end=
             else:
                 i = i + 1
         info = "{" + vehicleName + "} {" + map + "} {" + str(seed) + "} {" + str(runtime) + "} {" + str(timescale) + "}"
-        stuffToPickle = [statesToReplay, NPCNameList, info]
+        weather = "{" + str(rain) + "} {" + str(fog) + "} {" + str(wetness) + "} {" + str(timeofday) + "} {" + str(fixed) + "}"
+        stuffToPickle = [statesToReplay, NPCNameList, info, weather]
         pickle.dump(stuffToPickle, f)
         f.close()
         f = open(filename, "a")
@@ -380,6 +410,12 @@ def replay(key):
         vn, map, seed, runtime, timescale = info
         return str(vn), str(map), int(seed), float(runtime), float(timescale)
 
+    # function that splits the simulators weather settings into floats
+    def splitWeather(weather):
+        weather = weather[1:-1].split('} {')
+        rain, fog, wetness, timeofday, fixed = weather
+        return float(rain), float(fog), float(wetness), float(timeofday), bool(fixed)
+
     # gets the string of states, the list of names, and the replay info from the pickle file using the key inputted
     # by the user
     PickleToUnpickle = getPickled(key)
@@ -389,14 +425,21 @@ def replay(key):
     transformString = str(unpickled[0])
     names = unpickled[1]
     info = unpickled[2]
+    weather = unpickled[3]
     vehicleName, map, seed, runtime, timescale = splitInfo(info)
-    # vehicle, map, seed, runtime, timescale
+    rain, fog, wetness, timeofday, fixed = splitWeather(weather)
+
     if sim.current_scene == map:
         sim.reset()
     else:
         # Seed (optional) is an Integer (-2,147,483,648 - 2,147,483,647) that determines the "random" behavior of the
         # NPC vehicles and rain effects.
         sim.load(scene=map, seed=seed)
+
+    # Handling weather and time
+    sim.weather = lgsvl.WeatherState(rain=rain, fog=fog, wetness=wetness)
+    sim.set_time_of_day(timeofday, fixed=fixed)
+
     # List of transforms representing good spawn points
     spawns = sim.get_spawn()
     # Creates new agent state, makes it's transform equal to the first good spawn point.
