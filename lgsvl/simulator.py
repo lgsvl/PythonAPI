@@ -8,7 +8,7 @@ from .remote import Remote
 from .agent import Agent, AgentType, AgentState
 from .sensor import GpsData
 from .geometry import Vector, Transform
-from .utils import accepts
+from .utils import accepts, ObjectState
 from .controllable import Controllable
 
 from collections import namedtuple
@@ -239,6 +239,20 @@ class Simulator:
         results.append(RaycastHit(hit["distance"], Vector.from_json(hit["point"]), Vector.from_json(hit["normal"])))
 
     return results
+
+  @accepts(str, ObjectState)
+  def controllable_add(self, name, object_state = None):
+    if object_state is None: object_state = ObjectState()
+    args = {"name": name, "state": object_state.to_json()}
+    j = self.remote.command("simulator/controllable_add", args)
+    controllable = Controllable(self.remote, j)
+    controllable.name = name
+    return controllable
+
+  @accepts(Controllable)
+  def controllable_remove(self, controllable):
+    self.remote.command("simulator/controllable_remove", {"uid": controllable.uid})
+    del self.controllables[controllable.uid]
 
   @accepts(str)
   def get_controllables(self, control_type = None):

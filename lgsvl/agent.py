@@ -6,7 +6,7 @@
 
 from .geometry import Vector, Transform, BoundingBox
 from .sensor import Sensor
-from .utils import accepts
+from .utils import accepts, ObjectState as AgentState
 
 from enum import Enum
 from collections.abc import Iterable, Callable
@@ -54,54 +54,6 @@ class NPCControl:
     self.e_stop = None            # bool
     self.turn_signal_left = None  # bool
     self.turn_signal_right = None # bool
-
-
-class AgentState:
-  def __init__(self, transform = None, velocity = None, angular_velocity = None):
-    if transform is None: transform = Transform()
-    if velocity is None: velocity = Vector()
-    if angular_velocity is None: angular_velocity = Vector()
-    self.transform = transform
-    self.velocity = velocity
-    self.angular_velocity = angular_velocity
-
-  @property
-  def position(self):
-    return self.transform.position
-
-  @property
-  def rotation(self):
-    return self.transform.rotation
-
-  @property
-  def speed(self):
-    return math.sqrt(
-      self.velocity.x * self.velocity.x +
-      self.velocity.y * self.velocity.y +
-      self.velocity.z * self.velocity.z)
-
-  @staticmethod
-  def from_json(j):
-    return AgentState(
-      Transform.from_json(j["transform"]),
-      Vector.from_json(j["velocity"]),
-      Vector.from_json(j["angular_velocity"]),
-    )
-
-  def to_json(self):
-    return {
-      "transform": self.transform.to_json(),
-      "velocity": self.velocity.to_json(),
-      "angular_velocity": self.angular_velocity.to_json(),
-    }
-
-  def __repr__(self):
-    return str({
-      "transform": str(self.transform),
-      "velocity": str(self.velocity),
-      "angular_velocity": str(self.angular_velocity),
-    })
-
 
 class Agent:
   def __init__(self, uid, simulator):
@@ -335,3 +287,4 @@ class Pedestrian(Agent):
   def on_waypoint_reached(self, fn):
     self.remote.command("agent/on_waypoint_reached", {"uid": self.uid})
     self.simulator._add_callback(self, "waypoint_reached", fn)
+	

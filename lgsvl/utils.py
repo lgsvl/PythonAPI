@@ -23,6 +23,51 @@ def accepts(*types):
     return new_f
   return check_accepts
 
+class ObjectState:
+  def __init__(self, transform = None, velocity = None, angular_velocity = None):
+    if transform is None: transform = Transform()
+    if velocity is None: velocity = Vector()
+    if angular_velocity is None: angular_velocity = Vector()
+    self.transform = transform
+    self.velocity = velocity
+    self.angular_velocity = angular_velocity
+
+  @property
+  def position(self):
+    return self.transform.position
+
+  @property
+  def rotation(self):
+    return self.transform.rotation
+
+  @property
+  def speed(self):
+    return math.sqrt(
+      self.velocity.x * self.velocity.x +
+      self.velocity.y * self.velocity.y +
+      self.velocity.z * self.velocity.z)
+
+  @staticmethod
+  def from_json(j):
+    return ObjectState(
+      Transform.from_json(j["transform"]),
+      Vector.from_json(j["velocity"]),
+      Vector.from_json(j["angular_velocity"]),
+    )
+
+  def to_json(self):
+    return {
+      "transform": self.transform.to_json(),
+      "velocity": self.velocity.to_json(),
+      "angular_velocity": self.angular_velocity.to_json(),
+    }
+
+  def __repr__(self):
+    return str({
+      "transform": str(self.transform),
+      "velocity": str(self.velocity),
+      "angular_velocity": str(self.angular_velocity),
+    })
 
 def transform_to_matrix(tr):
   px = tr.position.x
