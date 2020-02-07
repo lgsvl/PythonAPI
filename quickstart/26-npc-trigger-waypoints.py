@@ -67,7 +67,7 @@ for i in range(20):
   tr = 0
   if (i % 2):
     tr = 10 
-  wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 0, tr)
+  wp = lgsvl.DriveWaypoint(position=hit.point, speed=speed, angle=angle, idle=0, trigger_distance=tr)
   waypoints.append(wp)
 
 # When the NPC is within 0.5m of the waypoint, this will be called
