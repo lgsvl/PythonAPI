@@ -13,13 +13,14 @@ from collections.abc import Iterable, Callable
 import math
 
 class DriveWaypoint:
-  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, deactivate = False, trigger_distance = 0):
+  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, deactivate = False, trigger_distance = 0, timestamp = -1):
     self.position = position
     self.speed = speed
     self.angle = angle
     self.idle = idle
     self.deactivate = deactivate
     self.trigger_distance = trigger_distance
+    self.timestamp = timestamp
 
 class WalkWaypoint:
   def __init__(self, position, idle, trigger_distance = 0):
@@ -200,7 +201,15 @@ class NpcVehicle(Vehicle):
     '''
     self.remote.command("vehicle/follow_waypoints", {
       "uid": self.uid,
-      "waypoints": [{"position": wp.position.to_json(), "speed": wp.speed, "angle": wp.angle.to_json(), "idle": wp.idle, "deactivate": wp.deactivate, "trigger_distance": wp.trigger_distance} for wp in waypoints],
+      "waypoints": [{
+        "position": wp.position.to_json(),
+        "speed": wp.speed,
+        "angle": wp.angle.to_json(),
+        "idle": wp.idle,
+        "deactivate": wp.deactivate,
+        "trigger_distance": wp.trigger_distance,
+        "timestamp": wp.timestamp
+      } for wp in waypoints],
       "loop": loop,
     })
 
