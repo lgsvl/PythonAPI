@@ -105,10 +105,11 @@ class Simulator:
           break
       j = self.remote.command("simulator/continue")
 
-  @accepts(str, AgentType, AgentState)
-  def add_agent(self, name, agent_type, state = None):
+  @accepts(str, AgentType, AgentState, Vector)
+  def add_agent(self, name, agent_type, state = None, color = None):
     if state is None: state = AgentState()
-    args = {"name": name, "type": agent_type.value, "state": state.to_json()}
+    if color is None: color = Vector(-1, -1, -1)
+    args = {"name": name, "type": agent_type.value, "state": state.to_json(), "color": color.to_json()}
     uid = self.remote.command("simulator/add_agent", args)
     agent = Agent.create(self, uid, agent_type)
     agent.name = name

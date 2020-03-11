@@ -37,7 +37,7 @@ state = lgsvl.AgentState()
 state.transform.position = spawns[0].position + 4.0 * right + 10.0 * forward
 state.transform.rotation = spawns[0].rotation
 
-npc2 = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
+npc2 = sim.add_agent("SUV", lgsvl.AgentType.NPC, state, lgsvl.Vector(1,1,0))
 
 # If the passed bool is False, then the NPC will not moved
 # The float passed is the maximum speed the NPC will drive
