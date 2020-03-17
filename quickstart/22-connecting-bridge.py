@@ -34,3 +34,5 @@ while not a.bridge_connected:
   time.sleep(1)
 
 print("Bridge connected:", a.bridge_connected)
+
+sim.run()
