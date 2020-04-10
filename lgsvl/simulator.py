@@ -123,6 +123,11 @@ class Simulator:
     if agent in self.callbacks:
       del self.callbacks[agent]
 
+  @accepts(AgentType)
+  def add_random_agents(self, agent_type):
+    args = {"type": agent_type.value}
+    self.remote.command("simulator/add_random_agents", args)
+
   def get_agents(self):
     return list(self.agents.values())
 
