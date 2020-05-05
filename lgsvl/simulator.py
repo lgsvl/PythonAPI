@@ -53,6 +53,14 @@ class Simulator:
   def current_time(self):
     return self.remote.command("simulator/current_time")
 
+  @property
+  def available_agents(self):
+    return self.remote.command("simulator/available_agents")
+
+  @property
+  def available_npc_behaviours(self):
+    return self.remote.command("simulator/npc/available_behaviours")
+
   def reset(self):
     self.remote.command("simulator/reset")
     self.agents.clear()

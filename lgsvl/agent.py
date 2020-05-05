@@ -216,6 +216,9 @@ class NpcVehicle(Vehicle):
   def follow_closest_lane(self, follow, max_speed, isLaneChange=True):
     self.remote.command("vehicle/follow_closest_lane", {"uid": self.uid, "follow": follow, "max_speed": max_speed, "isLaneChange": isLaneChange})
 
+  def set_behaviour(self, behaviour):
+    self.remote.command("vehicle/behaviour", {"uid": self.uid, "behaviour": behaviour})
+
   @accepts(bool)
   def change_lane(self, isLeftChange):
     self.remote.command("vehicle/change_lane", {"uid": self.uid, "isLeftChange": isLeftChange})
