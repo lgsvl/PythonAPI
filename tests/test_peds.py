@@ -102,10 +102,10 @@ class TestPeds(unittest.TestCase):
 
             zoe.on_waypoint_reached(on_waypoint)
             zoe.follow(waypoints)
-            t0 = time.time()
+            t0 = sim.current_time
             sim.run() # reach the first waypoint
             sim.run() # reach the second waypoint
-            t1 = time.time()
+            t1 = sim.current_time
             noIdleTime = t1-t0
 
             zoe.state = state
@@ -115,10 +115,10 @@ class TestPeds(unittest.TestCase):
             hit = sim.raycast(state.position - 5 * right, lgsvl.Vector(0, -1, 0), layer_mask)
             waypoints.append(lgsvl.WalkWaypoint(hit.point, 0))
             zoe.follow(waypoints)
-            t2 = time.time()
+            t2 = sim.current_time
             sim.run() # reach the first waypoint
             sim.run() # reach the second waypoint
-            t3 = time.time()
+            t3 = sim.current_time
             idleTime = t3-t2
 
             self.assertAlmostEqual(idleTime-noIdleTime, 2.0, delta=0.5)
