@@ -11,9 +11,10 @@ from .utils import accepts, ObjectState as AgentState
 from enum import Enum
 from collections.abc import Iterable, Callable
 import math
+import json
 
 class DriveWaypoint:
-  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, deactivate = False, trigger_distance = 0, timestamp = -1):
+  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, deactivate = False, trigger_distance = 0, timestamp = -1, trigger = None):
     self.position = position
     self.speed = speed
     self.angle = angle
@@ -21,12 +22,47 @@ class DriveWaypoint:
     self.deactivate = deactivate
     self.trigger_distance = trigger_distance
     self.timestamp = timestamp
+    self.trigger = trigger
 
 class WalkWaypoint:
-  def __init__(self, position, idle, trigger_distance = 0):
+  def __init__(self, position, idle, trigger_distance = 0, trigger = None):
     self.position = position
     self.idle = idle
     self.trigger_distance = trigger_distance
+    self.trigger = trigger
+
+class WaypointTrigger:
+  def __init__(self, effectors):
+    self.effectors = effectors
+
+  @staticmethod
+  def from_json(j):
+    return WaypointTrigger(
+      json.loads(j["effectors"])
+    )
+
+  def to_json(self):
+    effectors_json = []
+    for effector in self.effectors:
+      effectors_json.append(effector.to_json())
+    return {
+      "effectors": effectors_json
+    }
+
+class TriggerEffector:
+  def __init__(self, type_name, value):
+    self.type_name = type_name
+    self.value = value
+
+  @staticmethod
+  def from_json(j):
+    return TriggerEffector(j["type_name"], j["value"])
+
+  def to_json(self):
+    return {
+      "type_name": self.type_name,
+      "value": self.value
+    }
 
 class AgentType(Enum):
   EGO = 1
@@ -196,6 +232,14 @@ class NpcVehicle(Vehicle):
         trigger_distance : float
           how close an EGO must approach for the NPC to continue
 
+        trigger : Class (list of Effectors)
+          trigger data with effectors applied on this waypoint
+            effectors : Class (type, value)
+              typeName : string
+                effector type name
+              value : float
+                value of the effector (for example time duration)
+
     loop : bool
       whether the NPC should loop through the waypoints after reaching the final one
     '''
@@ -208,7 +252,8 @@ class NpcVehicle(Vehicle):
         "idle": wp.idle,
         "deactivate": wp.deactivate,
         "trigger_distance": wp.trigger_distance,
-        "timestamp": wp.timestamp
+        "timestamp": wp.timestamp,
+        "trigger": (None if wp.trigger is None else wp.trigger.to_json())
       } for wp in waypoints],
       "loop": loop,
     })
