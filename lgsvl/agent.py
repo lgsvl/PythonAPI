@@ -51,18 +51,18 @@ class WaypointTrigger:
     }
 
 class TriggerEffector:
-  def __init__(self, type_name, value):
+  def __init__(self, type_name, parameters):
     self.type_name = type_name
-    self.value = value
+    self.parameters = parameters
 
   @staticmethod
   def from_json(j):
-    return TriggerEffector(j["type_name"], j["value"])
+    return TriggerEffector(j["type_name"], j["parameters"])
 
   def to_json(self):
     return {
       "type_name": self.type_name,
-      "value": self.value
+      "parameters": self.parameters
     }
 
 class AgentType(Enum):
@@ -238,8 +238,8 @@ class NpcVehicle(Vehicle):
             effectors : Class (type, value)
               typeName : string
                 effector type name
-              value : float
-                value of the effector (for example time duration)
+              parameters : dictionary
+                parameters of the effector (for example "value", "max_distance", "radius")
 
     loop : bool
       whether the NPC should loop through the waypoints after reaching the final one

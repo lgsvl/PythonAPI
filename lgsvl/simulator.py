@@ -61,6 +61,9 @@ class Simulator:
   def available_npc_behaviours(self):
     return self.remote.command("simulator/npc/available_behaviours")
 
+  def agents_traversed_waypoints(self, fn):
+    self._add_callback(None, "agents_traversed_waypoints", fn)
+
   def reset(self):
     self.remote.command("simulator/reset")
     self.agents.clear()
@@ -83,24 +86,32 @@ class Simulator:
   def _process_events(self, events):
     self.stopped = False
     for ev in events:
-      agent = self.agents[ev["agent"]]
-      if agent in self.callbacks:
-        callbacks = self.callbacks[agent]
+      if "agent" in ev:
+        agent = self.agents[ev["agent"]]
+        if agent in self.callbacks:
+          callbacks = self.callbacks[agent]
+          event_type = ev["type"]
+          if event_type in callbacks:
+            for fn in callbacks[event_type]:
+              if event_type == "collision":
+                fn(agent, self.agents.get(ev["other"]), Vector.from_json(ev["contact"]) if ev["contact"] is not None else None)
+              elif event_type == "waypoint_reached":
+                fn(agent, ev["index"])
+              elif event_type == "stop_line":
+                fn(agent)
+              elif event_type == "lane_change":
+                fn(agent)
+              elif event_type == "custom":
+                fn(agent, ev["kind"], ev["context"])
+              if self.stopped:
+                return
+      elif None in self.callbacks:
+        callbacks = self.callbacks[None]
         event_type = ev["type"]
         if event_type in callbacks:
-          for fn in callbacks[event_type]:
-            if event_type == "collision":
-              fn(agent, self.agents.get(ev["other"]), Vector.from_json(ev["contact"]) if ev["contact"] is not None else None)
-            elif event_type == "waypoint_reached":
-              fn(agent, ev["index"])
-            elif event_type == "stop_line":
-              fn(agent)
-            elif event_type == "lane_change":
-              fn(agent)
-            elif event_type == "custom":
-              fn(agent, ev["kind"], ev["context"])
-            if self.stopped:
-              return
+         for fn in callbacks[event_type]:
+           if event_type == "agents_traversed_waypoints":
+             fn()
 
   def _process(self, cmd, args):
     j = self.remote.command(cmd, args)
