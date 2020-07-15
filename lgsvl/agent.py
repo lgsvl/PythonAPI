@@ -25,8 +25,9 @@ class DriveWaypoint:
     self.trigger = trigger
 
 class WalkWaypoint:
-  def __init__(self, position, idle, trigger_distance = 0, trigger = None):
+  def __init__(self, position, idle, trigger_distance = 0, speed = 1, trigger = None):
     self.position = position
+    self.speed = speed
     self.idle = idle
     self.trigger_distance = trigger_distance
     self.trigger = trigger
@@ -320,7 +321,7 @@ class Pedestrian(Agent):
     Parameters
     ----------
     waypoints : list of WalkWaypoints
-      WalkWaypoint : Class (position, idle, trigger_distance)
+      WalkWaypoint : Class (position, idle, trigger_distance, speed)
 
         position : lgsvl.Vector()
           Unity coordinates of waypoint
@@ -331,12 +332,20 @@ class Pedestrian(Agent):
         trigger_distance : float
           how close an EGO must approach for the pedestrian to continue
 
+        speed : float
+          how fast the pedestrian should drive to the waypoint (default value 1)
+
     loop : bool
       whether the pedestrian should loop through the waypoints after reaching the final one
     '''
     self.remote.command("pedestrian/follow_waypoints", {
       "uid": self.uid,
-      "waypoints": [{"position": wp.position.to_json(), "idle": wp.idle, "trigger_distance": wp.trigger_distance} for wp in waypoints],
+      "waypoints": [{
+        "position": wp.position.to_json(), 
+        "idle": wp.idle, 
+        "trigger_distance": wp.trigger_distance,
+        "speed": wp.speed
+      } for wp in waypoints],
       "loop": loop,
     })
 
