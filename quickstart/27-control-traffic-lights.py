@@ -33,7 +33,7 @@ print("\n# List of controllable objects in {} scene:".format(scene_name))
 for c in controllables:
   print(c)
 
-signal = sim.get_controllable(lgsvl.Vector(19, 5, 21), "signal")
+signal = sim.get_controllable(lgsvl.Vector(15.5, 4.7, -23.9), "signal")
 print("\n# Signal of interest:")
 print(signal)
 
