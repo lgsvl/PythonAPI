@@ -26,7 +26,7 @@ state.transform = spawns[1]
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # This will create waypoints in a circle for the pedestrian to follow
-radius = 5
+radius = 4
 count = 8
 wp = []
 for i in range(count):
