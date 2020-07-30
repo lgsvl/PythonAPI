@@ -71,7 +71,7 @@ for i in range(2):
 
   trigger = None
   if i == 1:
-    parameters = {"value": 4.0}
+    parameters = {"max_distance": 4.0}
     effector = lgsvl.TriggerEffector("WaitForDistance", parameters)
     trigger = lgsvl.WaypointTrigger([effector])
   wp = lgsvl.DriveWaypoint(position=hit.point, speed=speed, angle=angle, idle=0, trigger_distance=0, trigger = trigger)
