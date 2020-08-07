@@ -51,6 +51,10 @@ class Sensor:
       return RadarSensor(remote, j)
     if j["type"] == "canbus":
       return CanBusSensor(remote, j)
+    if j["type"] == "recorder":
+      return VideoRecordingSensor(remote, j)
+    if j["type"] == "analysis":
+      return AnalysisSensor(remote, j)
     raise ValueError("Sensor type '{}' not supported".format(j["type"]))
 
 
@@ -127,3 +131,22 @@ class CanBusSensor(Sensor):
   def __init__(self, remote, j):
     super().__init__(remote, j["uid"], j["name"])
     self.frequency = j["frequency"]
+
+
+class VideoRecordingSensor(Sensor):
+  def __init__(self, remote, j):
+    super().__init__(remote, j["uid"], j["name"])
+    self.width = j["width"]
+    self.height = j["height"]
+    self.framerate = j["framerate"]
+
+
+class AnalysisSensor(Sensor):
+  def __init__(self, remote, j):
+    super().__init__(remote, j["uid"], j["name"])
+    self.suddenbrakemax = j["suddenbrakemax"]
+    self.suddensteermax = j["suddensteermax"]
+    self.stucktravelthreshold = j["stucktravelthreshold"]
+    self.stucktimethreshold = j["stucktimethreshold"]
+    self.minfps = j["minfps"]
+    self.minfpstime = j["minfpstime"]
