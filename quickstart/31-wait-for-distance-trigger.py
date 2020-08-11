@@ -70,7 +70,7 @@ for i in range(2):
   hit = sim.raycast(npc_position, lgsvl.Vector(0,-1,0), layer_mask) 
 
   trigger = None
-  if i == 1:
+  if i == 0:
     parameters = {"max_distance": 4.0}
     effector = lgsvl.TriggerEffector("WaitForDistance", parameters)
     trigger = lgsvl.WaypointTrigger([effector])
