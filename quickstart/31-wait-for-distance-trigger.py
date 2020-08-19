@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
 
 import os
 import lgsvl
-import math
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
@@ -20,7 +19,6 @@ layer_mask = 0
 layer_mask |= 1 << 0 # 0 is the layer for the road (default)
 
 # EGO
-
 state = lgsvl.AgentState()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 right = lgsvl.utils.transform_to_right(spawns[0])
