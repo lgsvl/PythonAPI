@@ -344,7 +344,8 @@ class Pedestrian(Agent):
         "position": wp.position.to_json(), 
         "idle": wp.idle, 
         "trigger_distance": wp.trigger_distance,
-        "speed": wp.speed
+        "speed": wp.speed,
+        "trigger": (None if wp.trigger is None else wp.trigger.to_json())
       } for wp in waypoints],
       "loop": loop,
     })
