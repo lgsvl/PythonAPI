@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -22,7 +22,7 @@ right = lgsvl.utils.transform_to_right(spawns[0])
 
 state = lgsvl.AgentState()
 state.transform = sim.map_point_on_lane(spawns[0].position + 200 * forward)
-a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 mindist = 10.0
 maxdist = 40.0
@@ -46,9 +46,9 @@ for name in ["Sedan", "SUV", "Jeep", "Hatchback"]:
 
   state = lgsvl.AgentState()
   state.transform = sim.map_point_on_lane(point)
-  n = sim.add_agent(name, lgsvl.AgentType.NPC, state)
-  n.follow_closest_lane(True, 10)
-  n.on_lane_change(on_lane_change)
-  n.on_stop_line(on_stop_line)
+  npc = sim.add_agent(name, lgsvl.AgentType.NPC, state)
+  npc.follow_closest_lane(True, 10)
+  npc.on_lane_change(on_lane_change)
+  npc.on_stop_line(on_stop_line)
 
 sim.run()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -19,27 +19,23 @@ else:
 spawns = sim.get_spawn()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 right = lgsvl.utils.transform_to_right(spawns[0])
-# EGO
 
+# Creating state object to define state for Ego and NPC
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state2 = copy.deepcopy(state)
-state2.transform.position += 50 * forward
-a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state2)
 
-# NPC, 10 meters ahead
+# Ego
+ego_state = copy.deepcopy(state)
+ego_state.transform.position += 50 * forward
+ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, ego_state)
 
-sx = spawns[0].position.x
-sy = spawns[0].position.y
-sz = spawns[0].position.z + 10.0
-
-state = lgsvl.AgentState()
-state.transform.position = spawns[0].position + 10 * forward
-state.transform.rotation = spawns[0].rotation
-npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
+# NPC
+npc_state = copy.deepcopy(state)
+npc_state.transform.position += 10 * forward
+npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, npc_state)
 
 vehicles = {
-  a: "EGO",
+  ego: "EGO",
   npc: "Sedan",
 }
 
@@ -49,7 +45,7 @@ def on_collision(agent1, agent2, contact):
   name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
   print("{} collided with {}".format(name1, name2))
 
-a.on_collision(on_collision)
+ego.on_collision(on_collision)
 npc.on_collision(on_collision)
 
 # This block creates the list of waypoints that the NPC will follow
@@ -68,7 +64,7 @@ for i in range(20):
   # Waypoint angles are input as Euler angles (roll, pitch, yaw)
   angle = spawns[0].rotation
   # Raycast the points onto the ground because BorregasAve is not flat
-  hit = sim.raycast(spawns[0].position + pz * forward, lgsvl.Vector(0,-1,0), layer_mask) 
+  hit = sim.raycast(spawns[0].position + pz * forward, lgsvl.Vector(0,-1,0), layer_mask)
 
   # NPC will wait for 1 second at each waypoint
   wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1)
@@ -81,10 +77,10 @@ def on_waypoint(agent, index):
 # The above function needs to be added to the list of callbacks for the NPC
 npc.on_waypoint_reached(on_waypoint)
 
-# The NPC needs to be given the list of waypoints. 
+# The NPC needs to be given the list of waypoints.
 # A bool can be passed as the 2nd argument that controls whether or not the NPC loops over the waypoints (default false)
 npc.follow(waypoints)
 
-input("Press Enter to run")
+input("Press Enter to run\n")
 
 sim.run()

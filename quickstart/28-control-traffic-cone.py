@@ -40,10 +40,10 @@ for i in range(10*3):
   # Set velocity and angular_velocity
   state.velocity = 10 * up
   state.angular_velocity = 6.5 * right
-  
+
   # add controllable
   o = sim.controllable_add("TrafficCone", state)
-  
+
 
 print("\nAdded {} Traffic Cones".format(i + 1))
 

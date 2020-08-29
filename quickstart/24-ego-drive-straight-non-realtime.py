@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -22,7 +22,7 @@ state.transform = spawns[0]
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 # Agents can be spawned with a velocity. Default is to spawn with 0 velocity
 state.velocity = 20 * forward
-a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 print("Real time elapsed =", 0)
 print("Simulation time =", sim.current_time)

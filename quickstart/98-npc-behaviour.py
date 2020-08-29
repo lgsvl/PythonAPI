@@ -9,7 +9,6 @@ import os
 import lgsvl
 import math
 import random
-import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 drunkDriverAvailable = False

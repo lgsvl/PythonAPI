@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
 
 import os
 import lgsvl
-import math
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
@@ -18,21 +17,20 @@ else:
 spawns = sim.get_spawn()
 
 # EGO
-
 state = lgsvl.AgentState()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 right = lgsvl.utils.transform_to_right(spawns[0])
 state.transform = spawns[0]
-a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
-# NPC, 10 meters ahead
+# NPC
 state = lgsvl.AgentState()
 state.transform.position = spawns[0].position + 10 * forward
 state.transform.rotation = spawns[0].rotation
 npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
 vehicles = {
-  a: "EGO",
+  ego: "EGO",
   npc: "Sedan",
 }
 
@@ -42,13 +40,12 @@ def on_collision(agent1, agent2, contact):
   name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
   print("{} collided with {}".format(name1, name2))
 
-a.on_collision(on_collision)
+ego.on_collision(on_collision)
 npc.on_collision(on_collision)
 
 # This block creates the list of waypoints that the NPC will follow
 # Each waypoint is an position vector paired with the speed that the NPC will drive to it
 waypoints = []
-x_max = 2
 z_delta = 12
 
 layer_mask = 0
@@ -61,7 +58,7 @@ for i in range(20):
   # Waypoint angles are input as Euler angles (roll, pitch, yaw)
   angle = spawns[0].rotation
   # Raycast the points onto the ground because BorregasAve is not flat
-  hit = sim.raycast(spawns[0].position + px * right + pz * forward, lgsvl.Vector(0,-1,0), layer_mask) 
+  hit = sim.raycast(spawns[0].position + px * right + pz * forward, lgsvl.Vector(0,-1,0), layer_mask)
 
   # Trigger is set to 10 meters for every other waypoint (0 means no trigger)
   tr = 0
@@ -77,7 +74,7 @@ def on_waypoint(agent, index):
 # The above function needs to be added to the list of callbacks for the NPC
 npc.on_waypoint_reached(on_waypoint)
 
-# The NPC needs to be given the list of waypoints. 
+# The NPC needs to be given the list of waypoints.
 # A bool can be passed as the 2nd argument that controls whether or not the NPC loops over the waypoints (default false)
 npc.follow(waypoints)
 
