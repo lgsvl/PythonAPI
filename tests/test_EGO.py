@@ -34,7 +34,7 @@ class TestEGO(unittest.TestCase):
             cmEqual(self, agent2.state.rotation, spawns[1].rotation, "Spawn Rotation 1")
 
     def test_agent_velocity(self): # Check EGO velocity
-        with SimConnection() as sim:
+        with SimConnection(60) as sim:
             state = spawnState(sim)
             agent = self.create_EGO(sim)
             cmEqual(self, agent.state.velocity, state.velocity, "0 Velocity")
@@ -47,7 +47,7 @@ class TestEGO(unittest.TestCase):
             cmEqual(self, agent.state.velocity, state.velocity, "50 Velocity")
 
     def test_ego_different_directions(self): # Check that the xyz velocities equate to xyz changes in position
-        with SimConnection(40) as sim:
+        with SimConnection(60) as sim:
             state = spawnState(sim)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             up = lgsvl.utils.transform_to_up(state.transform)
@@ -87,7 +87,7 @@ class TestEGO(unittest.TestCase):
     def test_rotation_on_highway_ramp(self): # Check that vehicle is rotated when spawned on the highway ramp
         with SimConnection() as sim:
             state = spawnState(sim)
-            state.transform.position = lgsvl.Vector(100.4229, 15.67488, -469.6401)
+            state.transform.position = lgsvl.Vector(469.6401, 15.67488, 100.4229)
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             self.assertAlmostEqual(ego.state.rotation.z, state.rotation.z)
             sim.run(0.5)
@@ -204,7 +204,7 @@ class TestEGO(unittest.TestCase):
             self.assertGreater(stickySpeed, finalSpeed)
 
     def test_vary_throttle(self): # Check that different throttle values accelerate differently
-        with SimConnection() as sim:
+        with SimConnection(40) as sim:
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
             control = lgsvl.VehicleControl()
             control.throttle = 0.5
@@ -221,7 +221,7 @@ class TestEGO(unittest.TestCase):
             self.assertLess(ego.state.speed, initialSpeed)
 
     def test_vary_steering(self): # Check that different steering values turn the car differently
-        with SimConnection() as sim:
+        with SimConnection(40) as sim:
             ego = sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
             control = lgsvl.VehicleControl()
             control.throttle = 0.5

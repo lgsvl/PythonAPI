@@ -74,12 +74,12 @@ class TestSimulator(unittest.TestCase):
             # Right
             hit = sim.raycast(p, right, layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 15.0892992019653)
+            self.assertAlmostEqual(hit.distance, 15.089282989502, places=3)
 
             #Left
             hit = sim.raycast(p, -right, layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 19.72922706604)
+            self.assertAlmostEqual(hit.distance, 19.7292556762695, places=3)
 
             #Back
             hit = sim.raycast(p, -forward, layer_mask)
@@ -96,7 +96,7 @@ class TestSimulator(unittest.TestCase):
             # Down
             hit = sim.raycast(p, -up, layer_mask)
             self.assertTrue(hit)
-            self.assertAlmostEqual(hit.distance, 1.08376359939575)
+            self.assertAlmostEqual(hit.distance, 1.0837641954422, places=3)
 
     def test_weather(self): # Check that the weather state can be read properly and changed
         with SimConnection() as sim:
@@ -217,7 +217,7 @@ class TestSimulator(unittest.TestCase):
             self.assertAlmostEqual(gps.northing, 4141627.34000015)
             self.assertAlmostEqual(gps.easting, 587060.970000267)
             self.assertAlmostEqual(gps.altitude, -1.03600001335144)
-            self.assertAlmostEqual(gps.orientation, -194.823394775391)
+            self.assertAlmostEqual(gps.orientation, -104.823394775391)
 
     def test_from_northing(self): # Check that position vectors are correctly generated given northing and easting
         with SimConnection() as sim:
@@ -236,7 +236,7 @@ class TestSimulator(unittest.TestCase):
     def test_from_alt_orient(self): # Check that position vectors are correctly generated with altitude and orientation
         with SimConnection() as sim:
             spawn = sim.get_spawn()[0]
-            location = sim.map_from_gps(northing=4141627.34000015, easting=587060.970000267, altitude=-1.03600001335144, orientation=-194.823394775391)
+            location = sim.map_from_gps(northing=4141627.34000015, easting=587060.970000267, altitude=-1.03600001335144, orientation=-104.823371887207)
             self.assertAlmostEqual(spawn.position.y, location.position.y, places=1)
             self.assertAlmostEqual(spawn.rotation.y, location.rotation.y, places=1)
 

@@ -69,7 +69,7 @@ class TestNPC(unittest.TestCase):
             agentState = agent.state
             self.assertGreater(agentState.speed, 0)
             # self.assertAlmostEqual(agent.state.speed, 5.6, delta=1)   
-            self.assertLess(agent.state.position.x - sim.get_spawn()[0].position.x, 5.6)
+            self.assertLess(agent.state.position.x - sim.get_spawn()[0].position.x, 5.6*2)
 
     def test_rotate_NPC(self): # Check if NPC can be rotated
         with SimConnection() as sim:
@@ -78,11 +78,11 @@ class TestNPC(unittest.TestCase):
             state.transform.position = state.position - 5 * right
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "SUV")
-            self.assertAlmostEqual(agent.state.transform.rotation.y, 194.823394, places=3)
+            self.assertAlmostEqual(agent.state.transform.rotation.y, 104.823394, places=3)
             x = agent.state
-            x.transform.rotation.y = 100
+            x.transform.rotation.y = 10
             agent.state = x
-            self.assertAlmostEqual(agent.state.transform.rotation.y, 100, delta=0.1)
+            self.assertAlmostEqual(agent.state.transform.rotation.y, 10, delta=0.1)
 
     def test_blank_agent(self): # Check that an exception is raised if a blank name is given
         with SimConnection() as sim:
@@ -299,10 +299,10 @@ class TestNPC(unittest.TestCase):
     def test_lane_change_right(self):
         with SimConnection(40) as sim:
             state = lgsvl.AgentState()
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(40.85, -1.57, -4.49))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(4.49, -1.57, 40.85))
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(42.73, -1.57, -0.63))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(0.63, -1.57, 42.73))
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             target = state.position + 31 * forward
@@ -324,12 +324,12 @@ class TestNPC(unittest.TestCase):
     def test_lane_change_right_missing_lane(self):
         with SimConnection(40) as sim:
             state = lgsvl.AgentState()
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(42.73, -1.57, -0.63))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(0.63, -1.57, 42.73))
             npc = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             target = state.position + 42.75 * forward
 
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(40.85, -1.57, -4.49))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(4.49, -1.57, 40.85))
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
@@ -349,10 +349,10 @@ class TestNPC(unittest.TestCase):
     def test_lane_change_left(self):
         with SimConnection(40) as sim:
             state = lgsvl.AgentState()
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(40.85, -1.57, -4.49))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(4.49, -1.57, 40.85))
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(42.02, -1.79, -9.82))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(9.82, -1.79, 42.02))
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             target = state.position + 31 * forward
@@ -374,7 +374,7 @@ class TestNPC(unittest.TestCase):
     def test_lane_change_left_opposing_traffic(self):
         with SimConnection(40) as sim:
             state = lgsvl.AgentState()
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(-40.292, -3.363, -78.962))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(78.962, -3.363, -40.292))
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             target = state.position + 42.75 * forward
@@ -400,13 +400,13 @@ class TestNPC(unittest.TestCase):
     def test_multiple_lane_changes(self):
         with SimConnection(120) as sim:
             state = lgsvl.AgentState()
-            state.transform.position = lgsvl.Vector(239,10,180)
-            state.transform.rotation = lgsvl.Vector(0,180,0)
+            state.transform.position = lgsvl.Vector(-180,10,239)
+            state.transform.rotation = lgsvl.Vector(0,90,0)
             sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
 
             state = lgsvl.AgentState()
-            state.transform.position = lgsvl.Vector(234.5, 10, 175)
-            state.transform.rotation = lgsvl.Vector(0.016, 180, 0)
+            state.transform.position = lgsvl.Vector(-175, 10, 234.5)
+            state.transform.rotation = lgsvl.Vector(0, 90, 0.016)
             npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
             npc.follow_closest_lane(True, 10)
@@ -455,9 +455,9 @@ class TestNPC(unittest.TestCase):
                 npc.apply_control(control)
 
     def test_e_stop(self):
-        with SimConnection() as sim:
+        with SimConnection(60) as sim:
             state = lgsvl.AgentState()
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(-40.292, -3.363, -78.962))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(78.962, -3.363, -40.292))
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             state.transform.position = state.position + 10 * forward
@@ -478,7 +478,7 @@ class TestNPC(unittest.TestCase):
     def test_waypoint_speed(self):
         with SimConnection(60) as sim:
             state = lgsvl.AgentState()
-            state.transform = sim.map_point_on_lane(lgsvl.Vector(-40.292, -3.363, -78.962))
+            state.transform = sim.map_point_on_lane(lgsvl.Vector(78.962, -3.363, -40.292))
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             up = lgsvl.utils.transform_to_up(state.transform)

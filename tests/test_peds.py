@@ -19,13 +19,13 @@ class TestPeds(unittest.TestCase):
             state.transform.position = state.position - 4 * forward
             sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
             for name in ["Bob", "EntrepreneurFemale", "Howard", "Johny", \
-                "Pamela", "Presley", "Red", "Robin", "Stephen", "Zoe"]:
+                "Pamela", "Presley", "Robin", "Stephen", "Zoe"]:
                 agent = self.create_ped(sim, name, spawnState(sim))
                 cmEqual(self, agent.state.position, sim.get_spawn()[0].position, name)
                 self.assertEqual(agent.name, name)
     
     def test_ped_random_walk(self): # Check if pedestrians can walk randomly
-        with SimConnection() as sim:
+        with SimConnection(40) as sim:
             state = spawnState(sim)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             state.transform.position = state.position - 4 * forward
