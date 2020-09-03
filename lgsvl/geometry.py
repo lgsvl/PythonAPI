@@ -105,3 +105,29 @@ class Transform:
 
     def __repr__(self):
         return "Transform(position={}, rotation={})".format(self.position, self.rotation)
+
+
+class Spawn:
+    def __init__(self, transform=None, destinations=None):
+        if transform is None: transform = Transform()
+        if destinations is None: destinations = []
+        self.position = transform.position
+        self.rotation = transform.rotation
+        self.destinations = destinations
+
+    @staticmethod
+    def from_json(j):
+        spawn_point = Transform.from_json(j)
+        destinations = []
+        for d in j["destinations"]:
+            destinations.append(Transform.from_json(d))
+
+        return Spawn(spawn_point, destinations)
+
+    def to_json(self):
+        return {"position": self.position.to_json(), "rotation": self.rotation.to_json()}
+
+    def __repr__(self):
+        return "Spawn(position={}, rotation={}, destinations={})".format(
+            self.transform.position, self.transform.rotation, self.destinations
+        )

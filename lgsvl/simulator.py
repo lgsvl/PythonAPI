@@ -7,7 +7,7 @@
 from .remote import Remote
 from .agent import Agent, AgentType, AgentState
 from .sensor import GpsData
-from .geometry import Vector, Transform
+from .geometry import Vector, Transform, Spawn
 from .utils import accepts, ObjectState
 from .controllable import Controllable
 
@@ -171,7 +171,7 @@ class Simulator:
 
     def get_spawn(self):
         spawns = self.remote.command("map/spawn/get")
-        return [Transform.from_json(spawn) for spawn in spawns]
+        return [Spawn.from_json(spawn) for spawn in spawns]
 
     @accepts(Transform)
     def map_to_gps(self, transform):
