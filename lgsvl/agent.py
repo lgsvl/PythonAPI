@@ -4,358 +4,402 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-from .geometry import Vector, Transform, BoundingBox
+from .geometry import Vector, BoundingBox
 from .sensor import Sensor
 from .utils import accepts, ObjectState as AgentState
 
 from enum import Enum
 from collections.abc import Iterable, Callable
-import math
 import json
 
+
 class DriveWaypoint:
-  def __init__(self, position, speed, angle = Vector(0,0,0), idle = 0, deactivate = False, trigger_distance = 0, timestamp = -1, trigger = None):
-    self.position = position
-    self.speed = speed
-    self.angle = angle
-    self.idle = idle
-    self.deactivate = deactivate
-    self.trigger_distance = trigger_distance
-    self.timestamp = timestamp
-    self.trigger = trigger
+    def __init__(
+        self,
+        position,
+        speed,
+        angle=Vector(0, 0, 0),
+        idle=0,
+        deactivate=False,
+        trigger_distance=0,
+        timestamp=-1,
+        trigger=None,
+    ):
+        self.position = position
+        self.speed = speed
+        self.angle = angle
+        self.idle = idle
+        self.deactivate = deactivate
+        self.trigger_distance = trigger_distance
+        self.timestamp = timestamp
+        self.trigger = trigger
+
 
 class WalkWaypoint:
-  def __init__(self, position, idle, trigger_distance = 0, speed = 1, trigger = None):
-    self.position = position
-    self.speed = speed
-    self.idle = idle
-    self.trigger_distance = trigger_distance
-    self.trigger = trigger
+    def __init__(self, position, idle, trigger_distance=0, speed=1, trigger=None):
+        self.position = position
+        self.speed = speed
+        self.idle = idle
+        self.trigger_distance = trigger_distance
+        self.trigger = trigger
+
 
 class WaypointTrigger:
-  def __init__(self, effectors):
-    self.effectors = effectors
+    def __init__(self, effectors):
+        self.effectors = effectors
 
-  @staticmethod
-  def from_json(j):
-    return WaypointTrigger(
-      json.loads(j["effectors"])
-    )
+    @staticmethod
+    def from_json(j):
+        return WaypointTrigger(json.loads(j["effectors"]))
 
-  def to_json(self):
-    effectors_json = []
-    for effector in self.effectors:
-      effectors_json.append(effector.to_json())
-    return {
-      "effectors": effectors_json
-    }
+    def to_json(self):
+        effectors_json = []
+        for effector in self.effectors:
+            effectors_json.append(effector.to_json())
+        return {"effectors": effectors_json}
+
 
 class TriggerEffector:
-  def __init__(self, type_name, parameters):
-    self.type_name = type_name
-    self.parameters = parameters
+    def __init__(self, type_name, parameters):
+        self.type_name = type_name
+        self.parameters = parameters
 
-  @staticmethod
-  def from_json(j):
-    return TriggerEffector(j["type_name"], j["parameters"])
+    @staticmethod
+    def from_json(j):
+        return TriggerEffector(j["type_name"], j["parameters"])
 
-  def to_json(self):
-    return {
-      "type_name": self.type_name,
-      "parameters": self.parameters
-    }
+    def to_json(self):
+        return {"type_name": self.type_name, "parameters": self.parameters}
+
 
 class AgentType(Enum):
-  EGO = 1
-  NPC = 2
-  PEDESTRIAN = 3
+    EGO = 1
+    NPC = 2
+    PEDESTRIAN = 3
 
 
 class VehicleControl:
-  def __init__(self):
-    self.steering = 0.0     # [-1..+1]
-    self.throttle = 0.0     # [0..1]
-    self.braking = 0.0     # [0..1]
-    self.reverse = False
-    self.handbrake = False
+    def __init__(self):
+        self.steering = 0.0  # [-1..+1]
+        self.throttle = 0.0  # [0..1]
+        self.braking = 0.0  # [0..1]
+        self.reverse = False
+        self.handbrake = False
 
-    # optional
-    self.headlights = None         # int, 0=off, 1=low, 2=high beams
-    self.windshield_wipers = None  # int, 0=off, 1-3=on
-    self.turn_signal_left = None   # bool
-    self.turn_signal_right = None  # bool
+        # optional
+        self.headlights = None  # int, 0=off, 1=low, 2=high beams
+        self.windshield_wipers = None  # int, 0=off, 1-3=on
+        self.turn_signal_left = None  # bool
+        self.turn_signal_right = None  # bool
+
 
 class NPCControl:
-  def __init__(self):
-    self.headlights = None        # int, 0=off, 1=low, 2=high
-    self.hazards = None           # bool
-    self.e_stop = None            # bool
-    self.turn_signal_left = None  # bool
-    self.turn_signal_right = None # bool
+    def __init__(self):
+        self.headlights = None  # int, 0=off, 1=low, 2=high
+        self.hazards = None  # bool
+        self.e_stop = None  # bool
+        self.turn_signal_left = None  # bool
+        self.turn_signal_right = None  # bool
+
 
 class Agent:
-  def __init__(self, uid, simulator):
-    self.uid = uid
-    self.remote = simulator.remote
-    self.simulator = simulator
+    def __init__(self, uid, simulator):
+        self.uid = uid
+        self.remote = simulator.remote
+        self.simulator = simulator
 
-  @property
-  def state(self):
-    j = self.remote.command("agent/state/get", {"uid": self.uid})
-    return AgentState.from_json(j)
+    @property
+    def state(self):
+        j = self.remote.command("agent/state/get", {"uid": self.uid})
+        return AgentState.from_json(j)
 
-  @state.setter
-  @accepts(AgentState)
-  def state(self, state):
-    self.remote.command("agent/state/set", {
-      "uid": self.uid,
-      "state": state.to_json()
-    })
+    @state.setter
+    @accepts(AgentState)
+    def state(self, state):
+        self.remote.command(
+            "agent/state/set", {"uid": self.uid, "state": state.to_json()}
+        )
 
-  @property
-  def transform(self):
-    return self.state.transform
+    @property
+    def transform(self):
+        return self.state.transform
 
-  @property
-  def bounding_box(self):
-    j = self.remote.command("agent/bounding_box/get", {"uid": self.uid})
-    return BoundingBox.from_json(j)
+    @property
+    def bounding_box(self):
+        j = self.remote.command("agent/bounding_box/get", {"uid": self.uid})
+        return BoundingBox.from_json(j)
 
-  def __eq__(self, other):
-    return self.uid == other.uid
+    def __eq__(self, other):
+        return self.uid == other.uid
 
-  def __hash__(self):
-    return hash(self.uid)
+    def __hash__(self):
+        return hash(self.uid)
 
-  @accepts(Callable)
-  def on_collision(self, fn):
-    self.remote.command("agent/on_collision", {"uid": self.uid})
-    self.simulator._add_callback(self, "collision", fn)
+    @accepts(Callable)
+    def on_collision(self, fn):
+        self.remote.command("agent/on_collision", {"uid": self.uid})
+        self.simulator._add_callback(self, "collision", fn)
 
-  @staticmethod
-  def create(simulator, uid, agent_type):
-    if agent_type == AgentType.EGO:
-      return EgoVehicle(uid, simulator)
-    elif agent_type == AgentType.NPC:
-      return NpcVehicle(uid, simulator)
-    elif agent_type == AgentType.PEDESTRIAN:
-      return Pedestrian(uid, simulator)
-    else:
-      raise ValueError("unsupported agent type")
+    @staticmethod
+    def create(simulator, uid, agent_type):
+        if agent_type == AgentType.EGO:
+            return EgoVehicle(uid, simulator)
+        elif agent_type == AgentType.NPC:
+            return NpcVehicle(uid, simulator)
+        elif agent_type == AgentType.PEDESTRIAN:
+            return Pedestrian(uid, simulator)
+        else:
+            raise ValueError("unsupported agent type")
 
 
 class Vehicle(Agent):
-  def __init__(self, uid, simulator):
-    super().__init__(uid, simulator)
+    def __init__(self, uid, simulator):
+        super().__init__(uid, simulator)
 
 
 class EgoVehicle(Vehicle):
-  def __init__(self, uid, simulator):
-    super().__init__(uid, simulator)
+    def __init__(self, uid, simulator):
+        super().__init__(uid, simulator)
 
-  @property
-  def bridge_connected(self):
-    return self.remote.command("vehicle/bridge/connected", {"uid": self.uid})
+    @property
+    def bridge_connected(self):
+        return self.remote.command("vehicle/bridge/connected", {"uid": self.uid})
 
-  @accepts(str, int)
-  def connect_bridge(self, address, port):
-    if port <= 0 or port > 65535: raise ValueError("port value is out of range")
-    self.remote.command("vehicle/bridge/connect", {"uid": self.uid, "address": address, "port": port})
+    @accepts(str, int)
+    def connect_bridge(self, address, port):
+        if port <= 0 or port > 65535:
+            raise ValueError("port value is out of range")
+        self.remote.command(
+            "vehicle/bridge/connect",
+            {"uid": self.uid, "address": address, "port": port},
+        )
 
-  def get_sensors(self):
-    j = self.remote.command("vehicle/sensors/get", {"uid": self.uid})
-    return [Sensor.create(self.remote, sensor) for sensor in j]
+    def get_sensors(self):
+        j = self.remote.command("vehicle/sensors/get", {"uid": self.uid})
+        return [Sensor.create(self.remote, sensor) for sensor in j]
 
-  @accepts(bool, float)
-  def set_fixed_speed(self, isCruise, speed=None):
-    self.remote.command("vehicle/set_fixed_speed", {"uid": self.uid, "isCruise": isCruise, "speed": speed})
+    @accepts(bool, float)
+    def set_fixed_speed(self, isCruise, speed=None):
+        self.remote.command(
+            "vehicle/set_fixed_speed",
+            {"uid": self.uid, "isCruise": isCruise, "speed": speed},
+        )
 
-  @accepts(VehicleControl, bool)
-  def apply_control(self, control, sticky = False):
-    args = {
-      "uid": self.uid,
-      "sticky": sticky,
-      "control": {
-        "steering": control.steering,
-        "throttle": control.throttle,
-        "braking": control.braking,
-        "reverse": control.reverse,
-        "handbrake": control.handbrake,
-      }
-    }
-    if control.headlights is not None:
-      args["control"]["headlights"] = control.headlights
-    if control.windshield_wipers is not None:
-      args["control"]["windshield_wipers"] = control.windshield_wipers
-    if control.turn_signal_left is not None:
-      args["control"]["turn_signal_left"] = control.turn_signal_left
-    if control.turn_signal_right is not None:
-      args["control"]["turn_signal_right"] = control.turn_signal_right
-    self.remote.command("vehicle/apply_control", args)
+    @accepts(VehicleControl, bool)
+    def apply_control(self, control, sticky=False):
+        args = {
+            "uid": self.uid,
+            "sticky": sticky,
+            "control": {
+                "steering": control.steering,
+                "throttle": control.throttle,
+                "braking": control.braking,
+                "reverse": control.reverse,
+                "handbrake": control.handbrake,
+            },
+        }
+        if control.headlights is not None:
+            args["control"]["headlights"] = control.headlights
+        if control.windshield_wipers is not None:
+            args["control"]["windshield_wipers"] = control.windshield_wipers
+        if control.turn_signal_left is not None:
+            args["control"]["turn_signal_left"] = control.turn_signal_left
+        if control.turn_signal_right is not None:
+            args["control"]["turn_signal_right"] = control.turn_signal_right
+        self.remote.command("vehicle/apply_control", args)
 
-  def on_custom(self, fn):
-    self.simulator._add_callback(self, "custom", fn)
+    def on_custom(self, fn):
+        self.simulator._add_callback(self, "custom", fn)
 
 
 class NpcVehicle(Vehicle):
-  def __init__(self, uid, simulator):
-    super().__init__(uid, simulator)
+    def __init__(self, uid, simulator):
+        super().__init__(uid, simulator)
 
-  @accepts(Iterable, bool)
-  def follow(self, waypoints, loop = False):
-    '''Tells the NPC to follow the waypoints
-    
-    When an NPC reaches a waypoint, it will:
-    1. Wait for an EGO vehicle to approach to within the trigger_distance [meters] (ignored if 0)
-    2. Wait the idle time (ignored if 0)
-    3. Drive to the next waypoint (if any)
+    @accepts(Iterable, bool)
+    def follow(self, waypoints, loop=False):
+        """Tells the NPC to follow the waypoints
 
-    Parameters
-    ----------
-    waypoints : list of DriveWaypoints
-      DriveWaypoint : Class (position, speed, angle, idle, trigger_distance)
+        When an NPC reaches a waypoint, it will:
+        1. Wait for an EGO vehicle to approach to within the trigger_distance [meters] (ignored if 0)
+        2. Wait the idle time (ignored if 0)
+        3. Drive to the next waypoint (if any)
 
-        position : lgsvl.Vector()
-          Unity coordinates of waypoint
+        Parameters
+        ----------
+        waypoints : list of DriveWaypoints
+        DriveWaypoint : Class (position, speed, angle, idle, trigger_distance)
 
-        speed : float
-          how fast the NPC should drive to the waypoint
+            position : lgsvl.Vector()
+            Unity coordinates of waypoint
 
-        angle : lgsvl.Vector()
-          Unity rotation of the NPC at the waypoint
+            speed : float
+            how fast the NPC should drive to the waypoint
 
-        idle : float
-          time for the NPC to wait at the waypoint
+            angle : lgsvl.Vector()
+            Unity rotation of the NPC at the waypoint
 
-        deactivate : bool
-          whether the NPC is to deactivate while waiting at this waypoint
+            idle : float
+            time for the NPC to wait at the waypoint
 
-        trigger_distance : float
-          how close an EGO must approach for the NPC to continue
+            deactivate : bool
+            whether the NPC is to deactivate while waiting at this waypoint
 
-        trigger : Class (list of Effectors)
-          trigger data with effectors applied on this waypoint
-            effectors : Class (type, value)
-              typeName : string
-                effector type name
-              parameters : dictionary
-                parameters of the effector (for example "value", "max_distance", "radius")
+            trigger_distance : float
+            how close an EGO must approach for the NPC to continue
 
-    loop : bool
-      whether the NPC should loop through the waypoints after reaching the final one
-    '''
-    self.remote.command("vehicle/follow_waypoints", {
-      "uid": self.uid,
-      "waypoints": [{
-        "position": wp.position.to_json(),
-        "speed": wp.speed,
-        "angle": wp.angle.to_json(),
-        "idle": wp.idle,
-        "deactivate": wp.deactivate,
-        "trigger_distance": wp.trigger_distance,
-        "timestamp": wp.timestamp,
-        "trigger": (None if wp.trigger is None else wp.trigger.to_json())
-      } for wp in waypoints],
-      "loop": loop,
-    })
+            trigger : Class (list of Effectors)
+            trigger data with effectors applied on this waypoint
+                effectors : Class (type, value)
+                typeName : string
+                    effector type name
+                parameters : dictionary
+                    parameters of the effector (for example "value", "max_distance", "radius")
 
-  def follow_closest_lane(self, follow, max_speed, isLaneChange=True):
-    self.remote.command("vehicle/follow_closest_lane", {"uid": self.uid, "follow": follow, "max_speed": max_speed, "isLaneChange": isLaneChange})
+        loop : bool
+        whether the NPC should loop through the waypoints after reaching the final one
+        """
+        self.remote.command(
+            "vehicle/follow_waypoints",
+            {
+                "uid": self.uid,
+                "waypoints": [
+                    {
+                        "position": wp.position.to_json(),
+                        "speed": wp.speed,
+                        "angle": wp.angle.to_json(),
+                        "idle": wp.idle,
+                        "deactivate": wp.deactivate,
+                        "trigger_distance": wp.trigger_distance,
+                        "timestamp": wp.timestamp,
+                        "trigger": (
+                            None if wp.trigger is None else wp.trigger.to_json()
+                        ),
+                    }
+                    for wp in waypoints
+                ],
+                "loop": loop,
+            },
+        )
 
-  def set_behaviour(self, behaviour):
-    self.remote.command("vehicle/behaviour", {"uid": self.uid, "behaviour": behaviour})
+    def follow_closest_lane(self, follow, max_speed, isLaneChange=True):
+        self.remote.command(
+            "vehicle/follow_closest_lane",
+            {
+                "uid": self.uid,
+                "follow": follow,
+                "max_speed": max_speed,
+                "isLaneChange": isLaneChange,
+            },
+        )
 
-  @accepts(bool)
-  def change_lane(self, isLeftChange):
-    self.remote.command("vehicle/change_lane", {"uid": self.uid, "isLeftChange": isLeftChange})
+    def set_behaviour(self, behaviour):
+        self.remote.command(
+            "vehicle/behaviour", {"uid": self.uid, "behaviour": behaviour}
+        )
 
-  @accepts(NPCControl)
-  def apply_control(self, control):
-    args = {
-      "uid": self.uid,
-      "control":{}
-    }
-    if control.headlights is not None:
-      if not control.headlights in [0,1,2]:
-        raise ValueError("unsupported intensity value")
-      args["control"]["headlights"] = control.headlights
-    if control.hazards is not None:
-      args["control"]["hazards"] = control.hazards
-    if control.e_stop is not None:
-      args["control"]["e_stop"] = control.e_stop
-    if control.turn_signal_left is not None or control.turn_signal_right is not None:
-      args["control"]["isLeftTurnSignal"] = control.turn_signal_left
-      args["control"]["isRightTurnSignal"] = control.turn_signal_right
-    self.remote.command("vehicle/apply_npc_control", args)
+    @accepts(bool)
+    def change_lane(self, isLeftChange):
+        self.remote.command(
+            "vehicle/change_lane", {"uid": self.uid, "isLeftChange": isLeftChange}
+        )
 
-  def on_waypoint_reached(self, fn):
-    self.remote.command("agent/on_waypoint_reached", {"uid": self.uid})
-    self.simulator._add_callback(self, "waypoint_reached", fn)
+    @accepts(NPCControl)
+    def apply_control(self, control):
+        args = {"uid": self.uid, "control": {}}
+        if control.headlights is not None:
+            if control.headlights not in [0, 1, 2]:
+                raise ValueError("unsupported intensity value")
+            args["control"]["headlights"] = control.headlights
+        if control.hazards is not None:
+            args["control"]["hazards"] = control.hazards
+        if control.e_stop is not None:
+            args["control"]["e_stop"] = control.e_stop
+        if (
+            control.turn_signal_left is not None
+            or control.turn_signal_right is not None
+        ):
+            args["control"]["isLeftTurnSignal"] = control.turn_signal_left
+            args["control"]["isRightTurnSignal"] = control.turn_signal_right
+        self.remote.command("vehicle/apply_npc_control", args)
 
-  def on_stop_line(self, fn):
-    self.remote.command("agent/on_stop_line", {"uid": self.uid})
-    self.simulator._add_callback(self, "stop_line", fn)
+    def on_waypoint_reached(self, fn):
+        self.remote.command("agent/on_waypoint_reached", {"uid": self.uid})
+        self.simulator._add_callback(self, "waypoint_reached", fn)
 
-  def on_lane_change(self, fn):
-    self.remote.command("agent/on_lane_change", {"uid": self.uid})
-    self.simulator._add_callback(self, "lane_change", fn)
+    def on_stop_line(self, fn):
+        self.remote.command("agent/on_stop_line", {"uid": self.uid})
+        self.simulator._add_callback(self, "stop_line", fn)
+
+    def on_lane_change(self, fn):
+        self.remote.command("agent/on_lane_change", {"uid": self.uid})
+        self.simulator._add_callback(self, "lane_change", fn)
 
 
 class Pedestrian(Agent):
-  def __init__(self, uid, simulator):
-    super().__init__(uid, simulator)
-  
-  @accepts(bool)
-  def walk_randomly(self, enable):
-    self.remote.command("pedestrian/walk_randomly", {"uid": self.uid, "enable": enable})
+    def __init__(self, uid, simulator):
+        super().__init__(uid, simulator)
 
-  @accepts(Iterable, bool)
-  def follow(self, waypoints, loop = False):
-    '''Tells the Pedestrian to follow the waypoints
+    @accepts(bool)
+    def walk_randomly(self, enable):
+        self.remote.command(
+            "pedestrian/walk_randomly", {"uid": self.uid, "enable": enable}
+        )
 
-    When a pedestrian reaches a waypoint, it will:
-    1. Wait for an EGO vehicle to approach to within the trigger_distance [meters] (ignored if 0)
-    2. Wait the idle time (ignored if 0)
-    3. Walk to the next waypoint (if any)
+    @accepts(Iterable, bool)
+    def follow(self, waypoints, loop=False):
+        """Tells the Pedestrian to follow the waypoints
 
-    Parameters
-    ----------
-    waypoints : list of WalkWaypoints
-      WalkWaypoint : Class (position, idle, trigger_distance, speed)
+        When a pedestrian reaches a waypoint, it will:
+        1. Wait for an EGO vehicle to approach to within the trigger_distance [meters] (ignored if 0)
+        2. Wait the idle time (ignored if 0)
+        3. Walk to the next waypoint (if any)
 
-        position : lgsvl.Vector()
-          Unity coordinates of waypoint
+        Parameters
+        ----------
+        waypoints : list of WalkWaypoints
+        WalkWaypoint : Class (position, idle, trigger_distance, speed)
 
-        idle : float
-          time for the pedestrian to wait at the waypoint
+            position : lgsvl.Vector()
+            Unity coordinates of waypoint
 
-        trigger_distance : float
-          how close an EGO must approach for the pedestrian to continue
+            idle : float
+            time for the pedestrian to wait at the waypoint
 
-        speed : float
-          how fast the pedestrian should drive to the waypoint (default value 1)
+            trigger_distance : float
+            how close an EGO must approach for the pedestrian to continue
 
-    loop : bool
-      whether the pedestrian should loop through the waypoints after reaching the final one
-    '''
-    self.remote.command("pedestrian/follow_waypoints", {
-      "uid": self.uid,
-      "waypoints": [{
-        "position": wp.position.to_json(), 
-        "idle": wp.idle, 
-        "trigger_distance": wp.trigger_distance,
-        "speed": wp.speed,
-        "trigger": (None if wp.trigger is None else wp.trigger.to_json())
-      } for wp in waypoints],
-      "loop": loop,
-    })
+            speed : float
+            how fast the pedestrian should drive to the waypoint (default value 1)
 
-  @accepts(float)
-  def set_speed(self, speed):
-    self.remote.command("pedestrian/set_speed", {"uid": self.uid, "speed": speed})
+        loop : bool
+        whether the pedestrian should loop through the waypoints after reaching the final one
+        """
+        self.remote.command(
+            "pedestrian/follow_waypoints",
+            {
+                "uid": self.uid,
+                "waypoints": [
+                    {
+                        "position": wp.position.to_json(),
+                        "idle": wp.idle,
+                        "trigger_distance": wp.trigger_distance,
+                        "speed": wp.speed,
+                        "trigger": (
+                            None if wp.trigger is None else wp.trigger.to_json()
+                        ),
+                    }
+                    for wp in waypoints
+                ],
+                "loop": loop,
+            },
+        )
 
-  @accepts(Callable)
-  def on_waypoint_reached(self, fn):
-    self.remote.command("agent/on_waypoint_reached", {"uid": self.uid})
-    self.simulator._add_callback(self, "waypoint_reached", fn)
-	
+    @accepts(float)
+    def set_speed(self, speed):
+        self.remote.command("pedestrian/set_speed", {"uid": self.uid, "speed": speed})
+
+    @accepts(Callable)
+    def on_waypoint_reached(self, fn):
+        self.remote.command("agent/on_waypoint_reached", {"uid": self.uid})
+        self.simulator._add_callback(self, "waypoint_reached", fn)

@@ -11,9 +11,9 @@ import time
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -30,7 +30,7 @@ a.connect_bridge("10.195.248.183", 9090)
 print("Waiting for connection...")
 
 while not a.bridge_connected:
-  time.sleep(1)
+    time.sleep(1)
 
 print("Bridge connected:", a.bridge_connected)
 

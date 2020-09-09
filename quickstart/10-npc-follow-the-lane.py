@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -37,7 +37,7 @@ state = lgsvl.AgentState()
 state.transform.position = spawns[0].position + 4.0 * right + 10.0 * forward
 state.transform.rotation = spawns[0].rotation
 
-npc2 = sim.add_agent("SUV", lgsvl.AgentType.NPC, state, lgsvl.Vector(1,1,0))
+npc2 = sim.add_agent("SUV", lgsvl.AgentType.NPC, state, lgsvl.Vector(1, 1, 0))
 
 # If the passed bool is False, then the NPC will not moved
 # The float passed is the maximum speed the NPC will drive

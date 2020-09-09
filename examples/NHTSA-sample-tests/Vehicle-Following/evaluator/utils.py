@@ -1,14 +1,15 @@
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
 
-import lgsvl
 import math
+
 
 class TestException(Exception):
     pass
+
 
 def separation(V1, V2):
     xdiff = V1.x - V2.x

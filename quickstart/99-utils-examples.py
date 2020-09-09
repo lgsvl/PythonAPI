@@ -5,8 +5,13 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-from lgsvl import *
-from lgsvl.utils import *
+from lgsvl import Transform, Vector
+from lgsvl.utils import (
+    transform_to_matrix,
+    matrix_inverse,
+    matrix_multiply,
+    vector_multiply,
+)
 
 # global "world" transform (for example, car position)
 world = Transform(Vector(10, 20, 30), Vector(11, 22, 33))

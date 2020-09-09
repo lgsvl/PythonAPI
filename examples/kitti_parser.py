@@ -115,7 +115,7 @@ class KittiParser:
 
         return transform
 
-# Finds a random point near the EGO on the map. 
+# Finds a random point near the EGO on the map.
 # Once that is done, randomly find another nearby point so that the NPCs are spawned on different lanes.
     def get_npc_random_transform(self):
         ego_transform = self.ego_state.transform

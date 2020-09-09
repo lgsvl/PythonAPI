@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -24,7 +24,7 @@ print(sim.weather)
 
 input("Press Enter to set rain to 80%")
 
-# Each weather variable is a float from 0 to 1 
+# Each weather variable is a float from 0 to 1
 # There is no default value so each varible must be specified
 sim.weather = lgsvl.WeatherState(rain=0.8, fog=0, wetness=0)
 print(sim.weather)

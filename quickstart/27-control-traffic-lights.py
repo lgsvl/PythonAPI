@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -13,9 +13,9 @@ sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 scene_name = "BorregasAve"
 
 if sim.current_scene == scene_name:
-  sim.reset()
+    sim.reset()
 else:
-  sim.load(scene_name, 42)
+    sim.load(scene_name, 42)
 
 spawns = sim.get_spawn()
 
@@ -31,7 +31,7 @@ print("Python API Quickstart #27: How to Control Traffic Light")
 controllables = sim.get_controllables("signal")
 print("\n# List of controllable objects in {} scene:".format(scene_name))
 for c in controllables:
-  print(c)
+    print(c)
 
 signal = sim.get_controllable(lgsvl.Vector(15.5, 4.7, -23.9), "signal")
 print("\n# Signal of interest:")

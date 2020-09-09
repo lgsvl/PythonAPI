@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -7,10 +7,10 @@
 # DO NOT INCLUDE IN __init__.py
 
 import unittest
-import math
 
 import lgsvl
 from .common import SimConnection, spawnState, TestTimeout
+
 
 class TestManual(unittest.TestCase):
     def test_wipers(self):
@@ -36,7 +36,7 @@ class TestManual(unittest.TestCase):
                 input("Press Enter if wipers are on high")
         except TestTimeout:
             self.fail("Wipers were not on")
-    
+
     def test_headlights(self):
         try:
             with SimConnection() as sim:

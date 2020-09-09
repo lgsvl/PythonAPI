@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 # The next few lines spawns an EGO vehicle in the map
 spawns = sim.get_spawn()
@@ -37,31 +37,31 @@ p.y += 1
 
 # Included layers can be hit by the rays. Otherwise the ray will go through the layer
 layer_mask = 0
-for bit in [0, 10, 11, 12]: # do not put 9 here, to not hit EGO vehicle itself
-  layer_mask |= 1 << bit
+for bit in [0, 10, 11, 12]:  # do not put 9 here, to not hit EGO vehicle itself
+    layer_mask |= 1 << bit
 
 # raycast returns None if the ray doesn't collide with anything
 # hit also has the point property which is the Unity position vector of where the ray collided with something
 hit = sim.raycast(p, right, layer_mask)
 if hit:
-  print("Distance right:", hit.distance)
+    print("Distance right:", hit.distance)
 
 hit = sim.raycast(p, -right, layer_mask)
 if hit:
-  print("Distance left:", hit.distance)
+    print("Distance left:", hit.distance)
 
 hit = sim.raycast(p, -forward, layer_mask)
 if hit:
-  print("Distance back:", hit.distance)
+    print("Distance back:", hit.distance)
 
 hit = sim.raycast(p, forward, layer_mask)
 if hit:
-  print("Distance forward:", hit.distance)
+    print("Distance forward:", hit.distance)
 
 hit = sim.raycast(p, up, layer_mask)
 if hit:
-  print("Distance up:", hit.distance)
+    print("Distance up:", hit.distance)
 
 hit = sim.raycast(p, -up, layer_mask)
 if hit:
-  print("Distance down:", hit.distance)
+    print("Distance down:", hit.distance)

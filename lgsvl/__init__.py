@@ -7,6 +7,19 @@
 from .geometry import Vector, BoundingBox, Transform
 from .simulator import Simulator, RaycastHit, WeatherState
 from .sensor import Sensor, CameraSensor, LidarSensor, ImuSensor
-from .agent import AgentType, AgentState, VehicleControl, Vehicle, EgoVehicle, NpcVehicle, Pedestrian, DriveWaypoint, WalkWaypoint, WaypointTrigger, TriggerEffector, NPCControl
+from .agent import (
+    AgentType,
+    AgentState,
+    VehicleControl,
+    Vehicle,
+    EgoVehicle,
+    NpcVehicle,
+    Pedestrian,
+    DriveWaypoint,
+    WalkWaypoint,
+    WaypointTrigger,
+    TriggerEffector,
+    NPCControl,
+)
 from .controllable import Controllable
 from .utils import ObjectState

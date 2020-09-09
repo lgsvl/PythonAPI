@@ -1,0 +1,11 @@
+[flake8]
+max-line-length = 130
+max-complexity = 23
+
+ignore = E701, E501, W503
+exclude =
+    tests/*
+    examples/*
+
+per-file-ignores =
+    lgsvl/__init__.py:F401

@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -30,15 +30,17 @@ state.transform.rotation = spawns[0].rotation
 npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 
 vehicles = {
-  ego: "EGO",
-  npc: "Sedan",
+    ego: "EGO",
+    npc: "Sedan",
 }
+
 
 # Executed upon receiving collision callback -- NPC is expected to drive through colliding objects
 def on_collision(agent1, agent2, contact):
-  name1 = vehicles[agent1]
-  name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
-  print("{} collided with {}".format(name1, name2))
+    name1 = vehicles[agent1]
+    name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
+    print("{} collided with {}".format(name1, name2))
+
 
 ego.on_collision(on_collision)
 npc.on_collision(on_collision)
@@ -49,27 +51,35 @@ waypoints = []
 z_delta = 12
 
 layer_mask = 0
-layer_mask |= 1 << 0 # 0 is the layer for the road (default)
+layer_mask |= 1 << 0  # 0 is the layer for the road (default)
 
 for i in range(20):
-  speed = 24# if i % 2 == 0 else 12
-  px = 0
-  pz = (i + 1) * z_delta
-  # Waypoint angles are input as Euler angles (roll, pitch, yaw)
-  angle = spawns[0].rotation
-  # Raycast the points onto the ground because BorregasAve is not flat
-  hit = sim.raycast(spawns[0].position + px * right + pz * forward, lgsvl.Vector(0,-1,0), layer_mask)
+    speed = 24  # if i % 2 == 0 else 12
+    px = 0
+    pz = (i + 1) * z_delta
+    # Waypoint angles are input as Euler angles (roll, pitch, yaw)
+    angle = spawns[0].rotation
+    # Raycast the points onto the ground because BorregasAve is not flat
+    hit = sim.raycast(
+        spawns[0].position + px * right + pz * forward,
+        lgsvl.Vector(0, -1, 0),
+        layer_mask,
+    )
 
-  # Trigger is set to 10 meters for every other waypoint (0 means no trigger)
-  tr = 0
-  if (i % 2):
-    tr = 10 
-  wp = lgsvl.DriveWaypoint(position=hit.point, speed=speed, angle=angle, idle=0, trigger_distance=tr)
-  waypoints.append(wp)
+    # Trigger is set to 10 meters for every other waypoint (0 means no trigger)
+    tr = 0
+    if i % 2:
+        tr = 10
+    wp = lgsvl.DriveWaypoint(
+        position=hit.point, speed=speed, angle=angle, idle=0, trigger_distance=tr
+    )
+    waypoints.append(wp)
+
 
 # When the NPC is within 0.5m of the waypoint, this will be called
 def on_waypoint(agent, index):
-  print("waypoint {} reached".format(index))
+    print("waypoint {} reached".format(index))
+
 
 # The above function needs to be added to the list of callbacks for the NPC
 npc.on_waypoint_reached(on_waypoint)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -9,19 +9,18 @@
 
 import os
 import lgsvl
-import sys
 import time
 import evaluator
 
-MAX_EGO_SPEED = 29.06 # (105 km/h, 65 mph)
-SPEED_VARIANCE = 10 # Simple Physics does not return an accurate value
-MAX_POV_SPEED = 26.82 # (96 km/h, 60 mph)
-MAX_POV_ROTATION = 5 #deg/s
-TIME_LIMIT = 45 # seconds
+MAX_EGO_SPEED = 29.06  # (105 km/h, 65 mph)
+SPEED_VARIANCE = 10  # Simple Physics does not return an accurate value
+MAX_POV_SPEED = 26.82  # (96 km/h, 60 mph)
+MAX_POV_ROTATION = 5  # deg/s
+TIME_LIMIT = 45  # seconds
 TIME_DELAY = 5
-MAX_FOLLOWING_DISTANCE = 100 # Apollo 3.5 is very cautious
+MAX_FOLLOWING_DISTANCE = 100  # Apollo 3.5 is very cautious
 
-print("VF_S_65_Slow - ", end = '')
+print("VF_S_65_Slow - ", end='')
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "SingleLaneRoad":
@@ -43,15 +42,17 @@ POVState = lgsvl.AgentState()
 POVState.transform = sim.map_point_on_lane(lgsvl.Vector(egoX - 104.74, egoY, egoZ - 7.34))
 POV = sim.add_agent("Sedan", lgsvl.AgentType.NPC, POVState)
 
+
 def on_collision(agent1, agent2, contact):
     raise evaluator.TestException("Ego collided with {}".format(agent2))
+
 
 ego.on_collision(on_collision)
 POV.on_collision(on_collision)
 
 try:
     t0 = time.time()
-    sim.run(TIME_DELAY) # The EGO should start moving first
+    sim.run(TIME_DELAY)  # The EGO should start moving first
     POV.follow_closest_lane(True, MAX_POV_SPEED, False)
 
     while True:

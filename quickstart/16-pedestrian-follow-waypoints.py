@@ -7,14 +7,13 @@
 
 import os
 import lgsvl
-import time
 import math
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 forward = lgsvl.utils.transform_to_forward(spawns[1])
@@ -29,11 +28,13 @@ radius = 4
 count = 8
 wp = []
 for i in range(count):
-  x = radius * math.cos(i * 2 * math.pi / count)
-  z = radius * math.sin(i * 2 * math.pi / count)
-  # idle is how much time the pedestrian will wait once it reaches the waypoint
-  idle = 1 if i < count//2 else 0
-  wp.append(lgsvl.WalkWaypoint(spawns[1].position + x * right + (z + 8) * forward, idle))
+    x = radius * math.cos(i * 2 * math.pi / count)
+    z = radius * math.sin(i * 2 * math.pi / count)
+    # idle is how much time the pedestrian will wait once it reaches the waypoint
+    idle = 1 if i < count // 2 else 0
+    wp.append(
+        lgsvl.WalkWaypoint(spawns[1].position + x * right + (z + 8) * forward, idle)
+    )
 
 state = lgsvl.AgentState()
 state.transform = spawns[1]
@@ -41,8 +42,10 @@ state.transform.position = wp[0].position
 
 p = sim.add_agent("Pamela", lgsvl.AgentType.PEDESTRIAN, state)
 
+
 def on_waypoint(agent, index):
-  print("Waypoint {} reached".format(index))
+    print("Waypoint {} reached".format(index))
+
 
 p.on_waypoint_reached(on_waypoint)
 

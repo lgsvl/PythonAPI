@@ -13,9 +13,9 @@ sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 scene_name = "CubeTown"
 
 if sim.current_scene == scene_name:
-  sim.reset()
+    sim.reset()
 else:
-  sim.load(scene_name, 42)
+    sim.load(scene_name, 42)
 
 spawns = sim.get_spawn()
 
@@ -29,20 +29,24 @@ ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 print("Python API Quickstart #28: How to Add/Control Traffic Cone")
 
-for i in range(10*3):
-  # Create controllables in a block
-  start = spawns[0].position + (5 + (1.0 * (i//6))) * forward - (2 + (1.0 * (i % 6))) * right
-  end = start + 10 * forward
+for i in range(10 * 3):
+    # Create controllables in a block
+    start = (
+        spawns[0].position
+        + (5 + (1.0 * (i // 6))) * forward
+        - (2 + (1.0 * (i % 6))) * right
+    )
+    end = start + 10 * forward
 
-  state = lgsvl.ObjectState()
-  state.transform.position = start
-  state.transform.rotation = spawns[0].rotation
-  # Set velocity and angular_velocity
-  state.velocity = 10 * up
-  state.angular_velocity = 6.5 * right
+    state = lgsvl.ObjectState()
+    state.transform.position = start
+    state.transform.rotation = spawns[0].rotation
+    # Set velocity and angular_velocity
+    state.velocity = 10 * up
+    state.angular_velocity = 6.5 * right
 
-  # add controllable
-  o = sim.controllable_add("TrafficCone", state)
+    # add controllable
+    o = sim.controllable_add("TrafficCone", state)
 
 
 print("\nAdded {} Traffic Cones".format(i + 1))

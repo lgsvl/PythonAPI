@@ -13,6 +13,7 @@ from .test_sensors import TestSensors
 from .test_peds import TestPeds
 from .test_utils import TestUtils
 
+
 def load_tests(loader, standard_tests, pattern):
     suite = unittest.TestSuite()
     suite.addTests(loader.loadTestsFromTestCase(TestNPC)) # must be first

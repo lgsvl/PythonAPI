@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -25,7 +25,7 @@ hit = sim.raycast(ego_position, lgsvl.Vector(0, -1, 0), layer_mask)
 state.transform.position = hit.point
 state.transform.rotation = lgsvl.Vector(0.0, 15.0, 0.0)
 forward = lgsvl.Vector(0.2, 0.0, 0.8)
-state.velocity = forward*15
+state.velocity = forward * 15
 a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 
 # Pedestrian
@@ -37,10 +37,7 @@ state.transform.position = hit.point
 state.transform.rotation = pedestrian_rotation
 pedestrian = sim.add_agent("Bob", lgsvl.AgentType.PEDESTRIAN, state)
 
-agents = {
-    a: "EGO",
-    pedestrian: "Bob"
-}
+agents = {a: "EGO", pedestrian: "Bob"}
 
 
 # Executed upon receiving collision callback -- pedestrian is expected to walk into colliding objects
@@ -59,14 +56,26 @@ waypoints = []
 
 trigger = None
 speed = 3
-hit = sim.raycast(pedestrian_position+lgsvl.Vector(7.4, 0.0, -2.2), lgsvl.Vector(0, -1, 0), layer_mask)
+hit = sim.raycast(
+    pedestrian_position + lgsvl.Vector(7.4, 0.0, -2.2),
+    lgsvl.Vector(0, -1, 0),
+    layer_mask,
+)
 effector = lgsvl.TriggerEffector("TimeToCollision", {})
 trigger = lgsvl.WaypointTrigger([effector])
-wp = lgsvl.WalkWaypoint(position=hit.point, speed=speed, idle=0, trigger_distance=0, trigger=trigger)
+wp = lgsvl.WalkWaypoint(
+    position=hit.point, speed=speed, idle=0, trigger_distance=0, trigger=trigger
+)
 waypoints.append(wp)
 
-hit = sim.raycast(pedestrian_position+lgsvl.Vector(12.4, 0.0, -3.4), lgsvl.Vector(0, -1, 0), layer_mask)
-wp = lgsvl.WalkWaypoint(position=hit.point, speed=speed, idle=0, trigger_distance=0, trigger=None)
+hit = sim.raycast(
+    pedestrian_position + lgsvl.Vector(12.4, 0.0, -3.4),
+    lgsvl.Vector(0, -1, 0),
+    layer_mask,
+)
+wp = lgsvl.WalkWaypoint(
+    position=hit.point, speed=speed, idle=0, trigger_distance=0, trigger=None
+)
 waypoints.append(wp)
 
 

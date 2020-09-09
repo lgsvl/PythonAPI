@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -27,9 +27,9 @@ right = lgsvl.utils.transform_to_right(spawns[0])
 # The first will be created in front of the EGO and then they will be created to the left
 # The available types of NPCs can be found in NPCManager prefab
 for i, name in enumerate(["Sedan", "SUV", "Jeep", "Hatchback"]):
-  state = lgsvl.AgentState()
+    state = lgsvl.AgentState()
 
-  # Spawn NPC vehicles 10 meters ahead of the EGO
-  state.transform.position = spawns[0].position + (10 * forward) - (4.0 * i * right)
-  state.transform.rotation = spawns[0].rotation
-  sim.add_agent(name, lgsvl.AgentType.NPC, state)
+    # Spawn NPC vehicles 10 meters ahead of the EGO
+    state.transform.position = spawns[0].position + (10 * forward) - (4.0 * i * right)
+    state.transform.rotation = spawns[0].rotation
+    sim.add_agent(name, lgsvl.AgentType.NPC, state)

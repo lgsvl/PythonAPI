@@ -7,13 +7,12 @@
 
 import os
 import lgsvl
-import random
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 forward = lgsvl.utils.transform_to_forward(spawns[0])

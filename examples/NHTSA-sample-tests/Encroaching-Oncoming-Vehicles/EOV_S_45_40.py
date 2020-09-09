@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2020 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -9,18 +9,17 @@
 
 import os
 import lgsvl
-import sys
 import time
 import evaluator
 
-MAX_EGO_SPEED = 20 # (72 km/h, 45 mph)
-MAX_POV_SPEED = 17.778 # (64 km/h, 40 mph)
-INITIAL_HEADWAY = 150 # spec says >68m
+MAX_EGO_SPEED = 20  # (72 km/h, 45 mph)
+MAX_POV_SPEED = 17.778  # (64 km/h, 40 mph)
+INITIAL_HEADWAY = 150  # spec says >68m
 SPEED_VARIANCE = 4
 TIME_LIMIT = 30
 TIME_DELAY = 4
 
-print("EOV_S_45_40 - ", end = '')
+print("EOV_S_45_40 - ", end='')
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "SingleLaneRoad":
@@ -46,8 +45,10 @@ POV = sim.add_agent("Sedan", lgsvl.AgentType.NPC, POVState)
 POVWaypoints = []
 POVWaypoints.append(lgsvl.DriveWaypoint(finalPOVWaypointPosition, MAX_POV_SPEED))
 
+
 def on_collision(agent1, agent2, contact):
     raise evaluator.TestException("Ego collided with {}".format(agent2))
+
 
 ego.on_collision(on_collision)
 POV.on_collision(on_collision)

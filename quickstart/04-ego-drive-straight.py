@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -34,14 +34,14 @@ print("Current frame = ", sim.current_frame)
 input("Press Enter to drive forward for 2 seconds")
 
 # The simulator can be run for a set amount of time. time_limit is optional and if omitted or set to 0, then the simulator will run indefinitely
-sim.run(time_limit = 2.0)
+sim.run(time_limit=2.0)
 
 print("Current time = ", sim.current_time)
 print("Current frame = ", sim.current_frame)
 
 input("Press Enter to continue driving for 2 seconds")
 
-sim.run(time_limit = 2.0)
+sim.run(time_limit=2.0)
 
 print("Current time = ", sim.current_time)
 print("Current frame = ", sim.current_frame)

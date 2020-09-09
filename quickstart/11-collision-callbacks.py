@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -36,19 +36,21 @@ state.transform.position = spawns[0].position + 10.0 * forward
 state.transform.rotation = spawns[0].rotation
 sedan = sim.add_agent("Sedan", lgsvl.AgentType.NPC, state)
 # Even though the sedan is commanded to follow the lane, obstacle avoidance takes precedence and it will not drive into the bus
-sedan.follow_closest_lane(True, 11.1) # 11.1 m/s is ~40 km/h
+sedan.follow_closest_lane(True, 11.1)  # 11.1 m/s is ~40 km/h
 
 vehicles = {
-  ego: "EGO",
-  bus: "SchoolBus",
-  sedan: "Sedan",
+    ego: "EGO",
+    bus: "SchoolBus",
+    sedan: "Sedan",
 }
+
 
 # This function gets called whenever any of the 3 vehicles above collides with anything
 def on_collision(agent1, agent2, contact):
-  name1 = vehicles[agent1]
-  name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
-  print("{} collided with {} at {}".format(name1, name2, contact))
+    name1 = vehicles[agent1]
+    name2 = vehicles[agent2] if agent2 is not None else "OBSTACLE"
+    print("{} collided with {} at {}".format(name1, name2, contact))
+
 
 # The above on_collision function needs to be added to the callback list of each vehicle
 ego.on_collision(on_collision)

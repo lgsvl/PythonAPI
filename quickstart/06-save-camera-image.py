@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -23,8 +23,8 @@ ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 # get_sensors returns a list of sensors on the EGO vehicle
 sensors = ego.get_sensors()
 for s in sensors:
-  if s.name == "Main Camera":
-    # Camera and LIDAR sensors can save data to the specified file path
-    s.save("main-camera.png", compression=0)
-    s.save("main-camera.jpg", quality=75)
-    break
+    if s.name == "Main Camera":
+        # Camera and LIDAR sensors can save data to the specified file path
+        s.save("main-camera.png", compression=0)
+        s.save("main-camera.jpg", quality=75)
+        break

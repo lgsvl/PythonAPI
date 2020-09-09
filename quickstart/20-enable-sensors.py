@@ -10,9 +10,9 @@ import lgsvl
 
 sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
-  sim.reset()
+    sim.reset()
 else:
-  sim.load("BorregasAve")
+    sim.load("BorregasAve")
 
 spawns = sim.get_spawn()
 
@@ -26,13 +26,13 @@ sensors = ego.get_sensors()
 # By default all sensors are enabled
 # Disabling sensor will prevent it to send or receive messages to ROS or Cyber bridges
 for s in sensors:
-  print(type(s), s.enabled)
+    print(type(s), s.enabled)
 
 input("Press Enter to disable lidar")
 
 for s in sensors:
-  if isinstance(s, lgsvl.LidarSensor):
-    s.enabled = False
+    if isinstance(s, lgsvl.LidarSensor):
+        s.enabled = False
 
 for s in sensors:
-  print(type(s), s.enabled)
+    print(type(s), s.enabled)
