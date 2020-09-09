@@ -25,7 +25,7 @@ ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO is now looking for a bridge at the specified IP and port
-ego.connect_bridge(os.environ.get("AUTOPILOT_HOST", "127.0.0.1"), 9090)
+ego.connect_bridge(os.environ.get("BRIDGE_HOST", "127.0.0.1"), 9090)
 
 print("Waiting for connection...")
 
