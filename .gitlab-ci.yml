@@ -1,0 +1,12 @@
+image: "python:3.6.9"
+
+before_script:
+    - pip install -r requirements.txt
+
+stages:
+    - Style Guide Enforcement
+
+flake8:
+    stage: Style Guide Enforcement
+    script:
+        - flake8
