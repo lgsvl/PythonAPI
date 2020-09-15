@@ -173,7 +173,7 @@ class Simulator:
         spawns = self.remote.command("map/spawn/get")
         return [Spawn.from_json(spawn) for spawn in spawns]
 
-    @accepts(Transform)
+    @accepts((Transform, Spawn))
     def map_to_gps(self, transform):
         j = self.remote.command("map/to_gps", {"transform": transform.to_json()})
         return GpsData(j["latitude"], j["longitude"], j["northing"], j["easting"], j["altitude"], j["orientation"])

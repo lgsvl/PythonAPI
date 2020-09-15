@@ -129,5 +129,5 @@ class Spawn:
 
     def __repr__(self):
         return "Spawn(position={}, rotation={}, destinations={})".format(
-            self.transform.position, self.transform.rotation, self.destinations
+            self.position, self.rotation, self.destinations
         )
