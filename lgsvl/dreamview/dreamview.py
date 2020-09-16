@@ -97,6 +97,7 @@ class Connection:
                         "x": current_gps.easting + easting_adjustment,
                         "y": current_gps.northing + northing_adjustment,
                         "z": 0,
+                        "heading": heading,
                     },
                     "end": {"x": dest_x, "y": dest_y, "z": 0},
                     "waypoint": "[]",
