@@ -10,7 +10,10 @@ setup(
     python_requires=">=3.5.0",
     url="https://github.com/lgsvl/simulator",
     packages=["lgsvl"],
-    install_requires=["websockets==7.0"],
+    install_requires=[
+        "websockets==7.0",
+        "websocket-client==0.57.0"
+    ],
     license="Other",
     classifiers=[
         "License :: Other/Proprietary License",

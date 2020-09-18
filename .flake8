@@ -9,3 +9,4 @@ exclude =
 
 per-file-ignores =
     lgsvl/__init__.py:F401
+    lgsvl/dreamview/__init__.py:F401
