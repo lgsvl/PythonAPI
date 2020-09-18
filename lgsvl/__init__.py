@@ -26,3 +26,4 @@ from .utils import ObjectState
 
 # Subpackages
 import lgsvl.dreamview
+import lgsvl.evaluator
