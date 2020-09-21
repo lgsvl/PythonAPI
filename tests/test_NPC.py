@@ -23,7 +23,7 @@ class TestNPC(unittest.TestCase):
                 state = lgsvl.AgentState()
                 agent = sim.add_agent("Jeep", lgsvl.AgentType.NPC, state)
                 agent.state.position
-            self.assertFalse(repr(e.exception).startswith(PROBLEM))
+                self.assertFalse(repr(e.exception).startswith(PROBLEM))
 
     def test_NPC_creation(self):  # Check if the different types of NPCs can be created
         with SimConnection(60) as sim:
