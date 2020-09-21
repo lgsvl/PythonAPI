@@ -119,8 +119,9 @@ class Spawn:
     def from_json(j):
         spawn_point = Transform.from_json(j)
         destinations = []
-        for d in j["destinations"]:
-            destinations.append(Transform.from_json(d))
+        if "destinations" in j:
+            for d in j["destinations"]:
+                destinations.append(Transform.from_json(d))
 
         return Spawn(spawn_point, destinations)
 
