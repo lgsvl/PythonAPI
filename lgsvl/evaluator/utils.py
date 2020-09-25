@@ -25,9 +25,9 @@ def right_lane_check(simulator, ego_transform):
 def in_parking_zone(beginning, end, ego_transform):
     forward = lgsvl.utils.transform_to_forward(ego_transform)
     b2e = ego_transform.position - beginning  # Vector from beginning of parking zone to EGO's position
-    b2e = b2e * 1 / b2e.magnitude  # Make is a Unit vector to simplify dot product result
+    b2e = b2e * (1 / b2e.magnitude())  # Make it a Unit vector to simplify dot product result
     e2e = end - ego_transform.position  # Vector from EGO's position to end of parking zone
-    e2e = e2e * 1 / e2e.magnitue
+    e2e = e2e * (1 / e2e.magnitude())
     return (
         numpy.dot([forward.x, forward.y, forward.z], [b2e.x, b2e.y, b2e.z]) > 0.9
         and numpy.dot([forward.x, forward.y, forward.z], [e2e.x, e2e.y, e2e.z]) > 0.9
