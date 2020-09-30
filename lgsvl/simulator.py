@@ -15,7 +15,7 @@ from collections import namedtuple
 
 RaycastHit = namedtuple("RaycastHit", "distance point normal")
 
-WeatherState = namedtuple("WeatherState", "rain fog wetness")
+WeatherState = namedtuple("WeatherState", "rain fog wetness cloudiness damage")
 
 
 class Simulator:
@@ -154,12 +154,12 @@ class Simulator:
     @property
     def weather(self):
         j = self.remote.command("environment/weather/get")
-        return WeatherState(j["rain"], j["fog"], j["wetness"])
+        return WeatherState(j["rain"], j["fog"], j["wetness"], j["cloudiness"], j["damage"])
 
     @weather.setter
     @accepts(WeatherState)
     def weather(self, state):
-        self.remote.command("environment/weather/set", {"rain": state.rain, "fog": state.fog, "wetness": state.wetness})
+        self.remote.command("environment/weather/set", {"rain": state.rain, "fog": state.fog, "wetness": state.wetness, "cloudiness": state.cloudiness, "damage": state.damage})
 
     @property
     def time_of_day(self):

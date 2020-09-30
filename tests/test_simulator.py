@@ -108,7 +108,7 @@ class TestSimulator(unittest.TestCase):
             self.assertAlmostEqual(fog, 0)
             self.assertAlmostEqual(wetness, 0)
 
-            sim.weather = lgsvl.WeatherState(rain=0.5, fog=0.3, wetness=0.8)
+            sim.weather = lgsvl.WeatherState(rain=0.5, fog=0.3, wetness=0.8, cloudiness=0, damage=0)
 
             rain = sim.weather.rain
             fog = sim.weather.fog
@@ -128,7 +128,7 @@ class TestSimulator(unittest.TestCase):
             self.assertAlmostEqual(fog, 0)
             self.assertAlmostEqual(wetness, 0)
 
-            sim.weather = lgsvl.WeatherState(rain=1.4, fog=-3, wetness="a")
+            sim.weather = lgsvl.WeatherState(rain=1.4, fog=-3, wetness="a", cloudiness=0, damage=0)
 
             rain = sim.weather.rain
             fog = sim.weather.fog
@@ -138,7 +138,7 @@ class TestSimulator(unittest.TestCase):
             self.assertAlmostEqual(fog, 0)
             self.assertAlmostEqual(wetness, 0)
 
-            sim.weather = lgsvl.WeatherState(rain=True, fog=0, wetness=0)
+            sim.weather = lgsvl.WeatherState(rain=True, fog=0, wetness=0, cloudiness=0, damage=0)
 
             rain = sim.weather.rain
             self.assertAlmostEqual(rain, 0)
@@ -170,7 +170,7 @@ class TestSimulator(unittest.TestCase):
             self.assertAlmostEqual(fog, 0)
             self.assertAlmostEqual(wetness, 0)
 
-            sim.weather = lgsvl.WeatherState(rain=0.5, fog=0.3, wetness=0.8)
+            sim.weather = lgsvl.WeatherState(rain=0.5, fog=0.3, wetness=0.8, cloudiness=0, damage=0)
             rain = sim.weather.rain
             fog = sim.weather.fog
             wetness = sim.weather.wetness
