@@ -11,6 +11,7 @@ import lgsvl
 import math
 import logging
 import sys
+import os
 
 log = logging.getLogger(__name__)
 
@@ -275,7 +276,7 @@ class Connection:
                     "Warning: Apollo module {} is not running!!!".format(module)
                 )
 
-    def setup_apollo(self, dest_x, dest_z, modules):
+    def setup_apollo(self, dest_x, dest_z, modules, default_timeout=60.0):
         """
         Starts a list of Apollo modules and sets the destination. Will wait for Control module to send a message before returning.
         Control sending a message indicates that all modules are working and Apollo is ready to continue.
@@ -293,28 +294,32 @@ class Connection:
         def on_control_received(agent, kind, context):
             if kind == "checkControl":
                 agent.is_control_received = True
-                log.info("Control message recieved")
+                log.info("Control message received")
 
         self.ego.on_custom(on_control_received)
 
-        for i in range(20):
-            self.sim.run(2)
+        try:
+            timeout = float(os.environ.get("DREAMVIEW_CONTROL_MESSAGE_TIMEOUT_SECS", default_timeout))
+        except Exception:
+            timeout = default_timeout
+            log.warning("Invalid DREAMVIEW_CONTROL_MESSAGE_TIMEOUT_SECS, using default {0}s".format(default_timeout))
+
+        run_time = 2
+        elapsed = 0
+        while timeout <= 0.0 or float(elapsed) < timeout:
+            self.sim.run(run_time)
 
             if self.ego.is_control_received:
                 break
 
-            if i > 0 and i % 2 == 0:
-                self.check_module_status(modules)
-                log.info(
-                    "{} seconds has passed, Ego hasn't received any control messages".format(
-                        i * 2
-                    )
-                )
-                log.info(
-                    "Please also check if your route has been set correctly in Dreamview."
-                )
+            if elapsed > 0 and elapsed % (run_time * 5) == 0:
+                self.checkModuleStatus(modules)
+                log.info("{} seconds have passed but Ego hasn't received any control messages.".format(elapsed))
+                log.info("Please also check if your route has been set correctly in Dreamview.")
+
+            elapsed += run_time
         else:
-            log.error("No control message from Apollo within 40 seconds. Aborting...")
+            log.error("No control message from Apollo within {} seconds. Aborting...".format(timeout))
             self.disable_apollo()
             raise WaitApolloError()
 
@@ -323,7 +328,7 @@ class Connection:
 
 class WaitApolloError(Exception):
     """
-    Raised when Apollo control message is not recieved in time
+    Raised when Apollo control message is not received in time
     """
 
     pass
