@@ -313,7 +313,7 @@ class Connection:
                 break
 
             if elapsed > 0 and elapsed % (run_time * 5) == 0:
-                self.checkModuleStatus(modules)
+                self.check_module_status(modules)
                 log.info("{} seconds have passed but Ego hasn't received any control messages.".format(elapsed))
                 log.info("Please also check if your route has been set correctly in Dreamview.")
 
