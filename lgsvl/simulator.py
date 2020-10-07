@@ -125,7 +125,7 @@ class Simulator:
                     break
             j = self.remote.command("simulator/continue")
 
-    @accepts(str, AgentType, AgentState, Vector)
+    @accepts(str, AgentType, (AgentState, type(None)), (Vector, type(None)))
     def add_agent(self, name, agent_type, state=None, color=None):
         if state is None: state = AgentState()
         if color is None: color = Vector(-1, -1, -1)
@@ -265,7 +265,7 @@ class Simulator:
 
         return results
 
-    @accepts(str, ObjectState)
+    @accepts(str, (ObjectState, type(None)))
     def controllable_add(self, name, object_state=None):
         if object_state is None: object_state = ObjectState()
         args = {"name": name, "state": object_state.to_json()}
