@@ -145,9 +145,6 @@ class VideoRecordingSensor(Sensor):
 class AnalysisSensor(Sensor):
     def __init__(self, remote, j):
         super().__init__(remote, j["uid"], j["name"])
-        self.suddenbrakemax = j["suddenbrakemax"]
-        self.suddensteermax = j["suddensteermax"]
         self.stucktravelthreshold = j["stucktravelthreshold"]
         self.stucktimethreshold = j["stucktimethreshold"]
-        self.minfps = j["minfps"]
-        self.minfpstime = j["minfpstime"]
+        self.stoplinethreshold = j["stoplinethreshold"]
