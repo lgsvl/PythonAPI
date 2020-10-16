@@ -140,6 +140,12 @@ class VideoRecordingSensor(Sensor):
         self.width = j["width"]
         self.height = j["height"]
         self.framerate = j["framerate"]
+        self.min_distance = j["near_plane"]
+        self.max_distance = j["far_plane"]
+        self.fov = j["fov"]
+        self.quality = j["quality"]
+        self.bitrate = j["bitrate"]
+        self.max_bitrate = j["max_bitrate"]
 
 
 class AnalysisSensor(Sensor):
