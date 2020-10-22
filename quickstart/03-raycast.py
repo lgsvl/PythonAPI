@@ -28,7 +28,7 @@ sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 p = spawns[0].position
 p.y += 1
 
-#use layers property to get all layers used in simulator
+# use layers property to get all layers used in simulator
 # useful bits in layer mask
 # 0 - Default (road & ground)
 # 9 - EGO vehicles
