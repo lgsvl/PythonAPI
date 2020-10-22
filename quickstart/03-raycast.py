@@ -41,8 +41,8 @@ print(layers)
 # Included layers can be hit by the rays. Otherwise the ray will go through the layer
 layer_mask = 0
 tohitlayers = ["Default", "NPC", "Pedestrian", "Obstacle"]
-for l in tohitlayers:
-    layer_mask |= 1 << layers[l]
+for layer in tohitlayers:
+    layer_mask |= 1 << layers[layer]
 
 # raycast returns None if the ray doesn't collide with anything
 # hit also has the point property which is the Unity position vector of where the ray collided with something
