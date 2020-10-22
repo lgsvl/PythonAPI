@@ -44,6 +44,10 @@ class Simulator:
         return self.remote.command("simulator/version")
 
     @property
+    def layers(self):
+        return self.remote.command("simulator/layers/get")
+
+    @property
     def current_scene(self):
         return self.remote.command("simulator/current_scene")
 

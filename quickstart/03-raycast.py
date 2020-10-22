@@ -28,17 +28,21 @@ sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
 p = spawns[0].position
 p.y += 1
 
+#use layers property to get all layers used in simulator
 # useful bits in layer mask
 # 0 - Default (road & ground)
 # 9 - EGO vehicles
 # 10 - NPC vehicles
 # 11 - Pedestrian
 # 12 - Obstacle
+layers = sim.layers
+print(layers)
 
 # Included layers can be hit by the rays. Otherwise the ray will go through the layer
 layer_mask = 0
-for bit in [0, 10, 11, 12]:  # do not put 9 here, to not hit EGO vehicle itself
-    layer_mask |= 1 << bit
+tohitlayers = ["Default", "NPC", "Pedestrian", "Obstacle"]
+for l in tohitlayers:
+    layer_mask |= 1 << layers[l]
 
 # raycast returns None if the ray doesn't collide with anything
 # hit also has the point property which is the Unity position vector of where the ray collided with something
