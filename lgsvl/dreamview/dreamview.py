@@ -126,29 +126,36 @@ class Connection:
         )
         return
 
-    def set_hd_map(self, map):
+    def set_hd_map(self, hd_map):
         """
         Folders in /apollo/modules/map/data/ are the available HD maps
         Map options in Dreamview are the folder names with the following changes:
             - underscores (_) are replaced with spaces
             - the first letter of each word is capitalized
 
-        map parameter is the modified folder name.
-        map should match one of the options in the right-most drop down in the top-right corner of Dreamview.
+        hd_map parameter is the modified folder name.
+        hd_map should match one of the options in the right-most drop down in the top-right corner of Dreamview.
         """
+
+        word_list = []
+        for s in hd_map.split('_'):
+            word_list.append(s[0].upper() + s[1:])
+
+        mapped_map = ' '.join(word_list)
+
         self.ws.send(
-            json.dumps({"type": "HMIAction", "action": "CHANGE_MAP", "value": map})
+            json.dumps({"type": "HMIAction", "action": "CHANGE_MAP", "value": mapped_map})
         )
 
-        if not self.get_current_map() == map:
-            folder_name = map.replace(" ", "_")
+        if not self.get_current_map() == mapped_map:
+            folder_name = hd_map.replace(" ", "_")
             error_message = (
                 "HD Map {0} was not set. Verify the files exist in "
                 "/apollo/modules/map/data/{1} and restart Dreamview -- Aborting..."
             )
             log.error(
                 error_message.format(
-                    map, folder_name
+                    mapped_map, folder_name
                 )
             )
             sys.exit(1)
@@ -165,15 +172,22 @@ class Connection:
         vehicle parameter is the modified folder name.
         vehicle should match one of the options in the middle drop down in the top-right corner of Dreamview.
         """
+
+        word_list = []
+        for s in vehicle.split('_'):
+            word_list.append(s[0].upper() + s[1:])
+
+        mapped_vehicle = ' '.join(word_list)
+
         self.ws.send(
             json.dumps(
-                {"type": "HMIAction", "action": "CHANGE_VEHICLE", "value": vehicle}
+                {"type": "HMIAction", "action": "CHANGE_VEHICLE", "value": mapped_vehicle}
             )
         )
 
         self.gps_offset = lgsvl.Vector(gps_offset_x, gps_offset_y, gps_offset_z)
 
-        if not self.get_current_vehicle() == vehicle:
+        if not self.get_current_vehicle() == mapped_vehicle:
             folder_name = vehicle.replace(" ", "_")
             error_message = (
                 "Vehicle calibration {0} was not set. Verify the files exist in "
@@ -181,7 +195,7 @@ class Connection:
             )
             log.error(
                 error_message.format(
-                    vehicle, folder_name
+                    mapped_vehicle, folder_name
                 )
             )
             sys.exit(1)
