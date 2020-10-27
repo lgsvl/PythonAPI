@@ -5,10 +5,12 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
+from environs import Env
 import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
 
 print("Current Scene = {}".format(sim.current_scene))
 

@@ -5,17 +5,16 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
+from environs import Env
 import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
 
-scene_name = "CubeTown"
-
-if sim.current_scene == scene_name:
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
+if sim.current_scene == "BorregasAve":
     sim.reset()
 else:
-    sim.load(scene_name, 42)
+    sim.load("BorregasAve", 42)
 
 spawns = sim.get_spawn()
 
@@ -25,7 +24,7 @@ right = lgsvl.utils.transform_to_right(spawns[0])
 up = lgsvl.utils.transform_to_up(spawns[0])
 state.transform = spawns[0]
 
-ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
 
 print("Python API Quickstart #28: How to Add/Control Traffic Cone")
 

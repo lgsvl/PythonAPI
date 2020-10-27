@@ -13,7 +13,8 @@ setup(
     install_requires=[
         "websockets==7.0",
         "websocket-client==0.57.0",
-        "numpy"
+        "numpy",
+        "environs"
     ],
     license="Other",
     classifiers=[

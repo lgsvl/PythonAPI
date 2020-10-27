@@ -5,11 +5,13 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
-import lgsvl
 import copy
+from environs import Env
+import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
 if sim.current_scene == "BorregasAve":
     sim.reset()
 else:
@@ -26,7 +28,7 @@ state.transform = spawns[0]
 # Ego
 ego_state = copy.deepcopy(state)
 ego_state.transform.position += 50 * forward
-ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, ego_state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
 
 # NPC
 npc_state = copy.deepcopy(state)

@@ -5,14 +5,16 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
+from environs import Env
 import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
 if sim.current_scene == "BorregasAve":
     sim.reset()
 else:
-    sim.load("BorregasAve")
+    sim.load("BorregasAve", 42)
 
 spawns = sim.get_spawn()
 layer_mask = 0
@@ -26,7 +28,7 @@ state.transform.position = hit.point
 state.transform.rotation = lgsvl.Vector(0.0, 15.0, 0.0)
 forward = lgsvl.Vector(0.2, 0.0, 0.8)
 state.velocity = forward * 15
-a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
 
 # Pedestrian
 state = lgsvl.AgentState()
@@ -37,7 +39,7 @@ state.transform.position = hit.point
 state.transform.rotation = pedestrian_rotation
 pedestrian = sim.add_agent("Bob", lgsvl.AgentType.PEDESTRIAN, state)
 
-agents = {a: "EGO", pedestrian: "Bob"}
+agents = {ego: "EGO", pedestrian: "Bob"}
 
 
 # Executed upon receiving collision callback -- pedestrian is expected to walk into colliding objects
@@ -47,7 +49,7 @@ def on_collision(agent1, agent2, contact):
     print("{} collided with {}".format(name1, name2))
 
 
-a.on_collision(on_collision)
+ego.on_collision(on_collision)
 pedestrian.on_collision(on_collision)
 
 # This block creates the list of waypoints that the pedestrian will follow

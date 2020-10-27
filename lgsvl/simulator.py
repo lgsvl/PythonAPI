@@ -12,17 +12,20 @@ from .utils import accepts, ObjectState
 from .controllable import Controllable
 
 from collections import namedtuple
+from environs import Env
 
 RaycastHit = namedtuple("RaycastHit", "distance point normal")
 
 WeatherState = namedtuple("WeatherState", "rain fog wetness cloudiness damage")
 WeatherState.__new__.__defaults__ = (0,) * len(WeatherState._fields)
 
+env = Env()
+
 
 class Simulator:
 
     @accepts(str, int)
-    def __init__(self, address="localhost", port=8181):
+    def __init__(self, address=env.str("LGSVL__SIMULATOR_HOST", "localhost"), port=env.int("LGSVL__SIMULATOR_PORT", 8181)):
         if port <= 0 or port > 65535:
             raise ValueError("port value is out of range")
         self.remote = Remote(address, port)

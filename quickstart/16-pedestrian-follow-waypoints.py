@@ -5,11 +5,13 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
-import lgsvl
 import math
+from environs import Env
+import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
 if sim.current_scene == "BorregasAve":
     sim.reset()
 else:
@@ -21,7 +23,7 @@ right = lgsvl.utils.transform_to_right(spawns[1])
 
 state = lgsvl.AgentState()
 state.transform = spawns[1]
-ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
 
 # This will create waypoints in a circle for the pedestrian to follow
 radius = 4

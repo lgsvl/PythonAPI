@@ -5,12 +5,14 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
-import lgsvl
 import random
 import time
+from environs import Env
+import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
 if sim.current_scene == "BorregasAve":
     sim.reset()
 else:
@@ -22,7 +24,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 right = lgsvl.utils.transform_to_right(spawns[0])
-ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
 
 input("Press Enter to start creating pedestrians")
 

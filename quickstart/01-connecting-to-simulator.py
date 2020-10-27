@@ -5,11 +5,15 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
+from environs import Env
 import lgsvl
 
-# Connects to the simulator instance at the ip defined by SIMULATOR_HOST, default is localhost or 127.0.0.1
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+# Connects to the simulator instance at the ip defined by LGSVL__SIMULATOR_HOST, default is localhost or 127.0.0.1
+# env.str() is equivalent to os.environ.get()
+# env.int() is equivalent to int(os.environ.get())
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
 
 print("Version =", sim.version)
 print("Current Time =", sim.current_time)

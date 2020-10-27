@@ -23,7 +23,7 @@ class CoordType(Enum):
 
 
 class Connection:
-    def __init__(self, simulator, ego_agent, ip="localhost", port="8888"):
+    def __init__(self, simulator, ego_agent, ip=os.environ.get("LGSVL__AUTOPILOT_0_HOST", "localhost"), port="8888"):
         """
         simulator: is an lgsvl.Simulator object
         ego_agent: an lgsvl.EgoVehicle object, this is intended to be used with a vehicle equipped with Apollo 5.0
@@ -299,10 +299,10 @@ class Connection:
         self.ego.on_custom(on_control_received)
 
         try:
-            timeout = float(os.environ.get("DREAMVIEW_CONTROL_MESSAGE_TIMEOUT_SECS", default_timeout))
+            timeout = float(os.environ.get("LGSVL__DREAMVIEW__CONTROL_MESSAGE_TIMEOUT_SECS", default_timeout))
         except Exception:
             timeout = default_timeout
-            log.warning("Invalid DREAMVIEW_CONTROL_MESSAGE_TIMEOUT_SECS, using default {0}s".format(default_timeout))
+            log.warning("Invalid LGSVL__DREAMVIEW__CONTROL_MESSAGE_TIMEOUT_SECS, using default {0}s".format(default_timeout))
 
         run_time = 2
         elapsed = 0

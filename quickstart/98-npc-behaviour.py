@@ -5,12 +5,15 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-import os
-import lgsvl
 import math
 import random
+from environs import Env
+import lgsvl
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+env = Env()
+
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
+
 drunkDriverAvailable = False
 trailerAvailable = 0
 map = "CubeTown"
@@ -56,7 +59,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-a = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
 
 mindist = 10.0
 maxdist = 40.0
