@@ -55,6 +55,10 @@ class Simulator:
         return self.remote.command("simulator/current_scene")
 
     @property
+    def current_scene_id(self):
+        return self.remote.command("simulator/current_scene_id")
+
+    @property
     def current_frame(self):
         return self.remote.command("simulator/current_frame")
 

@@ -21,6 +21,7 @@ else:
     sim.load("BorregasAve")
 
 print("Current Scene = {}".format(sim.current_scene))
+print("Current Scene ID = {}".format(sim.current_scene_id))
 
 # This will print out the position and rotation vectors for each of the spawn points in the loaded map
 spawns = sim.get_spawn()
