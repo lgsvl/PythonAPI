@@ -7,6 +7,7 @@
 
 from environs import Env
 import lgsvl
+from datetime import datetime
 
 env = Env()
 
@@ -40,3 +41,14 @@ print(sim.time_of_day)
 sim.run(5)
 
 print(sim.time_of_day)
+
+input("Press Enter to set date to July 1 2020 and time to 19:00")
+dt = datetime(2020, 7, 1, 19, 0, 0, 0)
+sim.set_date_time(dt, False)
+print(sim.time_of_day)
+print(sim.current_datetime)
+
+sim.run(5)
+
+print(sim.time_of_day)
+print(sim.current_datetime)

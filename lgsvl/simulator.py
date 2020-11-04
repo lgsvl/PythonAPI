@@ -13,6 +13,8 @@ from .controllable import Controllable
 
 from collections import namedtuple
 from environs import Env
+from datetime import datetime
+import re
 
 RaycastHit = namedtuple("RaycastHit", "distance point normal")
 
@@ -177,9 +179,28 @@ class Simulator:
     def time_of_day(self):
         return self.remote.command("environment/time/get")
 
+    @property
+    def current_datetime(self):
+        date_time_str = self.remote.command("simulator/datetime/get")
+        date_time_arr = list(map(int, re.split('[. :]', date_time_str)))
+        date_time = datetime(
+            date_time_arr[2],
+            date_time_arr[1],
+            date_time_arr[0],
+            date_time_arr[3],
+            date_time_arr[4],
+            date_time_arr[5]
+        )
+        return date_time
+
     @accepts((int, float), bool)
     def set_time_of_day(self, time, fixed=True):
         self.remote.command("environment/time/set", {"time": time, "fixed": fixed})
+
+    @accepts(datetime, bool)
+    def set_date_time(self, date_time, fixed=True):
+        date_time = date_time.__str__()
+        self.remote.command("environment/datetime/set", {"datetime": date_time, "fixed": fixed})
 
     def get_spawn(self):
         spawns = self.remote.command("map/spawn/get")
