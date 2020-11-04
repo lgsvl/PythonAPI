@@ -13,6 +13,7 @@ from .common import SimConnection, spawnState, TestTimeout
 
 
 class TestManual(unittest.TestCase):
+    @unittest.skip("Windshield wipers no longer supported")
     def test_wipers(self):
         try:
             with SimConnection() as sim:
@@ -73,6 +74,7 @@ class TestManual(unittest.TestCase):
         except TestTimeout:
             self.fail("Turn signals were not on")
 
+    @unittest.skip("Windshield wipers no longer supported")
     def test_wiper_large_value(self):
         try:
             with SimConnection() as sim:
@@ -85,6 +87,7 @@ class TestManual(unittest.TestCase):
         except TestTimeout:
             self.fail("Wipers were on")
 
+    @unittest.skip("Windshield wipers no longer supported")
     def test_wiper_str(self):
         try:
             with SimConnection() as sim:
