@@ -11,7 +11,7 @@
 # The data format is defined in a readme.txt downloadable from: https://s3.eu-central-1.amazonaws.com/avg-kitti/devkit_object.zip
 
 # Install numpy and PIL before running this script
-# SIMULATOR_HOST environment variable also needs to be set before running the script
+# LGSVL__SIMULATOR_HOST environment variable also needs to be set before running the script
 
 # 3 command line arguements are required when running this script. The arguements are:
 # number of data points to collect (int)
@@ -70,7 +70,7 @@ class KittiParser:
         os.makedirs(LIDAR_BIN_PATH, exist_ok=True)
         os.makedirs(LABEL_PATH, exist_ok=True)
 
-        self.sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+        self.sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1"), 8181)
         self.load_scene()
         self.sim.reset()
         self.ego = self.sim.add_agent(self.agent_name, lgsvl.AgentType.EGO)

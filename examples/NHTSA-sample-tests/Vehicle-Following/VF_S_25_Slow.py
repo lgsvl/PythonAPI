@@ -22,7 +22,7 @@ MAX_FOLLOWING_DISTANCE = 50  # Apollo 3.5 is very cautious
 
 print("VF_S_25_Slow - ", end='')
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "SingleLaneRoad":
     sim.reset()
 else:

@@ -33,7 +33,7 @@ class SimConnection:
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(self.seconds)
 
-        self.sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+        self.sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1"), 8181)
         if self.load_scene:
             if self.sim.current_scene == self.scene:
                 self.sim.reset()

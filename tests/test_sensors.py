@@ -123,7 +123,7 @@ class TestSensors(unittest.TestCase):
         with SimConnection(120) as sim:
 
             path = "main-camera.png"
-            islocal = os.environ.get("SIMULATOR_HOST", "127.0.0.1") == "127.0.0.1"
+            islocal = os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1") == "127.0.0.1"
 
             if islocal:
                 path = os.getcwd() + path
@@ -150,7 +150,7 @@ class TestSensors(unittest.TestCase):
     def test_save_lidar(self):  # Check that LIDAR sensor results can be saved
         with SimConnection(240) as sim:
             path = "lidar.pcd"
-            islocal = os.environ.get("SIMULATOR_HOST", "127.0.0.1") == "127.0.0.1"
+            islocal = os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1") == "127.0.0.1"
 
             if islocal:
                 path = os.getcwd() + path

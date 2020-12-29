@@ -9,7 +9,7 @@ import os
 import lgsvl
 import time
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "BorregasAve":
     sim.reset()
 # Re-load scene and set random seed

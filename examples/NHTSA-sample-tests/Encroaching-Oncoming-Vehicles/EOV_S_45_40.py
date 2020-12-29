@@ -21,7 +21,7 @@ TIME_DELAY = 4
 
 print("EOV_S_45_40 - ", end='')
 
-sim = lgsvl.Simulator(os.environ.get("SIMULATOR_HOST", "127.0.0.1"), 8181)
+sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1"), 8181)
 if sim.current_scene == "SingleLaneRoad":
     sim.reset()
 else:

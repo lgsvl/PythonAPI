@@ -8,7 +8,7 @@ Look into `quickstart` folder for simple usages.
 To run these examples first start the simulator and leave it in main menu.
 By default examples connect to Simulator on `localhost` address.
 To change it, adjust first argument of `Simulator` constructor, or set up
-`SIMULATOR_HOST` environment variable with hostname.
+`LGSVL__SIMULATOR_HOST` environment variable with hostname.
 
 # Documentation
 
