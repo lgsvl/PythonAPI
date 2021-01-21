@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2019-2020 LG Electronics, Inc.
+# Copyright (c) 2019-2021 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -75,6 +75,10 @@ class Simulator:
     @property
     def available_npc_behaviours(self):
         return self.remote.command("simulator/npc/available_behaviours")
+
+    @accepts(Transform)
+    def set_sim_camera(self, transform):
+        self.remote.command("simulator/camera/set", {"transform": transform.to_json()})
 
     def agents_traversed_waypoints(self, fn):
         self._add_callback(None, "agents_traversed_waypoints", fn)
