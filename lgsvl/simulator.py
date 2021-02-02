@@ -323,6 +323,13 @@ class Simulator:
         })
         return [Controllable(self.remote, controllable) for controllable in j]
 
+    @accepts(str)
+    def get_controllable_by_uid(self, uid):
+        j = self.remote.command("controllable/get", {
+            "uid": uid,
+        })
+        return Controllable(self.remote, j)
+
     @accepts(Vector, str)
     def get_controllable(self, position, control_type=None):
         j = self.remote.command("controllable/get", {

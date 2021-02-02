@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2019-2020 LG Electronics, Inc.
+# Copyright (c) 2019-2021 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -40,7 +40,7 @@ class Controllable:
         j = self.remote.command("controllable/control_policy/get", {"uid": self.uid})
         return j["control_policy"]
 
-    @accepts(str)
+    @accepts((str, list))
     def control(self, control_policy):
         self.remote.command("controllable/control_policy/set", {
             "uid": self.uid,
