@@ -13,10 +13,10 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
 
 # Installing
 
-    python3 -m pip install --user .
+    python3 -m pip install -r requirements.txt --user .
 
     # install in development mode
-    python3 -m pip install --user -e .
+    python3 -m pip install -r requirements.txt --user -e .
 
 Do not use the legacy `python3 setup.py install` nor `pip3 install`.
 
