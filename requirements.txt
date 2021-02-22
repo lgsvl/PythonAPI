@@ -1,4 +1,15 @@
-websockets>=7.0
-websocket-client==0.57.0  # for dreamview
-numpy  # for evaluator
-environs
+
+# - PACKAGE >= PKG_VERSION ; python_version >= PYTHON_VERSION
+#       PKG_VERSION is the first version of PACKAGE that supports PYTHON_VERSION
+# - PACKAGE < PKG_VERSION  ; python_version < PYTHON_VERSION
+#       PKG_VERSION is the first version of PACKAGE that no longer supports
+#       PYTHON_VERSION; add entries for PYTHON_VERSION > "python_requires" of
+#       lgsvl in setup.py
+# - Keep in alphabetical order.
+environs >= 8.1.0           ; python_version >= '3.9'
+numpy < 1.20                ; python_version <  '3.7'
+numpy >= 1.20               ; python_version >= '3.7'
+websocket-client >= 0.58.0  ; python_version >= '3.8'
+websockets < 8.1            ; python_version <  '3.6.1'
+websockets >= 8.1           ; python_version >= '3.8'
+websockets >= 9.0.1         ; python_version >= '3.9'

@@ -86,10 +86,10 @@ setup(
     url="https://github.com/lgsvl/PythonAPI",
     packages=["lgsvl", "lgsvl.dreamview", "lgsvl.evaluator", "lgsvl.wise"],
     install_requires=[
-        "websockets==7.0",
-        "websocket-client==0.57.0",
-        "numpy",
-        "environs"
+        "environs",
+        "numpy",                # for evaluator
+        "websocket-client",     # for dreamview
+        "websockets"
     ],
     setup_requires=[
         "GitPython==3.1.14"
