@@ -94,6 +94,11 @@ setup(
     setup_requires=[
         "GitPython==3.1.14"
     ],
+    extras_require={
+        "ci": [
+            "flake8>=3.7.0"
+        ],
+    },
     license="Other",
     classifiers=[
         "License :: Other/Proprietary License",

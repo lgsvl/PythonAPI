@@ -1,5 +1,4 @@
 websockets>=7.0
 websocket-client==0.57.0  # for dreamview
-flake8>=3.7.0
 numpy  # for evaluator
 environs
