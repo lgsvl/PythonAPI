@@ -16,7 +16,7 @@ Documentation is available on our website: https://www.lgsvlsimulator.com/docs/p
 
 # Requirements
 
-* Python 3.5 or higher
+* Python 3.6 or higher
 
 # Installing
 

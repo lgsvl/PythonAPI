@@ -7,7 +7,7 @@ setup(
     description="LGSVL Simulator Api",
     author="LGSVL",
     author_email="contact@lgsvlsimulator.com",
-    python_requires=">=3.5.0",
+    python_requires=">=3.6.0",
     url="https://github.com/lgsvl/simulator",
     packages=["lgsvl", "lgsvl.dreamview", "lgsvl.evaluator"],
     install_requires=[
