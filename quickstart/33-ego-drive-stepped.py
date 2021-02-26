@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2020 LG Electronics, Inc.
+# Copyright (c) 2020-2021 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -8,12 +8,14 @@
 import os
 import lgsvl
 import time
+from settings import *
 
-sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1"), 8181)
-if sim.current_scene == "BorregasAve":
+print("Python API Quickstart #33: Stepping a simulation")
+sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), SimulatorSettings.simulatorPort)
+if sim.current_scene == SimulatorSettings.mapName:
     sim.reset()
 # Re-load scene and set random seed
-sim.load("BorregasAve", seed=123)
+sim.load(SimulatorSettings.mapName, seed=123)
 
 spawns = sim.get_spawn()
 
@@ -32,13 +34,13 @@ forward = lgsvl.utils.transform_to_forward(spawns[0])
 # We can test Apollo with standard MKZ or MKZ with ground truth sensors
 # Refer to https://www.lgsvlsimulator.com/docs/modular-testing/
 # ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
-ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0gt)", lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(SimulatorSettings.egoVehicleWithBridge, lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO looks for a (Cyber) bridge at the specified IP and port
-ego.connect_bridge("127.0.0.1", 9090)
+ego.connect_bridge(SimulatorSettings.bridgeHost, SimulatorSettings.bridgePort)
 # uncomment to wait for bridge connection; script will drive ego if bridge not found
 # print("Waiting for connection...")
 # while not ego.bridge_connected:

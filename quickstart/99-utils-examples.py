@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019 LG Electronics, Inc.
+# Copyright (c) 2019-2021 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -13,6 +13,7 @@ from lgsvl.utils import (
     vector_multiply,
 )
 
+print("Python API Quickstart #99: Using the LGSVL utilities")
 # global "world" transform (for example, car position)
 world = Transform(Vector(10, 20, 30), Vector(11, 22, 33))
 

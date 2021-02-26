@@ -7,14 +7,16 @@
 
 from environs import Env
 import lgsvl
+from settings import *
 
+print("Python API Quickstart #34: Setting the fixed camera position")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
-if sim.current_scene == "BorregasAve":
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
+if sim.current_scene == SimulatorSettings.mapName:
     sim.reset()
 else:
-    sim.load("BorregasAve")
+    sim.load(SimulatorSettings.mapName)
 
 # This creates a transform in Unity world coordinates
 tr = lgsvl.Transform(lgsvl.Vector(10, 50, 0), lgsvl.Vector(90, 0, 0))
@@ -25,7 +27,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 state.velocity = 20 * forward
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", "Lincoln2017MKZ (Apollo 5.0)"), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
 
 # This function sets the camera to free state and applies the transform to the camera rig
 sim.set_sim_camera(tr)

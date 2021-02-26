@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019-2020 LG Electronics, Inc.
+# Copyright (c) 2019-2021 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
 
 from environs import Env
 import lgsvl
+from settings import *
 
+print("Python API Quickstart #2: Loading the scene spawn points")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
 
 print("Current Scene = {}".format(sim.current_scene))
 
 # Loads the named map in the connected simulator. The available maps can be set up in web interface
-if sim.current_scene == "BorregasAve":
+if sim.current_scene == SimulatorSettings.mapName:
     sim.reset()
 else:
-    sim.load("BorregasAve")
+    sim.load(SimulatorSettings.mapName)
 
 print("Current Scene = {}".format(sim.current_scene))
 print("Current Scene ID = {}".format(sim.current_scene_id))
