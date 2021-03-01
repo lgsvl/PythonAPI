@@ -16,7 +16,7 @@ sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulat
 if sim.current_scene == SimulatorSettings.mapName:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName, 42)
+    sim.load(SimulatorSettings.mapName)
 
 spawns = sim.get_spawn()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
@@ -31,6 +31,6 @@ ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), l
 sim.add_random_agents(lgsvl.AgentType.NPC)
 sim.add_random_agents(lgsvl.AgentType.PEDESTRIAN)
 
-input("Press Enter to start")
+input("Press Enter to start the simulation for 30 seconds")
 
-sim.run()
+sim.run(30)

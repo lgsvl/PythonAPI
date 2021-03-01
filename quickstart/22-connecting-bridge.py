@@ -37,5 +37,6 @@ while not ego.bridge_connected:
     time.sleep(1)
 
 print("Bridge connected:", ego.bridge_connected)
+print("Running the simulation for 30 seconds")
 
-sim.run()
+sim.run(30)

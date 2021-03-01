@@ -35,8 +35,9 @@ maxdist = 40.0
 
 random.seed(0)
 
-while True:
-    input("Press Enter to spawn NPC")
+print("Spawn 10 random NPCs on lanes")
+for i in range(10):
+    input("Press Enter to spawn NPC ({})".format(i+1))
 
     # Creates a random point around the EGO
     angle = random.uniform(0.0, 2 * math.pi)

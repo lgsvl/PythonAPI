@@ -51,6 +51,6 @@ npc1.follow_closest_lane(True, 11.1)
 # 5.6 m/s is ~20 km/h
 npc2.follow_closest_lane(True, 5.6)
 
-input("Press Enter to run")
+input("Press Enter to run the simulation for 40 seconds")
 
-sim.run()
+sim.run(40)

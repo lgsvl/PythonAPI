@@ -90,6 +90,6 @@ npc.on_waypoint_reached(on_waypoint)
 # A bool can be passed as the 2nd argument that controls whether or not the NPC loops over the waypoints (default false)
 npc.follow(waypoints)
 
-input("Press Enter to run\n")
+input("Press Enter to run the simulation for 30 seconds")
 
-sim.run()
+sim.run(30)

@@ -39,6 +39,7 @@ names = [
     "Zoe",
 ]
 
+print("Creating 120 pedestrians")
 for i in range(20 * 6):
     # Create peds in a block
     start = (
@@ -60,5 +61,5 @@ for i in range(20 * 6):
     p = sim.add_agent(name, lgsvl.AgentType.PEDESTRIAN, state)
     p.follow(wp, True)
 
-input("Press Enter to start")
-sim.run()
+input("Press Enter to start the simulation for 30 seconds")
+sim.run(30)

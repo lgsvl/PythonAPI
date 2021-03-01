@@ -29,7 +29,7 @@ ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), l
 print("Current time = ", sim.current_time)
 print("Current frame = ", sim.current_frame)
 
-input("Press Enter to start driving")
+input("Press Enter to start driving for 30 seconds")
 
 # VehicleControl objects can only be applied to EGO vehicles
 # You can set the steering (-1 ... 1), throttle and braking (0 ... 1), handbrake and reverse (bool)
@@ -39,4 +39,4 @@ c.steering = -1.0
 # a True in apply_control means the control will be continuously applied ("sticky"). False means the control will be applied for 1 frame
 ego.apply_control(c, True)
 
-sim.run()
+sim.run(30)

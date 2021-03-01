@@ -25,7 +25,7 @@ right = lgsvl.utils.transform_to_right(spawns[0])
 # ego vehicle
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-state.velocity = 8 * forward
+state.velocity = 6 * forward
 ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
 
 # school bus, 20m ahead, perpendicular to road, stopped
@@ -61,7 +61,7 @@ ego.on_collision(on_collision)
 bus.on_collision(on_collision)
 sedan.on_collision(on_collision)
 
-input("Press Enter to run")
+input("Press Enter to run the simulation for 10 seconds")
 
-# Manually drive into the sedan, bus, or obstacle to get a callback
-sim.run()
+# Drive into the sedan, bus, or obstacle to get a callback
+sim.run(10)

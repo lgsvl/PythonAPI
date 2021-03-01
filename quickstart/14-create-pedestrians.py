@@ -28,7 +28,7 @@ forward = lgsvl.utils.transform_to_forward(spawns[0])
 right = lgsvl.utils.transform_to_right(spawns[0])
 sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
 
-input("Press Enter to start creating pedestrians")
+input("Press Enter to create 100 pedestrians")
 
 # The list of available pedestrians can be found in PedestrianManager prefab
 names = [
@@ -44,7 +44,7 @@ names = [
 ]
 
 i = 0
-while True:
+while i < 100:
     state = lgsvl.AgentState()
 
     state.transform.position = (

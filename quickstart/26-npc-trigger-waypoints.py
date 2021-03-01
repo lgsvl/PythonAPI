@@ -25,6 +25,7 @@ state = lgsvl.AgentState()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 right = lgsvl.utils.transform_to_right(spawns[0])
 state.transform = spawns[0]
+state.velocity = 12 * forward
 ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
 
 # NPC
@@ -82,7 +83,7 @@ for i in range(20):
 
 # When the NPC is within 0.5m of the waypoint, this will be called
 def on_waypoint(agent, index):
-    print("waypoint {} reached".format(index))
+    print("waypoint {} reached, waiting for ego to get closer".format(index))
 
 
 # The above function needs to be added to the list of callbacks for the NPC
@@ -92,6 +93,6 @@ npc.on_waypoint_reached(on_waypoint)
 # A bool can be passed as the 2nd argument that controls whether or not the NPC loops over the waypoints (default false)
 npc.follow(waypoints)
 
-input("Press Enter to run")
+input("Press Enter to run simulation for 22 seconds")
 
-sim.run()
+sim.run(22)
