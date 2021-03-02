@@ -9,12 +9,12 @@ import math
 import random
 from environs import Env
 import lgsvl
-from settings import *
+from settings import SimulatorSettings
 
 print("Python API Quickstart #12: Creating NPCs on lanes")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
 if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
@@ -37,7 +37,7 @@ random.seed(0)
 
 print("Spawn 10 random NPCs on lanes")
 for i in range(10):
-    input("Press Enter to spawn NPC ({})".format(i+1))
+    input("Press Enter to spawn NPC ({})".format(i + 1))
 
     # Creates a random point around the EGO
     angle = random.uniform(0.0, 2 * math.pi)

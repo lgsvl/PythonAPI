@@ -66,10 +66,10 @@ class TriggerEffector:
 
     @staticmethod
     def from_json(j):
-        return TriggerEffector(j["typeName"], j["parameters"])
+        return TriggerEffector(j["type_name"], j["parameters"])
 
     def to_json(self):
-        return {"typeName": self.type_name, "parameters": self.parameters}
+        return {"type_name": self.type_name, "parameters": self.parameters}
 
 
 class AgentType(Enum):

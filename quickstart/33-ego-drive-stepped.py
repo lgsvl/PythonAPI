@@ -8,10 +8,10 @@
 import os
 import lgsvl
 import time
-from settings import *
+from settings import SimulatorSettings
 
 print("Python API Quickstart #33: Stepping a simulation")
-sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), SimulatorSettings.simulatorPort)
+sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), SimulatorSettings.simulator_port)
 if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 # Re-load scene and set random seed
@@ -40,7 +40,7 @@ ego = sim.add_agent(SimulatorSettings.ego_lincoln2017mkz_apollo5, lgsvl.AgentTyp
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO looks for a (Cyber) bridge at the specified IP and port
-ego.connect_bridge(SimulatorSettings.bridgeHost, SimulatorSettings.bridgePort)
+ego.connect_bridge(SimulatorSettings.bridge_host, SimulatorSettings.bridgePort)
 # uncomment to wait for bridge connection; script will drive ego if bridge not found
 # print("Waiting for connection...")
 # while not ego.bridge_connected:

@@ -8,12 +8,12 @@
 import time
 from environs import Env
 import lgsvl
-from settings import *
+from settings import SimulatorSettings
 
 print("Python API Quickstart #22: Connecting to a bridge")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
 if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
@@ -29,7 +29,7 @@ ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln201
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO is now looking for a bridge at the specified IP and port
-ego.connect_bridge(env.str("LGSVL__AUTOPILOT_0_HOST", SimulatorSettings.bridgeHost), env.int("LGSVL__AUTOPILOT_0_PORT", SimulatorSettings.bridgePort))
+ego.connect_bridge(env.str("LGSVL__AUTOPILOT_0_HOST", SimulatorSettings.bridge_host), env.int("LGSVL__AUTOPILOT_0_PORT", SimulatorSettings.bridgePort))
 
 print("Waiting for connection...")
 

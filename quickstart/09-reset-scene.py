@@ -8,14 +8,14 @@
 import random
 from environs import Env
 import lgsvl
-from settings import *
+from settings import SimulatorSettings
 
 print("Python API Quickstart #9: Resetting the scene to it's initial state")
 env = Env()
 
 random.seed(0)
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
 if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
