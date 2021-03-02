@@ -8,6 +8,7 @@ import unittest
 import time
 import lgsvl
 from .common import SimConnection, spawnState, cmEqual, mEqual, TestException
+from settings import SimulatorSettings
 
 PROBLEM = "Object reference not set to an instance of an object"
 
@@ -30,7 +31,7 @@ class TestNPC(unittest.TestCase):
             state = spawnState(sim)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position + 10 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             spawns = sim.get_spawn()
             for name in ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]:
                 agent = self.create_NPC(sim, name)
@@ -43,17 +44,17 @@ class TestNPC(unittest.TestCase):
             state = spawnState(sim)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position + 10 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             for name in ["Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]:
                 self.create_NPC(sim, name)
                 agentCount += 1
             agents = sim.get_agents()
             self.assertEqual(len(agents), agentCount)
-            agentCounter = {"Jaguar2015XE (Apollo 3.0)":0, "Sedan":0, "SUV":0, "Jeep":0, "Hatchback":0, "SchoolBus":0, "BoxTruck":0}
+            agentCounter = {SimulatorSettings.ego_jaguar2015xe_apollo5:0, "Sedan":0, "SUV":0, "Jeep":0, "Hatchback":0, "SchoolBus":0, "BoxTruck":0}
             for a in agents:
                 agentCounter[a.name] += 1
 
-            expectedAgents = ["Jaguar2015XE (Apollo 3.0)", "Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
+            expectedAgents = [SimulatorSettings.ego_jaguar2015xe_apollo5, "Sedan", "SUV", "Jeep", "Hatchback", "SchoolBus", "BoxTruck"]
             for a in expectedAgents:
                 with self.subTest(a):
                     self.assertEqual(agentCounter[a], 1)
@@ -63,7 +64,7 @@ class TestNPC(unittest.TestCase):
             state = spawnState(sim)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position - 5 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "Sedan")
             agent.follow_closest_lane(True, 5.6)
             sim.run(2.0)
@@ -77,7 +78,7 @@ class TestNPC(unittest.TestCase):
             state = spawnState(sim)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position - 5 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             agent = self.create_NPC(sim, "SUV")
             self.assertAlmostEqual(agent.state.transform.rotation.y, 104.823394, places=3)
             x = agent.state
@@ -111,7 +112,7 @@ class TestNPC(unittest.TestCase):
             state = spawnState(sim)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position + 10 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.rotation.z += 180
             agent = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
@@ -126,7 +127,7 @@ class TestNPC(unittest.TestCase):
             forward = lgsvl.utils.transform_to_forward(state.transform)
             up = lgsvl.utils.transform_to_up(state.transform)
             state.transform.position = state.position - 10 * forward + 200 * up
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.transform.position = state.position + 200 * up
             agent = sim.add_agent("Hatchback", lgsvl.AgentType.NPC, state)
@@ -162,7 +163,7 @@ class TestNPC(unittest.TestCase):
             forward = lgsvl.utils.transform_to_forward(state.transform)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position - 5 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             spawns = sim.get_spawn()
             agent = self.create_NPC(sim, "Sedan")
 
@@ -202,7 +203,7 @@ class TestNPC(unittest.TestCase):
             right = lgsvl.utils.transform_to_right(state.transform)
             up = lgsvl.utils.transform_to_up(state.transform)
             state.transform.position = state.position - 5 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             spawns = sim.get_spawn()
             agent = self.create_NPC(sim, "Sedan")
 
@@ -230,7 +231,7 @@ class TestNPC(unittest.TestCase):
             right = lgsvl.utils.transform_to_right(state.transform)
 
             state.transform.position = state.position - 5 * right
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.velocity = -10 * right
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
@@ -267,7 +268,7 @@ class TestNPC(unittest.TestCase):
                 right = lgsvl.utils.transform_to_right(state.transform)
 
                 state.transform.position = state.position - 5 * right
-                sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+                sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
                 sim.run(60)
         self.assertIn("Waypoint reached", repr(e.exception))
 
@@ -290,7 +291,7 @@ class TestNPC(unittest.TestCase):
 
     def test_spawn_speed(self):  # Checks that a spawned agent keeps the correct speed when spawned
         with SimConnection() as sim:
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim, 1))
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim, 1))
             npc = sim.add_agent("Sedan", lgsvl.AgentType.NPC, spawnState(sim))
 
             self.assertEqual(npc.state.speed,0)
@@ -304,7 +305,7 @@ class TestNPC(unittest.TestCase):
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
             state.transform = sim.map_point_on_lane(lgsvl.Vector(0.63, -1.57, 42.73))
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             target = state.position + 31 * forward
 
@@ -332,7 +333,7 @@ class TestNPC(unittest.TestCase):
             target = state.position + 42.75 * forward
 
             state.transform = sim.map_point_on_lane(lgsvl.Vector(4.49, -1.57, 40.85))
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
 
@@ -356,7 +357,7 @@ class TestNPC(unittest.TestCase):
             npc = sim.add_agent("SUV", lgsvl.AgentType.NPC, state)
 
             state.transform = sim.map_point_on_lane(lgsvl.Vector(9.82, -1.79, 42.02))
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             target = state.position + 31 * forward
 
@@ -384,7 +385,7 @@ class TestNPC(unittest.TestCase):
             target = state.position + 42.75 * forward
 
             state.transform.position = state.position - 10 * forward
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
 
             npc.follow_closest_lane(True, 10)
 
@@ -407,7 +408,7 @@ class TestNPC(unittest.TestCase):
             state = lgsvl.AgentState()
             state.transform.position = lgsvl.Vector(-180,10,239)
             state.transform.rotation = lgsvl.Vector(0,90,0)
-            sim.add_agent("XE_Rigged-apollo", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguae2015xe_autowareai, lgsvl.AgentType.EGO, state)
 
             state = lgsvl.AgentState()
             state.transform.position = lgsvl.Vector(-175, 10, 234.5)
@@ -464,7 +465,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection(60) as sim:
             state = lgsvl.AgentState()
             state.transform = sim.map_point_on_lane(lgsvl.Vector(78.962, -3.363, -40.292))
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             state.transform.position = state.position + 10 * forward
             npc = sim.add_agent("Jeep", lgsvl.AgentType.NPC, state)
@@ -485,7 +486,7 @@ class TestNPC(unittest.TestCase):
         with SimConnection(60) as sim:
             state = lgsvl.AgentState()
             state.transform = sim.map_point_on_lane(lgsvl.Vector(78.962, -3.363, -40.292))
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             up = lgsvl.utils.transform_to_up(state.transform)
             state.transform.position = state.position + 10 * forward

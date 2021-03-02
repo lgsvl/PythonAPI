@@ -10,14 +10,14 @@ import unittest
 
 import lgsvl
 from .common import SimConnection, spawnState, TestTimeout
-
+from settings import SimulatorSettings
 
 class TestManual(unittest.TestCase):
     @unittest.skip("Windshield wipers no longer supported")
     def test_wipers(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.windshield_wipers = 1
                 ego.apply_control(control, True)
@@ -41,7 +41,7 @@ class TestManual(unittest.TestCase):
     def test_headlights(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.headlights = 1
                 ego.apply_control(control, True)
@@ -59,7 +59,7 @@ class TestManual(unittest.TestCase):
     def test_blinkers(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.turn_signal_left = True
                 ego.apply_control(control, True)
@@ -78,7 +78,7 @@ class TestManual(unittest.TestCase):
     def test_wiper_large_value(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.windshield_wipers = 4
                 ego.apply_control(control, True)
@@ -91,7 +91,7 @@ class TestManual(unittest.TestCase):
     def test_wiper_str(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.windshield_wipers = "on"
                 ego.apply_control(control, True)
@@ -103,7 +103,7 @@ class TestManual(unittest.TestCase):
     def test_headlights_large_value(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.headlights = 123
                 ego.apply_control(control, True)
@@ -115,7 +115,7 @@ class TestManual(unittest.TestCase):
     def test_headlights_str(self):
         try:
             with SimConnection() as sim:
-                ego = sim.add_agent("Jaguar2015XE (Apollo 3.5)", lgsvl.AgentType.EGO, spawnState(sim))
+                ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
                 control = lgsvl.VehicleControl()
                 control.headlights = "123"
                 ego.apply_control(control, True)

@@ -27,3 +27,11 @@ class SimulatorSettings:
     # Ego vehicle that is loaded in most of the quickstart scripts. Default value is "Lincoln2017MKZ". This includes a bridge connection if needed and also bunch of sensors including LIDAR.
     # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
     ego_lincoln2017mkz_apollo5 = "47b529db-0593-4908-b3e7-4b24a32a0f70"
+
+    # Ego vehicle that is loaded in quickstart/tests scripts. Default value is "Jaguar2015XE - Apollo 5".
+    # https://wise.svlsimulator.com/vehicles/profile/3f4211dc-e5d7-42dc-94c5-c4832b1331bb/edit/configuration/c06d4932-5928-4730-8a91-ba64ac5f1813
+    ego_jaguar2015xe_apollo5 = "c06d4932-5928-4730-8a91-ba64ac5f1813"
+
+    # Ego vehicle that is loaded in quickstart/tests scripts. Default value is "Jaguar2015XE - AutowareAI".
+    # https://wise.svlsimulator.com/vehicles/profile/3f4211dc-e5d7-42dc-94c5-c4832b1331bb/edit/configuration/05cbb194-d095-4a0e-ae66-ff56c331ca83
+    ego_jaguae2015xe_autowareai = "05cbb194-d095-4a0e-ae66-ff56c331ca83"

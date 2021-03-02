@@ -9,6 +9,7 @@ import math
 
 import lgsvl
 from .common import SimConnection, cmEqual, mEqual, spawnState
+from settings import SimulatorSettings
 
 
 class TestPeds(unittest.TestCase):
@@ -17,7 +18,7 @@ class TestPeds(unittest.TestCase):
             state = spawnState(sim)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             state.transform.position = state.position - 4 * forward
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             for name in ["Bob", "EntrepreneurFemale", "Howard", "Johny", \
                 "Pamela", "Presley", "Robin", "Stephen", "Zoe"]:
                 agent = self.create_ped(sim, name, spawnState(sim))
@@ -29,7 +30,7 @@ class TestPeds(unittest.TestCase):
             state = spawnState(sim)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             state.transform.position = state.position - 4 * forward
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             spawnPoint = state.transform.position
 
@@ -53,7 +54,7 @@ class TestPeds(unittest.TestCase):
             forward = lgsvl.utils.transform_to_forward(state.transform)
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position - 4 * forward
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             state = spawnState(sim)
             state.transform.position = state.position + 10 * forward
             radius = 5
@@ -84,7 +85,7 @@ class TestPeds(unittest.TestCase):
 
     def test_waypoint_idle_time(self):
         with SimConnection(60) as sim:
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
             state = spawnState(sim)
             forward = lgsvl.utils.transform_to_forward(state.transform)
             right = lgsvl.utils.transform_to_right(state.transform)

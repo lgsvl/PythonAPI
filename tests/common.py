@@ -70,3 +70,4 @@ def mEqual(self, a, b, msg):  # Test vectors within 1cm
 
 def notAlmostEqual(a,b):
     return round(a-b,7) != 0
+

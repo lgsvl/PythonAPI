@@ -9,6 +9,7 @@ import unittest
 import lgsvl
 
 from .common import SimConnection, spawnState
+from settings import SimulatorSettings
 
 PROBLEM = "Object reference not set to an instance of an object"
 
@@ -32,7 +33,7 @@ class TestSimulator(unittest.TestCase):
 
     def test_run_time(self):  # Check if the simulator runs 2 seconds
         with SimConnection() as sim:
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, spawnState(sim))
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
             time = 2.0
             initial_time = sim.current_time
 
@@ -63,7 +64,7 @@ class TestSimulator(unittest.TestCase):
             forward = lgsvl.utils.transform_to_forward(state.transform)
             right = lgsvl.utils.transform_to_right(state.transform)
             up = lgsvl.utils.transform_to_up(state.transform)
-            sim.add_agent("Jaguar2015XE (Apollo 3.0)", lgsvl.AgentType.EGO, state)
+            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
 
             p = spawns[0].position
             p.y += 1
