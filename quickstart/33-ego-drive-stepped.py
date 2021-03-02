@@ -12,10 +12,10 @@ from settings import *
 
 print("Python API Quickstart #33: Stepping a simulation")
 sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), SimulatorSettings.simulatorPort)
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 # Re-load scene and set random seed
-sim.load(SimulatorSettings.mapName, seed=123)
+sim.load(SimulatorSettings.map_borregasave, seed=123)
 
 spawns = sim.get_spawn()
 
@@ -34,7 +34,7 @@ forward = lgsvl.utils.transform_to_forward(spawns[0])
 # We can test Apollo with standard MKZ or MKZ with ground truth sensors
 # Refer to https://www.lgsvlsimulator.com/docs/modular-testing/
 # ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
-ego = sim.add_agent(SimulatorSettings.egoVehicleWithBridge, lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(SimulatorSettings.ego_lincoln2017mkz_apollo5, lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
 print("Bridge connected:", ego.bridge_connected)

@@ -14,10 +14,10 @@ print("Python API Quickstart #16: Pedestrian following waypoints")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 forward = lgsvl.utils.transform_to_forward(spawns[1])
@@ -25,7 +25,7 @@ right = lgsvl.utils.transform_to_right(spawns[1])
 
 state = lgsvl.AgentState()
 state.transform = spawns[1]
-sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # This will create waypoints in a circle for the pedestrian to follow
 radius = 4

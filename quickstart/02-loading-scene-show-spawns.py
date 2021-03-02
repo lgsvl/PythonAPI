@@ -17,10 +17,10 @@ sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulat
 print("Current Scene = {}".format(sim.current_scene))
 
 # Loads the named map in the connected simulator. The available maps can be set up in web interface
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 print("Current Scene = {}".format(sim.current_scene))
 print("Current Scene ID = {}".format(sim.current_scene_id))

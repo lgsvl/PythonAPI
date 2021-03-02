@@ -21,13 +21,9 @@ class SimulatorSettings:
 	bridgePort = 9090
 
 	# Map loaded in the quickstart scripts. Changing the map may lead to unexpected behaviour in the quickstart scripts. Default value is "BorregasAve"
-	mapName = "BorregasAve"
+        # https://wise.svlsimulator.com/maps/profile/aae03d2a-b7ca-4a88-9e41-9035287a12cc
+	map_borregasave = "aae03d2a-b7ca-4a88-9e41-9035287a12cc"
 
-	# Ego vehicle that is loaded in most of the quickstart scripts. Default value is "Lincoln2017MKZ"
-	egoVehicle = "Lincoln2017MKZ"
-
-	# Ego vehicle that is loaded in quickstart scripts where the bridge connection is required. Default value is "Lincoln2017MKZ"
-	egoVehicleWithBridge = "Lincoln2017MKZ"
-
-	# Ego vehicle that is loaded in quickstart scripts where the LIDAR sensor is required. Default value is "Lincoln2017MKZ"
-	egoVehicleWithLidar = "Lincoln2017MKZ"
+	# Ego vehicle that is loaded in most of the quickstart scripts. Default value is "Lincoln2017MKZ". This includes a bridge connection if needed and also bunch of sensors including LIDAR.
+        # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
+	ego_lincoln2017mkz_apollo5 = "47b529db-0593-4908-b3e7-4b24a32a0f70"

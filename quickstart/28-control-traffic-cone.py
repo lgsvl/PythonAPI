@@ -13,10 +13,10 @@ print("Python API Quickstart #28: How to Add/Control Traffic Cone")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName, 42)
+    sim.load(SimulatorSettings.map_borregasave, 42)
 
 spawns = sim.get_spawn()
 
@@ -26,7 +26,7 @@ right = lgsvl.utils.transform_to_right(spawns[0])
 up = lgsvl.utils.transform_to_up(spawns[0])
 state.transform = spawns[0]
 
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 for i in range(10 * 3):
     # Create controllables in a block

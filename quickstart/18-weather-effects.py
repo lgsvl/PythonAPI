@@ -13,16 +13,16 @@ print("Python API Quickstart #18: Changing the weather effects")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 print(sim.weather)
 

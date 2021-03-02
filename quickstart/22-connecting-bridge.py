@@ -14,16 +14,16 @@ print("Python API Quickstart #22: Connecting to a bridge")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicleWithBridge), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
 print("Bridge connected:", ego.bridge_connected)

@@ -13,10 +13,10 @@ print("Python API Quickstart #31: Using the wait for distance trigger")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName, 42)
+    sim.load(SimulatorSettings.map_borregasave, 42)
 
 spawns = sim.get_spawn()
 layer_mask = 0
@@ -33,7 +33,7 @@ hit = sim.raycast(
 spawn_state.position = hit.point
 state.transform = spawn_state
 state.velocity = forward * 2
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # NPC
 state = lgsvl.AgentState()

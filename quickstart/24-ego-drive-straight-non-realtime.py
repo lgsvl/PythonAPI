@@ -14,10 +14,10 @@ print("Python API Quickstart #24: Changing the Simulator timescale")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 
@@ -26,7 +26,7 @@ state.transform = spawns[0]
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 # Agents can be spawned with a velocity. Default is to spawn with 0 velocity
 state.velocity = 20 * forward
-sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 print("Real time elapsed =", 0)
 print("Simulation time =", sim.current_time)

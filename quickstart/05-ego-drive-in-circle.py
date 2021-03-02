@@ -13,10 +13,10 @@ print("Python API Quickstart #5: Ego vehicle driving in circle")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 
@@ -24,7 +24,7 @@ state = lgsvl.AgentState()
 state.transform = spawns[0]
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 state.transform.position += 5 * forward  # 5m forwards
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 print("Current time = ", sim.current_time)
 print("Current frame = ", sim.current_frame)

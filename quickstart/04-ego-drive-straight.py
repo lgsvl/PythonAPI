@@ -13,10 +13,10 @@ print("Python API Quickstart #4: Ego vehicle driving straight")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 
@@ -27,7 +27,7 @@ forward = lgsvl.utils.transform_to_forward(spawns[0])
 
 # Agents can be spawned with a velocity. Default is to spawn with 0 velocity
 state.velocity = 20 * forward
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # The bounding box of an agent are 2 points (min and max) such that the box formed from those 2 points completely encases the agent
 print("Vehicle bounding box =", ego.bounding_box)

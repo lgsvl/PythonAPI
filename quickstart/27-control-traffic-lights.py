@@ -13,10 +13,10 @@ print("Python API Quickstart #27: How to Control Traffic Light")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName, 42)
+    sim.load(SimulatorSettings.map_borregasave, 42)
 
 spawns = sim.get_spawn()
 
@@ -24,11 +24,11 @@ state = lgsvl.AgentState()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
 state.transform = spawns[0]
 state.transform.position = spawns[0].position + 20 * forward
-sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # # Get a list of controllable objects
 controllables = sim.get_controllables("signal")
-print("\n# List of controllable objects in {} scene:".format(SimulatorSettings.mapName))
+print("\n# List of controllable objects in {} scene:".format(SimulatorSettings.map_borregasave))
 for c in controllables:
     print(c)
 

@@ -13,10 +13,10 @@ print("Python API Quickstart #11: Handling the collision callbacks")
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulatorHost), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulatorPort))
-if sim.current_scene == SimulatorSettings.mapName:
+if sim.current_scene == SimulatorSettings.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.mapName)
+    sim.load(SimulatorSettings.map_borregasave)
 
 spawns = sim.get_spawn()
 forward = lgsvl.utils.transform_to_forward(spawns[0])
@@ -26,7 +26,7 @@ right = lgsvl.utils.transform_to_right(spawns[0])
 state = lgsvl.AgentState()
 state.transform = spawns[0]
 state.velocity = 6 * forward
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.egoVehicle), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # school bus, 20m ahead, perpendicular to road, stopped
 state = lgsvl.AgentState()
