@@ -1,6 +1,6 @@
-# Python API for LGSVL Simulator
+# Python API for SVL Simulator
 
-This folder contains Python API for LGSVL Simulator.
+This folder contains the Python API for the SVL Simulator.
 
 # Usage
 
@@ -12,7 +12,7 @@ To change it, adjust first argument of `Simulator` constructor, or set up
 
 # Documentation
 
-Documentation is available on our website: https://www.lgsvlsimulator.com/docs/python-api/
+Documentation is available on our website: https://www.svlsimulator.com/docs/python-api/
 
 # Requirements
 

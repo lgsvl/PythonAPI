@@ -4,9 +4,9 @@ from setuptools import setup
 
 setup(
     name="lgsvl",
-    description="LGSVL Simulator Api",
+    description="Python API for SVL Simulator",
     author="LGSVL",
-    author_email="contact@lgsvlsimulator.com",
+    author_email="contact@svlsimulator.com",
     python_requires=">=3.6.0",
     url="https://github.com/lgsvl/PythonAPI",
     packages=["lgsvl", "lgsvl.dreamview", "lgsvl.evaluator"],
