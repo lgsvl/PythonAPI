@@ -92,7 +92,7 @@ setup(
         "environs"
     ],
     setup_requires=[
-        "GitPython"
+        "GitPython==3.1.14"
     ],
     license="Other",
     classifiers=[
