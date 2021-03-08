@@ -1,14 +1,17 @@
-# Python API for SVL Simulator
+# lgsvl - A Python API for SVL Simulator
 
-This folder contains the Python API for the SVL Simulator.
+This folder contains **lgsvl**, a Python API for SVL Simulator.
 
 # Usage
 
-Look into `quickstart` folder for simple usages.
-To run these examples first start the simulator and leave it in main menu.
-By default examples connect to Simulator on `localhost` address.
-To change it, adjust first argument of `Simulator` constructor, or set up
-`LGSVL__SIMULATOR_HOST` environment variable with hostname.
+Look into `quickstart` and `examples` folders for simple usages. To run these
+examples, first add the maps and vehicles they use into your Library, and then
+launch a simulation on a local cluster selecting the **API Only** template.
+
+By default, the examples expect to be able to connect to SVL Simulator using the
+`localhost` address. To change it, set the `LGSVL__SIMULATOR_HOST` environment
+variable to the hostname or IP address of the network interface of the machine
+running SVL Simulator to which the examples should connect.
 
 # Documentation
 
@@ -26,6 +29,10 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
     pip3 install --user -e .
 
 # Running unit tests
+
+To run the unit tests, first add the maps and vehicles they use into your
+Library, then launch a simulation on a local cluster selecting the **API Only**
+template.
 
     # run all unittests
     python3 -m unittest discover -v -c
