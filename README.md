@@ -52,6 +52,6 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
 
 # Copyright and License
 
-Copyright (c) 2018-2020 LG Electronics, Inc.
+Copyright (c) 2018-2021 LG Electronics, Inc.
 
 This software contains code licensed as described in LICENSE.
