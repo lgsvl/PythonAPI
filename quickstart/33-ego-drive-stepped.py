@@ -29,11 +29,10 @@ forward = lgsvl.utils.transform_to_forward(spawns[0])
 # In order for Apollo to drive with stepped simulation we must add the clock sensor
 # and we must also set clock_mode to MODE_MOCK in Apollo's cyber/conf/cyber.pb.conf
 # Note that MODE_MOCK is only supported in Apollo master (6.0 or later)!
-# Refer to https://www.lgsvlsimulator.com/docs/sensor-json-options/#clock
+# Refer to https://www.svlsimulator.com/docs/sensor-json-options/#clock
 
 # We can test Apollo with standard MKZ or MKZ with ground truth sensors
-# Refer to https://www.lgsvlsimulator.com/docs/modular-testing/
-# ego = sim.add_agent("Lincoln2017MKZ (Apollo 5.0)", lgsvl.AgentType.EGO, state)
+# Refer to https://www.svlsimulator.com/docs/modular-testing/
 ego = sim.add_agent(SimulatorSettings.ego_lincoln2017mkz_apollo5, lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
