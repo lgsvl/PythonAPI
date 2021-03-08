@@ -7,7 +7,7 @@
 import signal
 import lgsvl
 import os
-
+from settings import SimulatorSettings
 
 class TestTimeout(Exception):
     pass
@@ -18,7 +18,7 @@ class TestException(Exception):
 
 
 class SimConnection:
-    def __init__(self, seconds=30, scene="BorregasAve", error_message=None, load_scene=True):
+    def __init__(self, seconds=30, scene=SimulatorSettings.map_borregasave, error_message=None, load_scene=True):
         if error_message is None:
             error_message = 'test timed out after {}s.'.format(seconds)
         self.seconds = seconds
