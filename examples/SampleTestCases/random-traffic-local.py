@@ -9,6 +9,8 @@ from datetime import datetime
 from environs import Env
 import random
 import lgsvl
+from settings import SimulatorSettings
+
 
 '''
 LGSVL__AUTOPILOT_0_HOST             IP address of the computer running the bridge to connect to
@@ -37,10 +39,7 @@ LGSVL__MAP = env.str("LGSVL__MAP", "san_francisco")
 # otherwise it will receive proper vehicle ID and simulator will fail,
 # since IDs are not supported yet. So for now it will fail to read
 # environment variable and use vehicle name as backup option
-# Default vehicle for this test case is Lincoln2017MKZ - Apollo 5.0 (modular testing)
-# https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/5c7fb3b0-1fd4-4943-8347-f73a05749718
-DEFAULT_VEHICLE_CONFIG = "5c7fb3b0-1fd4-4943-8347-f73a05749718"
-LGSVL__VEHICLE_0 = env.str("LGSVL__VEHICLE_0", DEFAULT_VEHICLE_CONFIG)
+LGSVL__VEHICLE_0 = env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_modular)
 LGSVL__AUTOPILOT_HD_MAP = env.str("LGSVL__AUTOPILOT_HD_MAP", "SanFrancisco")
 LGSVL__AUTOPILOT_0_VEHICLE_CONFIG = env.str("LGSVL__AUTOPILOT_0_VEHICLE_CONFIG", 'Lincoln2017MKZ')
 LGSVL__SIMULATION_DURATION_SECS = 120.0

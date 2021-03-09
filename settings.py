@@ -39,3 +39,7 @@ class SimulatorSettings:
     # Ego vehicle that is loaded in most of the NHTSA example scripts. Default value is "Lincoln2017MKZ - Full Analysis". This includes bunch of sensors that help analyze test results efficiently.
     # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/22656c7b-104b-4e6a-9c70-9955b6582220
     ego_lincoln2017mkz_apollo5_full_analysis = "22656c7b-104b-4e6a-9c70-9955b6582220"
+
+    # Ego vehicle that is loaded in most of the NHTSA example scripts. Default value is "Lincoln2017MKZ - Apollo 5 modular". This has sensors for modular testing.
+    # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/5c7fb3b0-1fd4-4943-8347-f73a05749718
+    ego_lincoln2017mkz_apollo5_modular = "5c7fb3b0-1fd4-4943-8347-f73a05749718"

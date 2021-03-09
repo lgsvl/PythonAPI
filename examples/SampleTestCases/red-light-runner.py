@@ -19,6 +19,8 @@
 
 import os
 import lgsvl
+from settings import SimulatorSettings
+
 import sys
 
 SIMULATOR_HOST = os.environ.get("LGSVL__SIMULATOR_HOST", "127.0.0.1")
@@ -35,10 +37,7 @@ else:
 # spawn EGO
 egoState = lgsvl.AgentState()
 egoState.transform = sim.get_spawn()[0]
-# Default vehicle for this test case is Lincoln2017MKZ - Apollo 5.0
-# https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
-DEFAULT_VEHICLE_CONFIG = "47b529db-0593-4908-b3e7-4b24a32a0f70"
-ego = sim.add_agent(os.environ.get("LGSVL__VEHICLE_0", DEFAULT_VEHICLE_CONFIG), lgsvl.AgentType.EGO, egoState)
+ego = sim.add_agent(os.environ.get("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
 ego.connect_bridge(BRIDGE_HOST, BRIDGE_PORT)
 
 forward = lgsvl.utils.transform_to_forward(egoState.transform) # Unit vector in the forward direction of the EGO

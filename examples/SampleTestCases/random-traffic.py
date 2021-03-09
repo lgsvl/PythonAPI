@@ -10,6 +10,8 @@ import random
 from environs import Env
 
 import lgsvl
+from settings import SimulatorSettings
+
 
 '''
 LGSVL__AUTOPILOT_0_HOST             IP address of the computer running the bridge to connect to
@@ -79,10 +81,7 @@ spawn_index = random.randrange(len(spawns))
 
 state = lgsvl.AgentState()
 state.transform = spawns[spawn_index]  # TODO some sort of Env Variable so that user/wise can select from list
-# Default vehicle for this test case is Lincoln2017MKZ - Apollo 5.0
-# https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
-DEFAULT_VEHICLE_CONFIG = "47b529db-0593-4908-b3e7-4b24a32a0f70"
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", DEFAULT_VEHICLE_CONFIG), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, state)
 
 # The EGO is now looking for a bridge at the specified IP and port
 BRIDGE_HOST = env.str("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")
