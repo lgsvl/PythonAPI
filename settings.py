@@ -35,3 +35,7 @@ class SimulatorSettings:
     # Ego vehicle that is loaded in quickstart/tests scripts. Default value is "Jaguar2015XE - AutowareAI".
     # https://wise.svlsimulator.com/vehicles/profile/3f4211dc-e5d7-42dc-94c5-c4832b1331bb/edit/configuration/05cbb194-d095-4a0e-ae66-ff56c331ca83
     ego_jaguae2015xe_autowareai = "05cbb194-d095-4a0e-ae66-ff56c331ca83"
+
+    # Ego vehicle that is loaded in most of the NHTSA example scripts. Default value is "Lincoln2017MKZ - Full Analysis". This includes bunch of sensors that help analyze test results efficiently.
+    # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/22656c7b-104b-4e6a-9c70-9955b6582220
+    ego_lincoln2017mkz_apollo5_full_analysis = "22656c7b-104b-4e6a-9c70-9955b6582220"

@@ -11,6 +11,8 @@ import time
 import logging
 from environs import Env
 import lgsvl
+from settings import SimulatorSettings
+
 FORMAT = "[%(levelname)6s] [%(name)s] %(message)s"
 logging.basicConfig(level=logging.WARNING, format=FORMAT)
 log = logging.getLogger(__name__)
@@ -43,8 +45,7 @@ egoState = lgsvl.AgentState()
 egoState.transform = sim.map_point_on_lane(lgsvl.Vector(1, 0, 65))
 # Default vehicle for this test case is Lincoln2017MKZ - Apollo 5.0
 # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
-DEFAULT_VEHICLE_CONFIG = "47b529db-0593-4908-b3e7-4b24a32a0f70"
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", DEFAULT_VEHICLE_CONFIG), lgsvl.AgentType.EGO, egoState)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
 forward = lgsvl.utils.transform_to_forward(egoState.transform)
 right = lgsvl.utils.transform_to_right(egoState.transform)
 
