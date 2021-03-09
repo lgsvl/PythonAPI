@@ -56,9 +56,26 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
 
 # Running unit tests
 
-To run the unit tests, first add the maps and vehicles they use into your
-Library, then launch a simulation on a local cluster selecting the **API Only**
-template.
+To run the unit tests, first make sure that these assets have been added to your Library:
+
+| Type    | Name           | URL |
+| ------- | -------------- | --- |
+| Map     | BorregasAve    | https://wise.svlsimulator.com/maps/profile/aae03d2a-b7ca-4a88-9e41-9035287a12cc |
+| Map     | CubeTown       | https://wise.svlsimulator.com/maps/profile/06773677-1ce3-492f-9fe2-b3147e126e27 |
+| Vehicle | Jaguar2015XE   | https://wise.svlsimulator.com/vehicles/profile/3f4211dc-e5d7-42dc-94c5-c4832b1331bb |
+| Vehicle | Lincoln2017MKZ | https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e |
+
+<br/>
+and that the plugins required by these vehicle sensor configurations have been added to your Library:
+
+| Vehicle      | Sensor Configuration | URL |
+| ------------ | -------------------- | --- |
+Jaguar2015XE   | Apollo 5.0           | https://wise.svlsimulator.com/vehicles/profile/3f4211dc-e5d7-42dc-94c5-c4832b1331bb/edit/configuration/c06d4932-5928-4730-8a91-ba64ac5f1813 |
+Jaguar2015XE   | Autoware AI          | https://wise.svlsimulator.com/vehicles/profile/3f4211dc-e5d7-42dc-94c5-c4832b1331bb/edit/configuration/05cbb194-d095-4a0e-ae66-ff56c331ca83 |
+Lincoln2017MKZ | Apollo 5.0           | https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70 |
+
+<br/>
+Then launch an **API Only** simulation before running the unit tests.
 
     # run all unittests
     python3 -m unittest discover -v -c
