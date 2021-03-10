@@ -24,6 +24,10 @@ class SimulatorSettings:
     # https://wise.svlsimulator.com/maps/profile/aae03d2a-b7ca-4a88-9e41-9035287a12cc
     map_borregasave = "aae03d2a-b7ca-4a88-9e41-9035287a12cc"
 
+    # Map loaded in the quickstart scripts. Changing the map may lead to unexpected behaviour in the quickstart scripts. Default value is "CubeTown".
+    # https://wise.svlsimulator.com/maps/profile/06773677-1ce3-492f-9fe2-b3147e126e27
+    map_cubetown = "06773677-1ce3-492f-9fe2-b3147e126e27"
+
     # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "SanFrancisco".
     # https://wise.svlsimulator.com/maps/profile/5d272540-f689-4355-83c7-03bf11b6865f
     map_sanfrancisco = "5d272540-f689-4355-83c7-03bf11b6865f"

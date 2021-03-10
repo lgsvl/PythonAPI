@@ -28,6 +28,7 @@ examples, first make sure that these assets have been added to your Library:
 | Type    | Name           | URL |
 | ------- | -------------- | --- |
 | Map     | BorregasAve    | https://wise.svlsimulator.com/maps/profile/aae03d2a-b7ca-4a88-9e41-9035287a12cc |
+| Map     | CubeTown       | https://wise.svlsimulator.com/maps/profile/06773677-1ce3-492f-9fe2-b3147e126e27 |
 | Map     | SanFrancisco   | https://wise.svlsimulator.com/maps/profile/5d272540-f689-4355-83c7-03bf11b6865f |
 | Map     | SingleLaneRoad | https://wise.svlsimulator.com/maps/profile/a6e2d149-6a18-4b83-9029-4411d7b2e69a |
 | Map     | Straight1LanePedestrianCrosswalk | https://wise.svlsimulator.com/maps/profile/a3a818b5-c66b-488a-a780-979bd5692db1 |

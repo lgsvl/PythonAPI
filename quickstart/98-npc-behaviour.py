@@ -18,15 +18,14 @@ sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulat
 
 drunkDriverAvailable = False
 trailerAvailable = 0
-map = "CubeTown"
 
 print("Current Scene = {}".format(sim.current_scene))
-# Loads the named map in the connected simulator. The available maps can be set up in web interface
-if sim.current_scene == map:
+# Loads the named map in the connected simulator.
+if sim.current_scene == SimulatorSettings.map_cubetown:
     sim.reset()
 else:
-    print("Loading Scene = {}".format(map))
-    sim.load(map)
+    print("Loading Scene = {}".format(SimulatorSettings.map_cubetown))
+    sim.load(SimulatorSettings.map_cubetown)
 
 agents = sim.available_agents
 print("agents:")
