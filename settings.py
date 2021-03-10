@@ -33,8 +33,8 @@ class SimulatorSettings:
     map_straight1lanepedestriancrosswalk = "a3a818b5-c66b-488a-a780-979bd5692db1"
 
     # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "SingleLaneRoad"
-    # https://wise.svlsimulator.com/maps/profile/dac1a8fc-054d-4f32-9f64-d24efe6c0fc9
-    map_singlelaneroad = "dac1a8fc-054d-4f32-9f64-d24efe6c0fc9"
+    # https://wise.svlsimulator.com/maps/profile/a6e2d149-6a18-4b83-9029-4411d7b2e69a
+    map_singlelaneroad = "a6e2d149-6a18-4b83-9029-4411d7b2e69a"
 
     # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "Straight1LaneSame"
     # https://wise.svlsimulator.com/maps/profile/1e2287cf-c590-4804-bcb1-18b2fd3752d1
