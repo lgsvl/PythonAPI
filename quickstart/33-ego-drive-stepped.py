@@ -39,7 +39,7 @@ ego = sim.add_agent(SimulatorSettings.ego_lincoln2017mkz_apollo5, lgsvl.AgentTyp
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO looks for a (Cyber) bridge at the specified IP and port
-ego.connect_bridge(SimulatorSettings.bridge_host, SimulatorSettings.bridgePort)
+ego.connect_bridge(SimulatorSettings.bridge_host, SimulatorSettings.bridge_port)
 # uncomment to wait for bridge connection; script will drive ego if bridge not found
 # print("Waiting for connection...")
 # while not ego.bridge_connected:

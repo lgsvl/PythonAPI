@@ -29,7 +29,7 @@ ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln201
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO is now looking for a bridge at the specified IP and port
-ego.connect_bridge(env.str("LGSVL__AUTOPILOT_0_HOST", SimulatorSettings.bridge_host), env.int("LGSVL__AUTOPILOT_0_PORT", SimulatorSettings.bridgePort))
+ego.connect_bridge(env.str("LGSVL__AUTOPILOT_0_HOST", SimulatorSettings.bridge_host), env.int("LGSVL__AUTOPILOT_0_PORT", SimulatorSettings.bridge_port))
 
 print("Waiting for connection...")
 
