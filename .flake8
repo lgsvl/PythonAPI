@@ -4,6 +4,7 @@ max-complexity = 23
 
 ignore = E701, E501, W503
 exclude =
+    .git
     tests/*
     examples/*
 
