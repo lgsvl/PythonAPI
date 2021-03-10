@@ -19,7 +19,6 @@
 
 import os
 import lgsvl
-from settings import SimulatorSettings
 
 import time
 import sys
@@ -29,7 +28,7 @@ SIMULATOR_PORT = int(os.environ.get("LGSVL__SIMULATOR_PORT", 8181))
 BRIDGE_HOST = os.environ.get("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")
 BRIDGE_PORT = int(os.environ.get("LGSVL__AUTOPILOT_0_PORT", 9090))
 
-scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_sanfrancisco)
+scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_sanfrancisco)
 
 sim = lgsvl.Simulator(SIMULATOR_HOST, SIMULATOR_PORT)
 if sim.current_scene == scene_name:
@@ -41,13 +40,13 @@ else:
 egoState = lgsvl.AgentState()
 # Spawn point found in Unity Editor
 egoState.transform = sim.map_point_on_lane(lgsvl.Vector(773.29, 10.24, -10.79))
-ego = sim.add_agent(os.environ.get("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
+ego = sim.add_agent(os.environ.get("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
 ego.connect_bridge(BRIDGE_HOST, BRIDGE_PORT)
 
 right = lgsvl.utils.transform_to_right(egoState.transform) # Unit vector in the right direction of the EGO
 forward = lgsvl.utils.transform_to_forward(egoState.transform) # Unit vector in the forward direction of the EGO
 
-# spawn NPC 
+# spawn NPC
 npcState = lgsvl.AgentState()
 npcState.transform = egoState.transform
 npcState.transform.position = egoState.position - 3.6 * right # NPC is 3.6m to the left of the EGO

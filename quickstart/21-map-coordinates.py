@@ -7,16 +7,15 @@
 
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 print("Python API Quickstart #21: Converting the map coordinates")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
-if sim.current_scene == SimulatorSettings.map_borregasave:
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
+if sim.current_scene == lgsvl.wise.DefaultAssets.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.map_borregasave)
+    sim.load(lgsvl.wise.DefaultAssets.map_borregasave)
 
 spawns = sim.get_spawn()
 

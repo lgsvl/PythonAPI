@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # Copyright (c) 2021 LG Electronics, Inc.
 #
@@ -6,7 +5,7 @@
 #
 
 
-# Settings class with common variables used in the quickstart and example scripts.
+# Settings classes with common variables used in the quickstart and example scripts.
 class SimulatorSettings:
     # IP address of the endpoint running the Simulator. Default value is "127.0.0.1"
     simulator_host = "127.0.0.1"
@@ -20,6 +19,8 @@ class SimulatorSettings:
     # Port used by the Simulator for the bridge connection. Default value is 9090
     bridge_port = 9090
 
+
+class DefaultAssets:
     # Map loaded in the quickstart scripts. Changing the map may lead to unexpected behaviour in the quickstart scripts. Default value is "BorregasAve".
     # https://wise.svlsimulator.com/maps/profile/aae03d2a-b7ca-4a88-9e41-9035287a12cc
     map_borregasave = "aae03d2a-b7ca-4a88-9e41-9035287a12cc"

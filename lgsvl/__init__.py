@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2019-2020 LG Electronics, Inc.
+# Copyright (c) 2019-2021 LG Electronics, Inc.
 #
 # This software contains code licensed as described in LICENSE.
 #
@@ -27,3 +27,4 @@ from .utils import ObjectState
 # Subpackages
 import lgsvl.dreamview
 import lgsvl.evaluator
+import lgsvl.wise

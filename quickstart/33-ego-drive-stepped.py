@@ -8,14 +8,13 @@
 import os
 import lgsvl
 import time
-from settings import SimulatorSettings
 
 print("Python API Quickstart #33: Stepping a simulation")
-sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), SimulatorSettings.simulator_port)
-if sim.current_scene == SimulatorSettings.map_borregasave:
+sim = lgsvl.Simulator(os.environ.get("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), lgsvl.wise.SimulatorSettings.simulator_port)
+if sim.current_scene == lgsvl.wise.DefaultAssets.map_borregasave:
     sim.reset()
 # Re-load scene and set random seed
-sim.load(SimulatorSettings.map_borregasave, seed=123)
+sim.load(lgsvl.wise.DefaultAssets.map_borregasave, seed=123)
 
 spawns = sim.get_spawn()
 
@@ -33,13 +32,13 @@ forward = lgsvl.utils.transform_to_forward(spawns[0])
 
 # We can test Apollo with standard MKZ or MKZ with ground truth sensors
 # Refer to https://www.svlsimulator.com/docs/modular-testing/
-ego = sim.add_agent(SimulatorSettings.ego_lincoln2017mkz_apollo5, lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5, lgsvl.AgentType.EGO, state)
 
 # An EGO will not connect to a bridge unless commanded to
 print("Bridge connected:", ego.bridge_connected)
 
 # The EGO looks for a (Cyber) bridge at the specified IP and port
-ego.connect_bridge(SimulatorSettings.bridge_host, SimulatorSettings.bridge_port)
+ego.connect_bridge(lgsvl.wise.SimulatorSettings.bridge_host, lgsvl.wise.SimulatorSettings.bridge_port)
 # uncomment to wait for bridge connection; script will drive ego if bridge not found
 # print("Waiting for connection...")
 # while not ego.bridge_connected:

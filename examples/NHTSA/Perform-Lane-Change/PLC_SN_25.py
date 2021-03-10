@@ -11,7 +11,6 @@ import time
 import logging
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 FORMAT = "[%(levelname)6s] [%(name)s] %(message)s"
 logging.basicConfig(level=logging.WARNING, format=FORMAT)
@@ -33,7 +32,7 @@ LGSVL__AUTOPILOT_0_PORT = env.int("LGSVL__AUTOPILOT_0_PORT", 9090)
 print("PLC_SN_25 - ", end='')
 
 sim = lgsvl.Simulator(LGSVL__SIMULATOR_HOST, LGSVL__SIMULATOR_PORT)
-scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_straight1lanesame)
+scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_straight1lanesame)
 if sim.current_scene == scene_name:
     sim.reset()
 else:
@@ -44,7 +43,7 @@ egoState = lgsvl.AgentState()
 # A point close to the desired lane was found in Editor.
 # This method returns the position and orientation of the closest lane to the point.
 egoState.transform = sim.map_point_on_lane(lgsvl.Vector(3.68, 0, -50))
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
 forward = lgsvl.utils.transform_to_forward(egoState.transform)
 right = lgsvl.utils.transform_to_right(egoState.transform)
 

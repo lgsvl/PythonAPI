@@ -7,7 +7,6 @@
 
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 print("Python API Quickstart #1: Connecting to the Simulator")
 env = Env()
@@ -15,7 +14,7 @@ env = Env()
 # Connects to the simulator instance at the ip defined by LGSVL__SIMULATOR_HOST, default is localhost or 127.0.0.1
 # env.str() is equivalent to os.environ.get()
 # env.int() is equivalent to int(os.environ.get())
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
 
 print("Version =", sim.version)
 print("Current Time =", sim.current_time)

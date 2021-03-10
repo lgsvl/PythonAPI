@@ -10,7 +10,6 @@ import random
 from environs import Env
 
 import lgsvl
-from settings import SimulatorSettings
 
 
 '''
@@ -41,7 +40,7 @@ LGSVL__VEHICLE_0                    Name of EGO vehicle to be loaded in Simulato
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
-scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_borregasave)
+scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_borregasave)
 try:
     sim.load(scene_name, env.int("LGSVL__RANDOM_SEED"))
 except Exception:
@@ -81,7 +80,7 @@ spawn_index = random.randrange(len(spawns))
 
 state = lgsvl.AgentState()
 state.transform = spawns[spawn_index]  # TODO some sort of Env Variable so that user/wise can select from list
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, state)
 
 # The EGO is now looking for a bridge at the specified IP and port
 BRIDGE_HOST = env.str("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")

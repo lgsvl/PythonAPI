@@ -9,7 +9,7 @@ setup(
     author_email="contact@svlsimulator.com",
     python_requires=">=3.6.0",
     url="https://github.com/lgsvl/PythonAPI",
-    packages=["lgsvl", "lgsvl.dreamview", "lgsvl.evaluator"],
+    packages=["lgsvl", "lgsvl.dreamview", "lgsvl.evaluator", "lgsvl.wise"],
     install_requires=[
         "websockets==7.0",
         "websocket-client==0.57.0",

@@ -7,16 +7,15 @@
 
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 print("Python API Quickstart #3: Using raycasts in the Simulator")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
-if sim.current_scene == SimulatorSettings.map_borregasave:
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
+if sim.current_scene == lgsvl.wise.DefaultAssets.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.map_borregasave)
+    sim.load(lgsvl.wise.DefaultAssets.map_borregasave)
 
 # The next few lines spawns an EGO vehicle in the map
 spawns = sim.get_spawn()
@@ -26,7 +25,7 @@ state.transform = spawns[0]
 forward = lgsvl.utils.transform_to_forward(state.transform)
 right = lgsvl.utils.transform_to_right(state.transform)
 up = lgsvl.utils.transform_to_up(state.transform)
-sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # This is the point from which the rays will originate from. It is raised 1m from the ground
 p = spawns[0].position

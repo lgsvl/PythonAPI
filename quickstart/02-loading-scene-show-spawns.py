@@ -7,20 +7,19 @@
 
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 print("Python API Quickstart #2: Loading the scene spawn points")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
 
 print("Current Scene = {}".format(sim.current_scene))
 
 # Loads the named map in the connected simulator. The available maps can be set up in web interface
-if sim.current_scene == SimulatorSettings.map_borregasave:
+if sim.current_scene == lgsvl.wise.DefaultAssets.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.map_borregasave)
+    sim.load(lgsvl.wise.DefaultAssets.map_borregasave)
 
 print("Current Scene = {}".format(sim.current_scene))
 print("Current Scene ID = {}".format(sim.current_scene_id))

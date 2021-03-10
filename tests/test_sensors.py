@@ -8,7 +8,6 @@ import unittest
 import os
 import lgsvl
 from .common import SimConnection, spawnState, notAlmostEqual
-from settings import SimulatorSettings
 
 # TODO add tests for bridge to check if enabled sensor actually sends data
 
@@ -16,7 +15,7 @@ from settings import SimulatorSettings
 class TestSensors(unittest.TestCase):
     def test_apollo_5_sensors(self):  # Check that Apollo 3.5 sensors are created and are positioned reasonably
         with SimConnection(60) as sim:
-            agent = self.create_EGO(sim, SimulatorSettings.ego_lincoln2017mkz_apollo5)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5)
             expectedSensors = ['Lidar', 'GPS', 'Telephoto Camera', \
                 'Main Camera', 'IMU', 'CAN Bus', 'Radar']
             sensors = agent.get_sensors()
@@ -34,7 +33,7 @@ class TestSensors(unittest.TestCase):
     @unittest.skip("No SF vehicle")
     def test_santafe_sensors(self):  # Check that Apollo Santa Fe sensors are created and are positioned reasonably
         with SimConnection() as sim:
-            agent = self.create_EGO(sim, SimulatorSettings.ego_lincoln2017mkz_apollo5)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5)
             expectedSensors = ['velodyne', 'GPS', 'Telephoto Camera', 'Main Camera', \
                 'IMU', 'RADAR', 'CANBUS', 'Segmentation Camera', 'Left Camera', 'Right Camera']
             sensors = agent.get_sensors()
@@ -52,7 +51,7 @@ class TestSensors(unittest.TestCase):
     @unittest.skip("No LGSVL Vehicle")
     def test_lgsvl_sensors(self):  # Check that LGSVL sensors are created and are positioned reasonably
         with SimConnection() as sim:
-            agent = self.create_EGO(sim, SimulatorSettings.ego_lincoln2017mkz_apollo5)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5)
             expectedSensors = ['velodyne', 'GPS', 'Telephoto Camera', 'Main Camera', \
                 'IMU', 'RADAR', 'CANBUS', 'Segmentation Camera', 'Left Camera', 'Right Camera']
             sensors = agent.get_sensors()
@@ -87,7 +86,7 @@ class TestSensors(unittest.TestCase):
 
     def test_apollo_sensors(self):  # Check that all the Apollo sensors are there
         with SimConnection() as sim:
-            agent = self.create_EGO(sim, SimulatorSettings.ego_jaguar2015xe_apollo5)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
             expectedSensors = ["Lidar", "GPS", "Telephoto Camera", "Main Camera", "IMU", \
                  "CAN Bus", "Radar"]
 
@@ -105,7 +104,7 @@ class TestSensors(unittest.TestCase):
 
     def test_autoware_sensors(self):  # Check that all Autoware sensors are there
         with SimConnection() as sim:
-            agent = self.create_EGO(sim, SimulatorSettings.ego_jaguae2015xe_autowareai)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_jaguae2015xe_autowareai)
             expectedSensors = ["Lidar", "GPS", "Main Camera", "IMU"]
 
             sensors = agent.get_sensors()
@@ -131,7 +130,7 @@ class TestSensors(unittest.TestCase):
                 if os.path.isfile(path):
                     os.remove(path)
 
-            agent = self.create_EGO(sim, SimulatorSettings.ego_jaguar2015xe_apollo5)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
             sensors = agent.get_sensors()
 
             savedSuccess = False
@@ -158,7 +157,7 @@ class TestSensors(unittest.TestCase):
                 if os.path.isfile(path):
                     os.remove(path)
 
-            agent = self.create_EGO(sim, SimulatorSettings.ego_jaguar2015xe_apollo5)
+            agent = self.create_EGO(sim, lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
             sensors = agent.get_sensors()
             savedSuccess = False
 
@@ -180,7 +179,7 @@ class TestSensors(unittest.TestCase):
             state.transform = sim.get_spawn()[0]
             right = lgsvl.utils.transform_to_right(state.transform)
             state.velocity = -50 * right
-            agent = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
+            agent = sim.add_agent(lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             sensors = agent.get_sensors()
             initialGPSData = None
             gps = None
@@ -206,7 +205,7 @@ class TestSensors(unittest.TestCase):
 
     def test_sensor_disabling(self):  # Check if sensors can be enabled
         with SimConnection() as sim:
-            agent = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
+            agent = sim.add_agent(lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
             for s in agent.get_sensors():
                 if s.name == "Lidar":
                     s.enabled = False
@@ -220,7 +219,7 @@ class TestSensors(unittest.TestCase):
 
     def test_sensor_equality(self):  # Check that sensor == operator works
         with SimConnection() as sim:
-            agent = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
+            agent = sim.add_agent(lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, spawnState(sim))
             prevSensor = None
             for s in agent.get_sensors():
                 self.assertTrue(s == s)

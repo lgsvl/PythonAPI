@@ -9,23 +9,22 @@ import math
 import random
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 print("Python API Quickstart #98: Simulating different NPCs behaviours")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
 
 drunkDriverAvailable = False
 trailerAvailable = 0
 
 print("Current Scene = {}".format(sim.current_scene))
 # Loads the named map in the connected simulator.
-if sim.current_scene == SimulatorSettings.map_cubetown:
+if sim.current_scene == lgsvl.wise.DefaultAssets.map_cubetown:
     sim.reset()
 else:
-    print("Loading Scene = {}".format(SimulatorSettings.map_cubetown))
-    sim.load(SimulatorSettings.map_cubetown)
+    print("Loading Scene = {}".format(lgsvl.wise.DefaultAssets.map_cubetown))
+    sim.load(lgsvl.wise.DefaultAssets.map_cubetown)
 
 agents = sim.available_agents
 print("agents:")
@@ -60,7 +59,7 @@ spawns = sim.get_spawn()
 
 state = lgsvl.AgentState()
 state.transform = spawns[0]
-sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
+sim.add_agent(env.str("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 mindist = 10.0
 maxdist = 40.0

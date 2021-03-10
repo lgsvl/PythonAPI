@@ -8,7 +8,6 @@ import unittest
 
 import lgsvl
 from .common import SimConnection, spawnState
-from settings import SimulatorSettings
 
 # TODO add tests for collisions between NPCs, EGO & obstacles
 
@@ -16,7 +15,7 @@ from settings import SimulatorSettings
 class TestCollisions(unittest.TestCase):
     def test_ego_collision(self):  # Check that a collision between Ego and NPC is reported
         with SimConnection() as sim:
-            mover, bus = self.setup_collision(sim, SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
+            mover, bus = self.setup_collision(sim, lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
             collisions = []
 
             def on_collision(agent1, agent2, contact):
@@ -31,12 +30,12 @@ class TestCollisions(unittest.TestCase):
             self.assertGreater(len(collisions), 0)
             self.assertInBetween(collisions[0][2], collisions[0][0].state.position, collisions[0][1].state.position, "Ego Collision")
 
-            self.assertTrue(collisions[0][0].name == SimulatorSettings.ego_jaguar2015xe_apollo5 or collisions[0][1].name == SimulatorSettings.ego_jaguar2015xe_apollo5)
+            self.assertTrue(collisions[0][0].name == lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5 or collisions[0][1].name == lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
             self.assertTrue(True)
 
     def test_sim_stop(self):  # Check that sim.stop works properly
         with SimConnection() as sim:
-            mover, bus = self.setup_collision(sim, SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
+            mover, bus = self.setup_collision(sim, lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, "SchoolBus", lgsvl.AgentType.NPC)
             collisions = []
 
             def on_collision(agent1, agent2, contact):
@@ -52,7 +51,7 @@ class TestCollisions(unittest.TestCase):
 
     def test_ped_collision(self):  # Check if a collision between EGO and pedestrian is reported
         with SimConnection() as sim:
-            ego, ped = self.setup_collision(sim, SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, "Howard", lgsvl.AgentType.PEDESTRIAN)
+            ego, ped = self.setup_collision(sim, lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, "Howard", lgsvl.AgentType.PEDESTRIAN)
             self.assertTrue(isinstance(ego, lgsvl.EgoVehicle))
             self.assertTrue(isinstance(ped, lgsvl.Pedestrian))
             collisions = []
@@ -66,7 +65,7 @@ class TestCollisions(unittest.TestCase):
             sim.run(15)
             self.assertGreater(len(collisions), 0)
             self.assertInBetween(collisions[0][2], collisions[0][0].state.position, collisions[0][1].state.position, "Ped Collision")
-            self.assertTrue(collisions[0][0].name == SimulatorSettings.ego_jaguar2015xe_apollo5 or collisions[0][1].name == SimulatorSettings.ego_jaguar2015xe_apollo5)
+            self.assertTrue(collisions[0][0].name == lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5 or collisions[0][1].name == lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
 
     @unittest.skip("NPCs ignore collisions with Pedestrians, activate this when NPCs use real physics")
     def test_ped_npc_collisions(self):  # Check that collision between NPC and Pedestrian is reported
@@ -94,7 +93,7 @@ class TestCollisions(unittest.TestCase):
         with SimConnection() as sim:
             state = spawnState(sim)
             state.position.x += 10
-            sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
+            sim.add_agent(lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             jeep, bus = self.setup_collision(sim, "Jeep", lgsvl.AgentType.NPC, "SchoolBus", lgsvl.AgentType.NPC)
             collisions = []
 
@@ -120,7 +119,7 @@ class TestCollisions(unittest.TestCase):
             right = lgsvl.utils.transform_to_right(state.transform)
             state.transform.position = state.position + 30 * right - 1 * up + 140 * forward
             state.velocity = 50 * forward
-            ego = sim.add_agent(SimulatorSettings.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
+            ego = sim.add_agent(lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5, lgsvl.AgentType.EGO, state)
             collisions = []
 
             def on_collision(agent1, agent2, contact):
@@ -133,9 +132,9 @@ class TestCollisions(unittest.TestCase):
 
             self.assertGreater(len(collisions), 0)
             if collisions[0][0] is None:
-                self.assertTrue(collisions[0][1].name == SimulatorSettings.ego_jaguar2015xe_apollo5)
+                self.assertTrue(collisions[0][1].name == lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
             elif collisions[0][1] is None:
-                self.assertTrue(collisions[0][0].name == SimulatorSettings.ego_jaguar2015xe_apollo5)
+                self.assertTrue(collisions[0][0].name == lgsvl.wise.DefaultAssets.ego_jaguar2015xe_apollo5)
             else:
                 self.fail("Collision not with object")
 

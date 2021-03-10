@@ -19,7 +19,6 @@
 
 import os
 import lgsvl
-from settings import SimulatorSettings
 
 import sys
 
@@ -28,7 +27,7 @@ SIMULATOR_PORT = int(os.environ.get("LGSVL__SIMULATOR_PORT", 8181))
 BRIDGE_HOST = os.environ.get("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")
 BRIDGE_PORT = int(os.environ.get("LGSVL__AUTOPILOT_0_PORT", 9090))
 
-scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_straight1lanepedestriancrosswalk)
+scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_straight1lanepedestriancrosswalk)
 sim = lgsvl.Simulator(SIMULATOR_HOST, SIMULATOR_PORT)
 if sim.current_scene == scene_name:
     sim.reset()
@@ -38,7 +37,7 @@ else:
 # spawn EGO
 egoState = lgsvl.AgentState()
 egoState.transform = sim.get_spawn()[0]
-ego = sim.add_agent(os.environ.get("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
+ego = sim.add_agent(os.environ.get("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
 ego.connect_bridge(BRIDGE_HOST, BRIDGE_PORT)
 
 # spawn PED

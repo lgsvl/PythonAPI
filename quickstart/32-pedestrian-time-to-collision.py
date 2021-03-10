@@ -7,16 +7,15 @@
 
 from environs import Env
 import lgsvl
-from settings import SimulatorSettings
 
 print("Python API Quickstart #1: Using the time to collision trigger with a pedestrian")
 env = Env()
 
-sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", SimulatorSettings.simulator_port))
-if sim.current_scene == SimulatorSettings.map_borregasave:
+sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
+if sim.current_scene == lgsvl.wise.DefaultAssets.map_borregasave:
     sim.reset()
 else:
-    sim.load(SimulatorSettings.map_borregasave, 42)
+    sim.load(lgsvl.wise.DefaultAssets.map_borregasave, 42)
 
 spawns = sim.get_spawn()
 layer_mask = 0
@@ -30,7 +29,7 @@ state.transform.position = hit.point
 state.transform.rotation = lgsvl.Vector(0.0, 15.0, 0.0)
 forward = lgsvl.Vector(0.2, 0.0, 0.8)
 state.velocity = forward * 15
-ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
+ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5), lgsvl.AgentType.EGO, state)
 
 # Pedestrian
 state = lgsvl.AgentState()

@@ -9,7 +9,6 @@ from datetime import datetime
 from environs import Env
 import random
 import lgsvl
-from settings import SimulatorSettings
 
 
 '''
@@ -37,8 +36,8 @@ LGSVL__AUTOPILOT_0_VEHICLE_CONFIG = env.str("LGSVL__AUTOPILOT_0_VEHICLE_CONFIG",
 LGSVL__SIMULATION_DURATION_SECS = 120.0
 LGSVL__RANDOM_SEED = env.int("LGSVL__RANDOM_SEED", 51472)
 
-vehicle_conf = env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_modular)
-scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_sanfrancisco)
+vehicle_conf = env.str("LGSVL__VEHICLE_0", lgsvl.wise.DefaultAssets.ego_lincoln2017mkz_apollo5_modular)
+scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_sanfrancisco)
 sim = lgsvl.Simulator(SIMULATOR_HOST, SIMULATOR_PORT)
 try:
     print("Loading map {}...".format(scene_name))
