@@ -2,7 +2,22 @@
 
 This folder contains **lgsvl**, a Python API for SVL Simulator.
 
-# Usage
+# Documentation
+
+Documentation is available on our website: https://www.svlsimulator.com/docs/python-api/
+
+# Requirements
+
+* Python 3.6 or higher
+
+# Installing
+
+    pip3 install --user .
+
+    # install in development mode
+    pip3 install --user -e .
+
+# Examples
 
 Look into `quickstart` and `examples` folders for simple usages. To run these
 examples, first make sure that these assets have been added to your Library:
@@ -39,20 +54,6 @@ By default, the examples expect to be able to connect to SVL Simulator using the
 variable to the hostname or IP address of the network interface of the machine
 running SVL Simulator to which the examples should connect.
 
-# Documentation
-
-Documentation is available on our website: https://www.svlsimulator.com/docs/python-api/
-
-# Requirements
-
-* Python 3.6 or higher
-
-# Installing
-
-    pip3 install --user .
-
-    # install in development mode
-    pip3 install --user -e .
 
 # Running unit tests
 
