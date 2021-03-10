@@ -17,9 +17,6 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
     # install in development mode
     pip3 install --user -e .
 
-    # only required when running the examples and unit tests
-    export PYTHONPATH=$PWD
-
 # Examples
 
 Look into `quickstart` and `examples` folders for simple usages. To run these
@@ -81,9 +78,6 @@ Lincoln2017MKZ | Apollo 5.0           | https://wise.svlsimulator.com/vehicles/p
 
 <br/>
 Then launch an **API Only** simulation before running the unit tests.
-
-    # required to run the unittests
-    export PYTHONPATH=$PWD
 
     # run all unittests
     python3 -m unittest discover -v -c
