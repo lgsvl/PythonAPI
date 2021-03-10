@@ -35,10 +35,11 @@ LGSVL__AUTOPILOT_0_PORT = env.int("LGSVL__AUTOPILOT_0_PORT", 9090)
 print("VF_S_45_Slow - ", end='')
 
 sim = lgsvl.Simulator(LGSVL__SIMULATOR_HOST, LGSVL__SIMULATOR_PORT)
-if sim.current_scene == "Straight1LaneSame":
+scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_straight1lanesame)
+if sim.current_scene == scene_name:
     sim.reset()
 else:
-    sim.load("Straight1LaneSame")
+    sim.load(scene_name)
 
 # spawn EGO in the 2nd to right lane
 egoState = lgsvl.AgentState()

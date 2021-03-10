@@ -34,10 +34,11 @@ LGSVL__AUTOPILOT_0_PORT = env.int("LGSVL__AUTOPILOT_0_PORT", 9090)
 print("EOV_S_25_20 - ", end='')
 
 sim = lgsvl.Simulator(LGSVL__SIMULATOR_HOST, LGSVL__SIMULATOR_PORT)
-if sim.current_scene == "Straight2LaneOpposing":
+scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_straight2laneopposing)
+if sim.current_scene == scene_name:
     sim.reset()
 else:
-    sim.load("Straight2LaneOpposing")
+    sim.load(scene_name)
 
 # spawn EGO in the 2nd to right lane
 egoState = lgsvl.AgentState()
