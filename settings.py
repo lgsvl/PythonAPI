@@ -24,6 +24,18 @@ class SimulatorSettings:
     # https://wise.svlsimulator.com/maps/profile/aae03d2a-b7ca-4a88-9e41-9035287a12cc
     map_borregasave = "aae03d2a-b7ca-4a88-9e41-9035287a12cc"
 
+    # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "SanFrancisco"
+    # https://wise.svlsimulator.com/maps/profile/5d272540-f689-4355-83c7-03bf11b6865f
+    map_sanfrancisco = "5d272540-f689-4355-83c7-03bf11b6865f"
+
+    # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "Straight1LanePedestrianCrosswalk"
+    # https://wise.svlsimulator.com/maps/profile/a3a818b5-c66b-488a-a780-979bd5692db1
+    map_straight1lanepedestriancrosswalk = "a3a818b5-c66b-488a-a780-979bd5692db1"
+
+    # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "SingleLaneRoad"
+    # https://wise.svlsimulator.com/maps/profile/dac1a8fc-054d-4f32-9f64-d24efe6c0fc9
+    map_singlelaneroad = "dac1a8fc-054d-4f32-9f64-d24efe6c0fc9"
+
     # Ego vehicle that is loaded in most of the quickstart scripts. Default value is "Lincoln2017MKZ". This includes a bridge connection if needed and also bunch of sensors including LIDAR.
     # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
     ego_lincoln2017mkz_apollo5 = "47b529db-0593-4908-b3e7-4b24a32a0f70"

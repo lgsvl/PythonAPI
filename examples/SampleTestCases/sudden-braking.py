@@ -28,11 +28,12 @@ SIMULATOR_PORT = int(os.environ.get("LGSVL__SIMULATOR_PORT", 8181))
 BRIDGE_HOST = os.environ.get("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")
 BRIDGE_PORT = int(os.environ.get("LGSVL__AUTOPILOT_0_PORT", 9090))
 
+scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_singlelaneroad)
 sim = lgsvl.Simulator(SIMULATOR_HOST, SIMULATOR_PORT)
-if sim.current_scene == "SingleLaneRoad":
+if sim.current_scene == scene_name:
     sim.reset()
 else:
-    sim.load("SingleLaneRoad", seed=0)
+    sim.load(scene_name, seed=0)
 
 # spawn EGO
 egoState = lgsvl.AgentState()

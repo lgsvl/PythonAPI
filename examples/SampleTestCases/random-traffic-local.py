@@ -32,28 +32,22 @@ SIMULATOR_PORT = env.int("LGSVL__SIMULATOR_PORT", 8181)
 BRIDGE_HOST = env.str("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")
 BRIDGE_PORT = env.int("LGSVL__AUTOPILOT_0_PORT", 9090)
 
-# Map name is passed to WISE instead ID by default.
-LGSVL__MAP = env.str("LGSVL__MAP", "san_francisco")
-# Here we intentionally make a typo in envrionment variable name and
-# use LGSVL__VEHICLE_1 instead of LGSVL__VEHICLE_0 because
-# otherwise it will receive proper vehicle ID and simulator will fail,
-# since IDs are not supported yet. So for now it will fail to read
-# environment variable and use vehicle name as backup option
-LGSVL__VEHICLE_0 = env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_modular)
 LGSVL__AUTOPILOT_HD_MAP = env.str("LGSVL__AUTOPILOT_HD_MAP", "SanFrancisco")
 LGSVL__AUTOPILOT_0_VEHICLE_CONFIG = env.str("LGSVL__AUTOPILOT_0_VEHICLE_CONFIG", 'Lincoln2017MKZ')
 LGSVL__SIMULATION_DURATION_SECS = 120.0
 LGSVL__RANDOM_SEED = env.int("LGSVL__RANDOM_SEED", 51472)
 
+vehicle_conf = env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_modular)
+scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_sanfrancisco)
 sim = lgsvl.Simulator(SIMULATOR_HOST, SIMULATOR_PORT)
 try:
-    print("Loading map {}...".format(SIMULATOR_MAP))
-    sim.load(SIMULATOR_MAP, LGSVL__RANDOM_SEED) # laod map with random seed
+    print("Loading map {}...".format(scene_name))
+    sim.load(scene_name, LGSVL__RANDOM_SEED) # laod map with random seed
 except Exception:
-    if sim.current_scene == SIMULATOR_MAP:
+    if sim.current_scene == scene_name:
         sim.reset()
     else:
-        sim.load(SIMULATOR_MAP)
+        sim.load(scene_name)
 
 
 # reset time of the day
@@ -65,8 +59,8 @@ spawn_index = LGSVL__RANDOM_SEED % len(spawns)
 
 state = lgsvl.AgentState()
 state.transform = spawns[spawn_index]  # TODO some sort of Env Variable so that user/wise can select from list
-print("Loading vehicle {}...".format(LGSVL__VEHICLE_0))
-ego = sim.add_agent(LGSVL__VEHICLE_0, lgsvl.AgentType.EGO, state)
+print("Loading vehicle {}...".format(vehicle_conf))
+ego = sim.add_agent(vehicle_conf, lgsvl.AgentType.EGO, state)
 
 print("Connecting to bridge...")
 # The EGO is now looking for a bridge at the specified IP and port

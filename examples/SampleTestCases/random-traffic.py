@@ -41,7 +41,7 @@ LGSVL__VEHICLE_0                    Name of EGO vehicle to be loaded in Simulato
 env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", "127.0.0.1"), env.int("LGSVL__SIMULATOR_PORT", 8181))
-scene_name = env.str("LGSVL__MAP", "BorregasAve")
+scene_name = env.str("LGSVL__MAP", SimulatorSettings.map_borregasave)
 try:
     sim.load(scene_name, env.int("LGSVL__RANDOM_SEED"))
 except Exception:
