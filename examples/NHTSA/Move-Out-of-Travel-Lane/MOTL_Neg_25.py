@@ -43,8 +43,6 @@ egoState = lgsvl.AgentState()
 # A point close to the desired lane was found in Editor.
 # This method returns the position and orientation of the closest lane to the point.
 egoState.transform = sim.map_point_on_lane(lgsvl.Vector(2.6, 0, 30))
-# Default vehicle for this test case is Lincoln2017MKZ - Apollo 5.0
-# https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
 ego = sim.add_agent(env.str("LGSVL__VEHICLE_0", SimulatorSettings.ego_lincoln2017mkz_apollo5_full_analysis), lgsvl.AgentType.EGO, egoState)
 forward = lgsvl.utils.transform_to_forward(egoState.transform)
 right = lgsvl.utils.transform_to_right(egoState.transform)
