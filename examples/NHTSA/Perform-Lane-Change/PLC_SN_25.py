@@ -32,7 +32,7 @@ LGSVL__AUTOPILOT_0_PORT = env.int("LGSVL__AUTOPILOT_0_PORT", 9090)
 print("PLC_SN_25 - ", end='')
 
 sim = lgsvl.Simulator(LGSVL__SIMULATOR_HOST, LGSVL__SIMULATOR_PORT)
-scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_straight1lanesame)
+scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_straight2lanesame)
 if sim.current_scene == scene_name:
     sim.reset()
 else:

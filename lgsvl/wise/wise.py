@@ -45,6 +45,10 @@ class DefaultAssets:
     # https://wise.svlsimulator.com/maps/profile/1e2287cf-c590-4804-bcb1-18b2fd3752d1
     map_straight1lanesame = "1e2287cf-c590-4804-bcb1-18b2fd3752d1"
 
+    # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "Straight2LaneSame".
+    # https://wise.svlsimulator.com/maps/profile/b39d3ef9-21d7-409d-851b-4c90dad80a25
+    map_straight2lanesame = "b39d3ef9-21d7-409d-851b-4c90dad80a25"
+
     # Map loaded in some of the examples. Changing the map may lead to unexpected behaviour in the example scripts. Default value is "Straight2LaneSameCurbRightIntersection".
     # https://wise.svlsimulator.com/maps/profile/378edc3f-8fce-4596-87dc-7d12fc2ad743
     map_straight2lanesamecurbrightintersection = "378edc3f-8fce-4596-87dc-7d12fc2ad743"
