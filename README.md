@@ -17,6 +17,14 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
     # install in development mode
     pip3 install --user -e .
 
+**NOTE:** If you are using release 2020.06 of SVL Simulator, you must switch to
+the `release-2020.06` branch of this repository prior to installing:
+
+    git checkout -b release-2020.06
+
+We encourage you to migrate to release 2021.1 of SVL Simulator soon as it is
+feasible/practical to do so.
+
 # Examples
 
 Look into `quickstart` and `examples` folders for simple usages. To run these
