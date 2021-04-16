@@ -261,7 +261,7 @@ class Connection:
         self.ws = create_connection(self.url)
         return
 
-    def enable_apollo(self, dest_x, dest_z, modules):
+    def enable_apollo(self, dest_x, dest_z, modules, coord_type=CoordType.Unity):
         """
         Enables a list of modules and then sets the destination
         """
@@ -269,7 +269,7 @@ class Connection:
             log.info("Starting {} module...".format(mod))
             self.enable_module(mod)
 
-        self.set_destination(dest_x, dest_z)
+        self.set_destination(dest_x, dest_z, coord_type=coord_type)
 
     def disable_apollo(self):
         """
@@ -290,7 +290,7 @@ class Connection:
                     "Warning: Apollo module {} is not running!!!".format(module)
                 )
 
-    def setup_apollo(self, dest_x, dest_z, modules, default_timeout=60.0):
+    def setup_apollo(self, dest_x, dest_z, modules, default_timeout=60.0, coord_type=CoordType.Unity):
         """
         Starts a list of Apollo modules and sets the destination. Will wait for Control module to send a message before returning.
         Control sending a message indicates that all modules are working and Apollo is ready to continue.
@@ -302,7 +302,7 @@ class Connection:
         if not all(mod_status[mod] for mod in modules):
             self.disable_apollo()
 
-        self.enable_apollo(dest_x, dest_z, modules)
+        self.enable_apollo(dest_x, dest_z, modules, coord_type=coord_type)
         self.ego.is_control_received = False
 
         def on_control_received(agent, kind, context):
