@@ -1,0 +1,3 @@
+[build-system]
+# get_version() in setup.py requires GitPython.
+requires = ["setuptools", "wheel", "GitPython"]

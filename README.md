@@ -9,13 +9,16 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
 # Requirements
 
 * Python 3.6 or higher
+* Pip 21.0 or higher (install using `python3 -m pip install 'pip>=21.0'`)
 
 # Installing
 
-    pip3 install --user .
+    python3 -m pip install --user .
 
     # install in development mode
-    pip3 install --user -e .
+    python3 -m pip install --user -e .
+
+Do not use the legacy `python3 setup.py install` nor `pip3 install`.
 
 **NOTE:** If you are using release 2020.06 of SVL Simulator, you must switch to
 the `release-2020.06` branch of this repository prior to installing:
@@ -109,6 +112,14 @@ Then launch an **API Only** simulation before running the unit tests.
     ~/.local/bin/coverage html --omit "~/.local/*","tests/*"
 
     # output is in htmlcov/index.html
+
+# Tagging releases
+
+The final change for a new release must be to set the argument of the
+`get_version('<VERSION>')` call in `setup.py` to the new version.
+Then commit this change and tag it with the new version:
+
+    git tag -a -m <VERSION> <VERSION>
 
 # Copyright and License
 
