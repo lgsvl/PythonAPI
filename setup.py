@@ -76,9 +76,16 @@ def get_version(git_tag):
     return public_version_identifier + local_version_label_with_plus
 
 
+package_name = 'lgsvl'
+
 setup(
-    name="lgsvl",
+    name=package_name,
     version=get_version('2021.1'),
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+    ],
     description="Python API for SVL Simulator",
     author="LGSVL",
     author_email="contact@svlsimulator.com",
@@ -87,8 +94,9 @@ setup(
     packages=["lgsvl", "lgsvl.dreamview", "lgsvl.evaluator", "lgsvl.wise"],
     install_requires=[
         "environs",
-        "numpy",                # for evaluator
-        "websocket-client",     # for dreamview
+        "numpy",
+        "setuptools",
+        "websocket-client",
         "websockets"
     ],
     setup_requires=[
@@ -99,7 +107,10 @@ setup(
             "flake8>=3.7.0"
         ],
     },
-    license="Other",
+    zip_safe=True,
+    maintainer='Hadi Tabatabaee',
+    maintainer_email='hadi.tabatabaee@lge.com',
+    license='Other',
     classifiers=[
         "License :: Other/Proprietary License",
         "Programming Language :: Python :: 3",
