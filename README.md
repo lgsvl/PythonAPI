@@ -9,7 +9,7 @@ Documentation is available on our website: https://www.svlsimulator.com/docs/pyt
 # Requirements
 
 * Python 3.6 or higher
-* Pip 21.0 or higher (install using `python3 -m pip install 'pip>=21.0'`)
+* Pip 21.1.1 or higher (install using `python3 -m pip install 'pip>=21.1.1'`)
 
 # Installing
 
