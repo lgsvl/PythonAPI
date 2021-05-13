@@ -88,7 +88,13 @@ Jaguar2015XE   | Autoware AI          | https://wise.svlsimulator.com/vehicles/p
 Lincoln2017MKZ | Apollo 5.0           | https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70 |
 
 <br/>
+
 Then launch an **API Only** simulation before running the unit tests.
+
+By default, the unit tests expect to be able to connect to SVL Simulator using
+the `localhost` address. To change it, set the `LGSVL__SIMULATOR_HOST`
+environment variable to the hostname or IP address of the network interface of
+the machine running SVL Simulator to which the unit tests should connect.
 
     # run all unittests
     python3 -m unittest discover -v -c
