@@ -79,3 +79,8 @@ class DefaultAssets:
     # This has sensors for modular testing.
     # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/5c7fb3b0-1fd4-4943-8347-f73a05749718
     ego_lincoln2017mkz_apollo5_modular = "5c7fb3b0-1fd4-4943-8347-f73a05749718"
+
+    # Ego vehicle that is loaded in most of the Apollo 6.0 scripts. Default value is "Lincoln2017MKZ" using the "Apollo 6.0 (modular testing)" sensor configuration.
+    # This has sensors for modular testing.
+    # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/2e9095fa-c9b9-4f3f-8d7d-65fa2bb03921
+    ego_lincoln2017mkz_apollo6_modular = "2e9095fa-c9b9-4f3f-8d7d-65fa2bb03921"
