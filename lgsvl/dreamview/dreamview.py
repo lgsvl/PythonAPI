@@ -237,7 +237,13 @@ class Connection:
         """
         Returns the current HD Map loaded in Dreamview
         """
-        self.reconnect()
+        try:
+            self.reconnect()
+        except ConnectionRefusedError as e:
+            log.error("Not able to get the current HD map loaded in Dreamview.")
+            log.error("Original exception: " + str(e))
+            return None
+
         data = json.loads(self.ws.recv())
         while data["type"] != "HMIStatus":
             data = json.loads(self.ws.recv())
@@ -247,7 +253,13 @@ class Connection:
         """
         Returns the current Vehicle configuration loaded in Dreamview
         """
-        self.reconnect()
+        try:
+            self.reconnect()
+        except ConnectionRefusedError as e:
+            log.error("Not able to get the current vehicle configuration loaded in Dreamview.")
+            log.error("Original exception: " + str(e))
+            return None
+
         data = json.loads(self.ws.recv())
         while data["type"] != "HMIStatus":
             data = json.loads(self.ws.recv())
