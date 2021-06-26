@@ -11,6 +11,7 @@ from .geometry import Vector, Transform, Spawn
 from .utils import accepts, ObjectState
 from .controllable import Controllable
 
+from enum import Enum
 from collections import namedtuple
 from environs import Env
 from datetime import datetime
@@ -25,6 +26,12 @@ env = Env()
 
 
 class Simulator:
+
+    class SimulatorCameraState(Enum):
+        FREE = 0
+        FOLLOW = 1
+        CINEMATIC = 2
+        DRIVER = 3
 
     @accepts(str, int)
     def __init__(self, address=env.str("LGSVL__SIMULATOR_HOST", "localhost"), port=env.int("LGSVL__SIMULATOR_PORT", 8181)):
@@ -79,6 +86,10 @@ class Simulator:
     @accepts(Transform)
     def set_sim_camera(self, transform):
         self.remote.command("simulator/camera/set", {"transform": transform.to_json()})
+
+    @accepts(SimulatorCameraState)
+    def set_sim_camera_state(self, state):
+        self.remote.command("simulator/camera/state/set", {"state": state.value})
 
     def agents_traversed_waypoints(self, fn):
         self._add_callback(None, "agents_traversed_waypoints", fn)
