@@ -216,8 +216,8 @@ class NpcVehicle(Vehicle):
     def __init__(self, uid, simulator):
         super().__init__(uid, simulator)
 
-    @accepts(Iterable, bool)
-    def follow(self, waypoints, loop=False):
+    @accepts(Iterable, bool, str)
+    def follow(self, waypoints, loop=False, waypoints_path_type="Linear"):
         """Tells the NPC to follow the waypoints
 
         When an NPC reaches a waypoint, it will:
@@ -258,6 +258,9 @@ class NpcVehicle(Vehicle):
 
         loop : bool
         whether the NPC should loop through the waypoints after reaching the final one
+
+        waypoints_path_type : string
+        how the waypoints path should be interpreted, default path type is "Linear"
         """
         self.remote.command(
             "vehicle/follow_waypoints",
@@ -278,6 +281,7 @@ class NpcVehicle(Vehicle):
                     }
                     for wp in waypoints
                 ],
+                "waypoints_path_type": waypoints_path_type,
                 "loop": loop,
             },
         )
@@ -346,8 +350,8 @@ class Pedestrian(Agent):
             "pedestrian/walk_randomly", {"uid": self.uid, "enable": enable}
         )
 
-    @accepts(Iterable, bool)
-    def follow(self, waypoints, loop=False):
+    @accepts(Iterable, bool, str)
+    def follow(self, waypoints, loop=False, waypoints_path_type="Linear"):
         """Tells the Pedestrian to follow the waypoints
 
         When a pedestrian reaches a waypoint, it will:
@@ -391,6 +395,7 @@ class Pedestrian(Agent):
                     }
                     for wp in waypoints
                 ],
+                "waypoints_path_type": waypoints_path_type,
                 "loop": loop,
             },
         )
