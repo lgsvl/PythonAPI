@@ -9,4 +9,4 @@ stages:
 flake8:
     stage: Style Guide Enforcement
     script:
-        - flake8
+        - python3 -m flake8
