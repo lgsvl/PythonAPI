@@ -18,6 +18,7 @@ class DriveWaypoint:
         self,
         position,
         speed,
+        acceleration=0,
         angle=Vector(0, 0, 0),
         idle=0,
         deactivate=False,
@@ -27,6 +28,7 @@ class DriveWaypoint:
     ):
         self.position = position
         self.speed = speed
+        self.acceleration = acceleration
         self.angle = angle
         self.idle = idle
         self.deactivate = deactivate
@@ -36,9 +38,10 @@ class DriveWaypoint:
 
 
 class WalkWaypoint:
-    def __init__(self, position, idle, trigger_distance=0, speed=1, trigger=None):
+    def __init__(self, position, idle, trigger_distance=0, speed=1, acceleration=0, trigger=None):
         self.position = position
         self.speed = speed
+        self.acceleration = acceleration
         self.idle = idle
         self.trigger_distance = trigger_distance
         self.trigger = trigger
@@ -228,13 +231,16 @@ class NpcVehicle(Vehicle):
         Parameters
         ----------
         waypoints : list of DriveWaypoints
-        DriveWaypoint : Class (position, speed, angle, idle, trigger_distance)
+        DriveWaypoint : Class (position, speed, acceleration, angle, idle, trigger_distance)
 
             position : lgsvl.Vector()
             Unity coordinates of waypoint
 
             speed : float
             how fast the NPC should drive to the waypoint
+
+            acceleration : float
+            how fast the NPC will increase the speed
 
             angle : lgsvl.Vector()
             Unity rotation of the NPC at the waypoint
@@ -270,6 +276,7 @@ class NpcVehicle(Vehicle):
                     {
                         "position": wp.position.to_json(),
                         "speed": wp.speed,
+                        "acceleration": wp.acceleration,
                         "angle": wp.angle.to_json(),
                         "idle": wp.idle,
                         "deactivate": wp.deactivate,
@@ -362,7 +369,7 @@ class Pedestrian(Agent):
         Parameters
         ----------
         waypoints : list of WalkWaypoints
-        WalkWaypoint : Class (position, idle, trigger_distance, speed)
+        WalkWaypoint : Class (position, idle, trigger_distance, speed, acceleration)
 
             position : lgsvl.Vector()
             Unity coordinates of waypoint
@@ -375,6 +382,9 @@ class Pedestrian(Agent):
 
             speed : float
             how fast the pedestrian should drive to the waypoint (default value 1)
+
+            acceleration : float
+            how fast the pedestrian will increase the speed
 
         loop : bool
         whether the pedestrian should loop through the waypoints after reaching the final one
@@ -389,6 +399,7 @@ class Pedestrian(Agent):
                         "idle": wp.idle,
                         "trigger_distance": wp.trigger_distance,
                         "speed": wp.speed,
+                        "acceleration": wp.acceleration,
                         "trigger": (
                             None if wp.trigger is None else wp.trigger.to_json()
                         ),
