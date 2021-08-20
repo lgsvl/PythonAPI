@@ -214,6 +214,14 @@ class EgoVehicle(Vehicle):
     def on_custom(self, fn):
         self.simulator._add_callback(self, "custom", fn)
 
+    def cancel_destination(self):
+        self.remote.command(
+            "vehicle/cancel_destination",
+            {
+                "uid": self.uid,
+            }
+        )
+
 
 class NpcVehicle(Vehicle):
     def __init__(self, uid, simulator):
