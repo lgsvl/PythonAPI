@@ -28,7 +28,7 @@ SIMULATOR_PORT = int(os.environ.get("LGSVL__SIMULATOR_PORT", 8181))
 BRIDGE_HOST = os.environ.get("LGSVL__AUTOPILOT_0_HOST", "127.0.0.1")
 BRIDGE_PORT = int(os.environ.get("LGSVL__AUTOPILOT_0_PORT", 9090))
 
-scene_name = env.str("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_sanfrancisco)
+scene_name = os.environ.get("LGSVL__MAP", lgsvl.wise.DefaultAssets.map_sanfrancisco)
 
 sim = lgsvl.Simulator(SIMULATOR_HOST, SIMULATOR_PORT)
 if sim.current_scene == scene_name:
