@@ -4,7 +4,7 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-from .geometry import Vector, BoundingBox
+from .geometry import Vector, BoundingBox, Transform
 from .sensor import Sensor
 from .utils import accepts, ObjectState as AgentState
 
@@ -221,6 +221,28 @@ class EgoVehicle(Vehicle):
                 "uid": self.uid,
             }
         )
+
+    def set_initial_pose(self):
+        self.remote.command(
+            "vehicle/set_initial_pose",
+            {
+                "uid": self.uid,
+            }
+        )
+
+    @accepts(Transform)
+    def set_destination(self, transform):
+        self.remote.command(
+            "vehicle/set_destination",
+            {
+                "uid": self.uid,
+                "transform": transform.to_json(),
+            }
+        )
+
+    def on_destination_reached(self, fn):
+        self.remote.command("agent/on_destination_reached", {"uid": self.uid})
+        self.simulator._add_callback(self, "destination_reached", fn)
 
 
 class NpcVehicle(Vehicle):

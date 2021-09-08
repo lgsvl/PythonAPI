@@ -4,7 +4,7 @@
 # This software contains code licensed as described in LICENSE.
 #
 
-from .geometry import Vector, BoundingBox, Transform
+from .geometry import Vector, BoundingBox, Transform, Quaternion
 from .simulator import Simulator, RaycastHit, WeatherState
 from .sensor import Sensor, CameraSensor, LidarSensor, ImuSensor
 from .agent import (

@@ -132,3 +132,21 @@ class Spawn:
         return "Spawn(position={}, rotation={}, destinations={})".format(
             self.position, self.rotation, self.destinations
         )
+
+
+class Quaternion:
+    def __init__(self, x=0.0, y=0.0, z=0.0, w=0.0):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
+
+    @staticmethod
+    def from_json(j):
+        return Quaternion(j["x"], j["y"], j["z"], j["w"])
+
+    def to_json(self):
+        return {"x": self.x, "y": self.y, "z": self.z, "w": self.w}
+
+    def __repr__(self):
+        return "Quaternion({}, {}, {}, {})".format(self.x, self.y, self.z, self.w)

@@ -7,7 +7,7 @@
 from .remote import Remote
 from .agent import Agent, AgentType, AgentState
 from .sensor import GpsData
-from .geometry import Vector, Transform, Spawn
+from .geometry import Vector, Transform, Spawn, Quaternion
 from .utils import accepts, ObjectState
 from .controllable import Controllable
 
@@ -130,6 +130,8 @@ class Simulator:
                             elif event_type == "stop_line":
                                 fn(agent)
                             elif event_type == "lane_change":
+                                fn(agent)
+                            elif event_type == "destination_reached":
                                 fn(agent)
                             elif event_type == "custom":
                                 fn(agent, ev["kind"], ev["context"])
@@ -280,6 +282,17 @@ class Simulator:
     def map_point_on_lane(self, point):
         j = self.remote.command("map/point_on_lane", {"point": point.to_json()})
         return Transform.from_json(j)
+
+    @accepts(Vector, Quaternion)
+    def map_from_nav(self, position, orientation):
+        res = self.remote.command(
+            "map/from_nav",
+            {
+                "position": position.to_json(),
+                "orientation": orientation.to_json()
+            }
+        )
+        return Transform.from_json(res)
 
     @accepts(Vector, Vector, int, float)
     def raycast(self, origin, direction, layer_mask=-1, max_distance=float("inf")):
