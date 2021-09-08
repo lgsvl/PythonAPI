@@ -47,6 +47,7 @@ ros_destinations = [
 ego.set_initial_pose()
 sim.run(5)
 
+
 def send_next_destination(agent):
     global i
     print(f"{i}: {agent.name} reached destination")
@@ -59,6 +60,7 @@ def send_next_destination(agent):
     ros_dst = ros_destinations[i]
     next_dst = sim.map_from_nav(Vector(*ros_dst[0]), Quaternion(*ros_dst[1]))
     ego.set_destination(next_dst)
+
 
 ros_dst = ros_destinations[0]
 first_dst = sim.map_from_nav(Vector(*ros_dst[0]), Quaternion(*ros_dst[1]))
