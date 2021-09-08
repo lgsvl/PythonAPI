@@ -304,6 +304,16 @@ class Simulator:
             }
         )
 
+    def get_nav_origin(self):
+        res = self.remote.command("navigation/get_origin")
+        nav_origin = None
+        if res:
+            nav_origin = {
+                "transform": Transform.from_json(res),
+                "offset": res["offset"]
+            }
+        return nav_origin
+
     @accepts(Vector, Vector, int, float)
     def raycast(self, origin, direction, layer_mask=-1, max_distance=float("inf")):
         hit = self.remote.command("simulator/raycast", [{
