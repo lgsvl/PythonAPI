@@ -73,7 +73,7 @@ for i in range(20):
     )
 
     # NPC will wait for 1 second at each waypoint
-    wp = lgsvl.DriveWaypoint(hit.point, speed, angle, 1)
+    wp = lgsvl.DriveWaypoint(hit.point, speed, angle=angle, idle=1)
     waypoints.append(wp)
 
 
