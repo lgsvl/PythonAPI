@@ -61,4 +61,5 @@ for name in ["Sedan", "SUV", "Jeep", "Hatchback"]:
     npc.on_lane_change(on_lane_change)
     npc.on_stop_line(on_stop_line)
 
-sim.run()
+print("Running the simulation for 30 seconds.")
+sim.run(30)
