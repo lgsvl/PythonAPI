@@ -214,14 +214,6 @@ class EgoVehicle(Vehicle):
     def on_custom(self, fn):
         self.simulator._add_callback(self, "custom", fn)
 
-    def cancel_destination(self):
-        self.remote.command(
-            "vehicle/cancel_destination",
-            {
-                "uid": self.uid,
-            }
-        )
-
     def set_initial_pose(self):
         self.remote.command(
             "vehicle/set_initial_pose",
