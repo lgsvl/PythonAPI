@@ -177,6 +177,9 @@ class EgoVehicle(Vehicle):
             {"uid": self.uid, "address": address, "port": port},
         )
 
+    def get_bridge_type(self):
+        return self.remote.command("vehicle/bridge/type", {"uid": self.uid})
+
     def get_sensors(self):
         j = self.remote.command("vehicle/sensors/get", {"uid": self.uid})
         return [Sensor.create(self.remote, sensor) for sensor in j]
