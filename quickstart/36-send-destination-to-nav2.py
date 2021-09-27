@@ -14,9 +14,8 @@ env = Env()
 
 sim = lgsvl.Simulator(env.str("LGSVL__SIMULATOR_HOST", lgsvl.wise.SimulatorSettings.simulator_host), env.int("LGSVL__SIMULATOR_PORT", lgsvl.wise.SimulatorSettings.simulator_port))
 
-# TODO: Make public assets for LGSeocho with NavOrigin and cloi sensor config
-map_seocho = "9b494638-b3e9-4239-9f3f-51b2c68cd292"
-ego_cloi = "4717598d-6c67-48a1-9a02-988a89d8660c"
+map_seocho = lgsvl.wise.DefaultAssets.map_lgseocho
+ego_cloi = lgsvl.wise.DefaultAssets.ego_lgcloi_navigation2
 
 if sim.current_scene == map_seocho:
     sim.reset()

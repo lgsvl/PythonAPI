@@ -57,6 +57,10 @@ class DefaultAssets:
     # https://wise.svlsimulator.com/maps/profile/671868be-44f9-44a1-913c-cb0f29d12634
     map_straight2laneopposing = "671868be-44f9-44a1-913c-cb0f29d12634"
 
+    # Map loaded in the quickstart scripts. Changing the map may lead to unexpected behaviour in the quickstart scripts. Default value is "LGSeocho".
+    # https://wise.svlsimulator.com/maps/profile/26546191-86e8-4b53-9432-1cecbbd95c87
+    map_lgseocho = "26546191-86e8-4b53-9432-1cecbbd95c87"
+
     # Ego vehicle that is loaded in most of the quickstart scripts. Default value is "Lincoln2017MKZ" using the "Apollo 5.0" sensor configuration.
     # This includes a bridge connection if needed and also bunch of sensors including LIDAR.
     # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/47b529db-0593-4908-b3e7-4b24a32a0f70
@@ -84,3 +88,19 @@ class DefaultAssets:
     # This has sensors for modular testing.
     # https://wise.svlsimulator.com/vehicles/profile/73805704-1e46-4eb6-b5f9-ec2244d5951e/edit/configuration/2e9095fa-c9b9-4f3f-8d7d-65fa2bb03921
     ego_lincoln2017mkz_apollo6_modular = "2e9095fa-c9b9-4f3f-8d7d-65fa2bb03921"
+
+    # Cloi robot that is loaded in quickstart/tests scripts. Default value is "LGCloi" using the "Navigation2" sensor configuration.
+    # https://wise.svlsimulator.com/vehicles/profile/20609b67-6dbd-40ad-9b46-e6bc455278ed/edit/configuration/c2207cd4-c8d0-4a12-b5b7-c79ab748becc
+    ego_lgcloi_navigation2 = "c2207cd4-c8d0-4a12-b5b7-c79ab748becc"
+
+    # Cloi robot that is loaded in quickstart/tests scripts. Default value is "LGCloi" using the "Nav2_Multi_Robot1" sensor configuration.
+    # https://wise.svlsimulator.com/vehicles/profile/20609b67-6dbd-40ad-9b46-e6bc455278ed/edit/configuration/eee61d18-c6e3-4292-988d-445802aaee97
+    ego_lgcloi_navigation2_multi_robot1 = "eee61d18-c6e3-4292-988d-445802aaee97"
+
+    # Cloi robot that is loaded in quickstart/tests scripts. Default value is "LGCloi" using the "Nav2_Multi_Robot2" sensor configuration.
+    # https://wise.svlsimulator.com/vehicles/profile/20609b67-6dbd-40ad-9b46-e6bc455278ed/edit/configuration/f9c5ace0-969a-4ade-8208-87d09d1a53f8
+    ego_lgcloi_navigation2_multi_robot2 = "f9c5ace0-969a-4ade-8208-87d09d1a53f8"
+
+    # Cloi robot that is loaded in quickstart/tests scripts. Default value is "LGCloi" using the "Nav2_Multi_Robot3" sensor configuration.
+    # https://wise.svlsimulator.com/vehicles/profile/20609b67-6dbd-40ad-9b46-e6bc455278ed/edit/configuration/cfdb1484-91b7-4f27-b729-e313cc31ed8e
+    ego_lgcloi_navigation2_multi_robot3 = "cfdb1484-91b7-4f27-b729-e313cc31ed8e"
