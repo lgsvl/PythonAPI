@@ -108,6 +108,15 @@ class Connection:
 
         return
 
+    def remove_all_routing_points(self):
+        """
+        This function removes all routing points by calling this API : https://github.com/ApolloAuto/apollo/blob/master/modules/dreamview/backend/simulation_world/simulation_world_updater.cc#L309
+        """
+        self.ws.send(
+            json.dumps({"type": "Reset"})
+        )
+        return
+
     def enable_module(self, module):
         """
         module is the name of the Apollo 5.0 module as seen in the "Module Controller" tab of Dreamview
