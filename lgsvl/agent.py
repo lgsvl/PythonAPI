@@ -424,7 +424,7 @@ class Pedestrian(Agent):
                         "idle": wp.idle,
                         "trigger_distance": wp.trigger_distance,
                         "speed": wp.speed,
-                        "acceleration": wp.acceleration,
+                        "acceleration": wp.acceleration.to_json(),
                         "trigger": (
                             None if wp.trigger is None else wp.trigger.to_json()
                         ),
